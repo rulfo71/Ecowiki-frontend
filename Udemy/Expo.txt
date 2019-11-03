@@ -1,0 +1,4 @@
+Expo Cli
+
+Realiza toda una instalacion de paquetes necesaria
+Expo nos da un panel para simular las aplicaciones muy facil 

@@ -1,0 +1,22 @@
+expo cli /  para generar el proyecto
+para usar opciones nativas del ordenador
+
+firebase / los datos que generamos en el proyecto
+firestone - nueva bbdd de google
+
+React native 
+	flujo de datos  de componentes
+	reutilizacion de componentes
+	navigation 3
+	menu 
+		hamburguesa
+		menu abajo (este vamos a hacer)
+	formularios con validaciones
+	infinity scroll (virtual scroll)
+	buscador
+	loader
+	toasts
+	Ranking 
+	
+
+
