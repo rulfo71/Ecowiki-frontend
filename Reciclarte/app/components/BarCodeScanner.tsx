@@ -30,17 +30,11 @@ export default class BarcodeScannerExample extends React.Component {
       return <Text>No access to camera</Text>;
     }
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "flex-end"
-        }}
-      >
+      <View style= {styles.view}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
           style={StyleSheet.absoluteFillObject}
-        />
+        /> 
 
         {scanned && (
           <Button
@@ -57,3 +51,12 @@ export default class BarcodeScannerExample extends React.Component {
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 }
+
+const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: 'stretch'
+  }
+});

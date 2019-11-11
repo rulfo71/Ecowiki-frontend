@@ -41,7 +41,7 @@ const scanScreenStack = createStackNavigator({
   Map: {
     screen: ScanProductScreen,
     navigationOptions: ({ navigation }) => ({
-      title: "Scan Product Screenn"
+      title: "Scan Product Screen"
     })
   }
 });
