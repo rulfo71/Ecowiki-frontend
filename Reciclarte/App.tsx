@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, Avatar } from "react-native-elements";
 import UserNavigation from "./app/navigations/User";
 import HomeScreen from "./app/screens/Home";
+import { firebaseApp } from "./app/utils/firebase";
 
 export default class App extends React.Component {
   buttonOnClick = value => {
