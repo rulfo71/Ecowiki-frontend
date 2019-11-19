@@ -5,6 +5,12 @@ import * as Permissions from "expo-permissions";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 
+import { firebaseApp } from "../utils/firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+
+const db = firebase.firestore(firebaseApp);
+
 export default class BarcodeScannerExample extends React.Component {
   state = {
     hasCameraPermission: null,
@@ -30,11 +36,11 @@ export default class BarcodeScannerExample extends React.Component {
       return <Text>No access to camera</Text>;
     }
     return (
-      <View style= {styles.view}>
+      <View style={styles.view}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
           style={StyleSheet.absoluteFillObject}
-        /> 
+        />
 
         {scanned && (
           <Button
@@ -49,6 +55,32 @@ export default class BarcodeScannerExample extends React.Component {
   handleBarCodeScanned = ({ type, data }) => {
     this.setState({ scanned: true });
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    this.lookForBarCode(data);
+  };
+
+  lookForBarCode = data => {
+    console.log("holis");
+    console.log(data);
+    var products = db
+      .collection("productos")
+      .where("CodBarra", "==", data)
+      .get()
+      .then(function(querySnapshot) {
+        console.log("entre al then");
+        if (querySnapshot.empty) {
+          console.log("Esta emptyy");
+        }
+        // console.log(querySnapshot);
+        querySnapshot.forEach(function(doc) {
+          console.log("entre al foreachhh");
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+          console.log("Este producto va en " + doc.data().Material);
+        });
+      })
+      .catch(function(error) {
+        console.log("Error getting documents: ", error);
+      });
   };
 }
 
@@ -57,6 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-end",
-    alignItems: 'stretch'
+    alignItems: "stretch"
   }
 });
