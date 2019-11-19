@@ -59,20 +59,19 @@ export default class BarcodeScannerExample extends React.Component {
   };
 
   lookForBarCode = data => {
-    console.log("holis");
     console.log(data);
     var products = db
       .collection("productos")
       .where("CodBarra", "==", data)
       .get()
       .then(function(querySnapshot) {
-        console.log("entre al then");
         if (querySnapshot.empty) {
-          console.log("Esta emptyy");
+          console.log(
+            "No se encontro el producto en nuestra base de datos. Queres agregarlo? "
+          );
         }
         // console.log(querySnapshot);
         querySnapshot.forEach(function(doc) {
-          console.log("entre al foreachhh");
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data());
           console.log("Este producto va en " + doc.data().Material);
