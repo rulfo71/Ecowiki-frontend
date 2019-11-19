@@ -1,0 +1,27 @@
+Horizontal scaling nosql document database in the cloud
+
+Base de datos documental 
+
+Tree-like structure
+
+Todo se guarda en documentos y colecciones
+
+Document: Es como un objeto javascript. 
+- Tienen Fields
+	Fields:
+	Los doscuments tienen objetos Clave,  Valor (fields)
+	Pueden ser string, numeros, jsons, binarios, etc.
+- Los documentos no pueden tener documentos adentro.
+- Pueden apuntar a subcolecciones.
+- Lo normal seria que una coleccion tenga documentos adentro, 
+que apuntan a subcolecciones que tienen otros documentos, etc.
+
+
+Collection: 
+- Colecciones de documentos
+- Las colecciones solo pueden tener documentos
+- La root del firebase solo puede tener colecciones
+
+https://firebase.google.com/docs/firestore/quickstart?hl=es-419
+
+https://www.youtube.com/watch?v=v_hR4K4auoQ&feature=emb_rel_pause
