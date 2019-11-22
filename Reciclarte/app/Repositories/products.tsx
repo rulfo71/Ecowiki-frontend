@@ -17,17 +17,11 @@ export default class ProductsRepository{
       .get()
       .then(function(querySnapshot) {
         if (querySnapshot.empty) {
-            console.log('no lo tenemos desde productsRepository');
             foundProduct = null;
         }
-        // console.log(querySnapshot);
         querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-        //   console.log(doc.id, " => ", doc.data());
           var productsModel = new  ProductsModel();
           productsModel = doc.data();
-          console.log(productsModel);
-          console.log("Este producto va en " + doc.data().Material);
           foundProduct = productsModel;
         });
       })
