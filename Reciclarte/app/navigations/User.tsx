@@ -7,9 +7,11 @@ import { Icon } from "react-native-elements";
 //Screens
 import HomeScreen from "../screens/Home";
 import MapScreen from "../screens/Map";
-import ScanProductScreen from "../screens/ScanProduct";
 import SearchScreen from "../screens/Search";
 import MyAccountScreen from "../screens/MyAccount";
+//Screens Scan Product
+import ScanProductScreen from "../screens/ScanProduct/ScanProduct";
+import SetMaterialScreen from "../screens/ScanProduct/SetMaterial";
 
 const homeScreenStack = createStackNavigator({
   Home: {
@@ -42,6 +44,12 @@ const scanScreenStack = createStackNavigator({
     screen: ScanProductScreen,
     navigationOptions: ({ navigation }) => ({
       title: "Scan Product Screen"
+    })
+  },
+  SetMaterial: {
+    screen: SetMaterialScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "Set material Screen"
     })
   }
 });
