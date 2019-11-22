@@ -1,17 +1,17 @@
-import * as React from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import React, { Component } from "react";
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
-
+import ProductsRepository from '../Repositories/products';
 import { BarCodeScanner } from "expo-barcode-scanner";
 
-import { firebaseApp } from "../utils/firebase";
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import { firebaseApp } from "../utils/firebase";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 
-const db = firebase.firestore(firebaseApp);
+// const db = firebase.firestore(firebaseApp);
 
-export default class BarcodeScannerExample extends React.Component {
+export default class BarcodeScannerExample extends Component {
   state = {
     hasCameraPermission: null,
     scanned: false
@@ -52,35 +52,47 @@ export default class BarcodeScannerExample extends React.Component {
     );
   }
 
-  handleBarCodeScanned = ({ type, data }) => {
+  handleBarCodeScanned = async ({ type, data }) => {
     this.setState({ scanned: true });
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    this.lookForBarCode(data);
-  };
+    // this.lookForBarCode(data);
+    
+    var productsRepository = new ProductsRepository();
+    await productsRepository.lookForBarCode(data).then(foundProduct => {
+      console.log('foundProduct es ' + foundProduct);
+      if (foundProduct){
+        console.log('Lo encontramos!');  
+        alert('este producto va en ' + foundProduct.Material)
+      }
+      else{
+        console.log('parece que no esta...')
+        this.addProductAlert();
+      }
+    });  
+  }; 
 
-  lookForBarCode = data => {
-    console.log(data);
-    var products = db
-      .collection("productos")
-      .where("CodBarra", "==", data)
-      .get()
-      .then(function(querySnapshot) {
-        if (querySnapshot.empty) {
-          console.log(
-            "No se encontro el producto en nuestra base de datos. Queres agregarlo? "
-          );
+  goToScreen = (screen) => {
+    console.log('gotoscreen' + screen);
+  }
+
+  addProductAlert = () => {
+    Alert.alert(
+      "No tenemos registrado este producto",
+      "Queres agregarlo?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("No quiere agregarlo")
+        },
+        {
+          text: "Si",
+          // onPress: () =>{ this.goToScreen("SetMaterial");}
+          onPress :  () =>  this.goToScreen('SetMaterial')
         }
-        // console.log(querySnapshot);
-        querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-          console.log("Este producto va en " + doc.data().Material);
-        });
-      })
-      .catch(function(error) {
-        console.log("Error getting documents: ", error);
-      });
-  };
+      ]
+    );
+  }
+
 }
 
 const styles = StyleSheet.create({
