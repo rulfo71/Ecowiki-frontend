@@ -33,7 +33,13 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.state = {
       hasCameraPermission: null,
       scanned: false,
-      overlayComponent: null,
+      overlayComponent: (
+        <OverlaySelectMaterial
+          isVisibleOverlay={true}
+          onAcceptButton={this.updateProduct}
+          onCancelButton={this.closeOverlay}
+        />
+      ),
       loading: false
     };
   }

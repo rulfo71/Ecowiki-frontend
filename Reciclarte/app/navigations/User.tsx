@@ -88,6 +88,7 @@ const RootStack = createBottomTabNavigator(
     }
   },
   {
+    initialRouteName: "Scan",
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#00a680"

@@ -58,6 +58,11 @@ export default class OverlaySelectMaterial extends Component<IProps, IState> {
         overlayStyle={styles.overlayStyle}
       >
         <View style={styles.ViewOverlay}>
+          <Input placeholder="Nombre (opcional)"></Input>
+          <Input
+            style={styles.description}
+            placeholder="Datos Adicionales (opcional)"
+          ></Input>
           <Picker
             selectedValue={this.state.material}
             onValueChange={this.updateMaterial}
@@ -97,12 +102,12 @@ const styles = StyleSheet.create({
     color: "red"
   },
   overlayStyle: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center"
   },
   ViewOverlay: {
     width: "100%",
+    height: "100%",
     padding: 20,
     borderColor: "#00a680",
     backgroundColor: "#fff",
@@ -115,14 +120,18 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    padding: 15
   },
   buttonCancel: {
-    backgroundColor: "#990000",
-    padding: 10
+    backgroundColor: "#990000"
+    // padding: 10
   },
   buttonSave: {
-    backgroundColor: "#00a680",
-    padding: 10
+    backgroundColor: "#00a680"
+    // padding: 10
+  },
+  description: {
+    height: 20
   }
 });
