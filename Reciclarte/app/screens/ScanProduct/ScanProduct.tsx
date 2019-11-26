@@ -1,8 +1,16 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  ActivityIndicator
+} from "react-native";
 import * as Permissions from "expo-permissions";
 import ProductsRepository from "../../Repositories/products";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { Text as TextElem, Overlay } from "react-native-elements";
 import OverlaySelectMaterial from "./OverlaySelectMaterial";
 
 interface IProps {
@@ -15,6 +23,7 @@ interface IState {
   hasCameraPermission?: any;
   scanned?: boolean;
   overlayComponent?: any;
+  loading: boolean;
 }
 
 export default class ScanProduct extends Component<IProps, IState> {
@@ -24,7 +33,8 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.state = {
       hasCameraPermission: null,
       scanned: false,
-      overlayComponent: null
+      overlayComponent: null,
+      loading: false
     };
   }
 
@@ -64,15 +74,26 @@ export default class ScanProduct extends Component<IProps, IState> {
   };
 
   handleBarCodeScanned = async ({ type, data }) => {
-    this.setState({ scanned: true });
-    var productsRepository = new ProductsRepository();
-    await productsRepository.lookForBarCode(data).then(foundProduct => {
-      if (foundProduct) {
-        alert("este producto va en " + foundProduct.Material);
-      } else {
-        this.addProductAlert();
-      }
+    this.setState({
+      scanned: true,
+      loading: true
     });
+    var productsRepository = new ProductsRepository();
+    await productsRepository
+      .lookForBarCode(data)
+      .then(foundProduct => {
+        this.setState({ loading: false });
+        if (foundProduct) {
+          alert("este producto va en " + foundProduct.Material);
+        } else {
+          this.addProductAlert();
+        }
+      })
+      .catch(error => {
+        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+        console.log("error");
+        this.setState({ loading: false });
+      });
   };
 
   // goToScreen = (screen) => {
@@ -94,7 +115,12 @@ export default class ScanProduct extends Component<IProps, IState> {
   };
 
   render() {
-    const { hasCameraPermission, scanned, overlayComponent } = this.state;
+    const {
+      hasCameraPermission,
+      scanned,
+      overlayComponent,
+      loading
+    } = this.state;
 
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;
@@ -116,6 +142,19 @@ export default class ScanProduct extends Component<IProps, IState> {
           />
         )}
         {overlayComponent}
+        <Overlay
+          overlayStyle={styles.overlayLoading}
+          isVisible={loading}
+          width="auto"
+          height="auto"
+        >
+          <View>
+            <TextElem style={styles.overlayLoadingText}>
+              Buscando el producto
+            </TextElem>
+            <ActivityIndicator size="large" color="#00a680"></ActivityIndicator>
+          </View>
+        </Overlay>
       </View>
     );
   }
@@ -127,5 +166,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "stretch"
+  },
+  overlayLoading: {
+    padding: 20
+  },
+  overlayLoadingText: {
+    color: "#00a680",
+    marginBottom: 20,
+    fontSize: 20
   }
 });
