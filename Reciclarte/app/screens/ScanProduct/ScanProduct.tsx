@@ -17,6 +17,7 @@ interface IProps {
   hasCameraPermission?: any;
   scanned?: boolean;
   overlayComponent?: any;
+  navigation?: any;
 }
 
 interface IState {
@@ -33,13 +34,13 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.state = {
       hasCameraPermission: null,
       scanned: false,
-      overlayComponent: (
-        <OverlaySelectMaterial
-          isVisibleOverlay={true}
-          onAcceptButton={this.updateProduct}
-          onCancelButton={this.closeOverlay}
-        />
-      ),
+      // overlayComponent: (
+      //   <OverlaySelectMaterial
+      //     isVisibleOverlay={true}
+      //     onAcceptButton={this.updateProduct}
+      //     onCancelButton={this.closeOverlay}
+      //   />
+      // ),
       loading: false
     };
   }
@@ -53,16 +54,19 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.setState({ hasCameraPermission: status === "granted" });
   };
   openOverlaySelectMaterial = async closeFunction => {
+    console.log("openOverlaySelectMaterial");
+    this.props.navigation.push("SetMaterial");
+
     // console.log("openOverlaySelectMaterial");
-    this.setState({
-      overlayComponent: (
-        <OverlaySelectMaterial
-          isVisibleOverlay={true}
-          onAcceptButton={this.updateProduct}
-          onCancelButton={this.closeOverlay}
-        />
-      )
-    });
+    // this.setState({
+    //   overlayComponent: (
+    //     <OverlaySelectMaterial
+    //       isVisibleOverlay={true}
+    //       onAcceptButton={this.updateProduct}
+    //       onCancelButton={this.closeOverlay}
+    //     />
+    //   )
+    // });
   };
 
   updateProduct = async () => {
