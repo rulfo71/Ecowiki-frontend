@@ -1,9 +1,10 @@
 export default class Products {
-    CodBarra: string
-    Material: string
-    Nombre: string
+  BarCode: string;
+  Material: string;
+  Name: string;
+  Description: string;
 
-    // constructor(){
-    //     // this.CodBarra = codBarra;
-    // }
+  // constructor(){
+  //     // this.CodBarra = codBarra;
+  // }
 }
