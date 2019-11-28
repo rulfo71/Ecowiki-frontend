@@ -1,0 +1,6 @@
+Reciclarte\app\Repositories\products.tsx
+- Elimminar hardcodeos
+
+Reciclarte\app\screens\ScanProduct\SetMaterial.tsx
+- Agrandar input descripcion
+- Establecer un default value en el picker. 
