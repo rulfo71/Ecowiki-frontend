@@ -17,8 +17,6 @@ interface IState {
 }
 
 export default class OverlaySelectMaterial extends Component<IProps, IState> {
-  isVisible: boolean;
-
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -61,6 +59,7 @@ export default class OverlaySelectMaterial extends Component<IProps, IState> {
           <Input placeholder="Nombre (opcional)"></Input>
           <Input
             style={styles.description}
+            containerStyle={styles.descriptionContainer}
             placeholder="Datos Adicionales (opcional)"
           ></Input>
           <Picker
@@ -131,7 +130,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#00a680"
     // padding: 10
   },
-  description: {
-    height: 20
+  description: {},
+  descriptionContainer: {
+    height: 50
   }
 });
