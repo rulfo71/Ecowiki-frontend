@@ -10,7 +10,6 @@ const db = firebase.firestore(firebaseApp)
 export default class ProductsRepository {
   public lookForBarCode = async data => {
     var foundProduct = null
-    console.log('lookForBarCode: ')
     await db
       .collection('productos')
       .where('BarCode', '==', data)
@@ -18,7 +17,6 @@ export default class ProductsRepository {
       .then(function(querySnapshot) {
         if (querySnapshot.empty) {
           foundProduct = null
-          console.log('estaba vacio')
         } else {
           querySnapshot.forEach(function(doc) {
             var productsModel = new ProductsModel()

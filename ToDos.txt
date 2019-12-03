@@ -4,3 +4,6 @@ Reciclarte\app\Repositories\products.tsx
 Reciclarte\app\screens\ScanProduct\SetMaterial.tsx
 - Agrandar input descripcion
 - Establecer un default value en el picker. 
+
+
+- Logica que agregue cuando 15 personas hayan dicho y que al que lo agregó le aparezca.
