@@ -11,6 +11,7 @@ import * as Permissions from 'expo-permissions'
 import ProductsRepository from '../../Repositories/products'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay } from 'react-native-elements'
+// import { Toast } from 'react-native-easy-toast'
 
 interface IProps {
   hasCameraPermission?: any
@@ -27,6 +28,8 @@ interface IState {
   barCode: string
 }
 
+// var toastRef
+
 export default class ScanProduct extends Component<IProps, IState> {
   constructor(props) {
     super(props)
@@ -34,16 +37,11 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.state = {
       hasCameraPermission: null,
       scanned: false,
-      // overlayComponent: (
-      //   <OverlaySelectMaterial
-      //     isVisibleOverlay={true}
-      //     onAcceptButton={this.updateProduct}
-      //     onCancelButton={this.closeOverlay}
-      //   />
-      // ),
       loading: false,
       barCode: ''
     }
+
+    // toastRef = useRef()
   }
 
   async componentDidMount() {
@@ -54,8 +52,13 @@ export default class ScanProduct extends Component<IProps, IState> {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     this.setState({ hasCameraPermission: status === 'granted' })
   }
-  openOverlaySelectMaterial = async closeFunction => {
-    this.props.navigation.push('SetMaterial', { barCode: this.state.barCode })
+  goToSetMaterial = async () => {
+    console.log('vamos pa set material con barcode ' + this.state.barCode)
+
+    this.props.navigation.push('SetMaterial', {
+      barCode: this.state.barCode
+      // toastRef: { toastRef }
+    })
   }
 
   updateProduct = async () => {
@@ -71,6 +74,8 @@ export default class ScanProduct extends Component<IProps, IState> {
   }
 
   handleBarCodeScanned = async ({ type, data }) => {
+    console.log('handleBarCodeScanned')
+
     this.setState({
       scanned: true,
       loading: true
@@ -113,10 +118,17 @@ export default class ScanProduct extends Component<IProps, IState> {
       },
       {
         text: 'Si',
-        onPress: async () =>
-          await this.openOverlaySelectMaterial(this.closeOverlay)
+        onPress: async () => await this.goToSetMaterial()
       }
     ])
+  }
+
+  MockScan = () => {
+    // TODO: Remove mock
+    this.props.navigation.push('SetMaterial', {
+      barCode: '01010101'
+      // toastRef: { toastRef }
+    })
   }
 
   render() {
@@ -160,6 +172,15 @@ export default class ScanProduct extends Component<IProps, IState> {
             <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
           </View>
         </Overlay>
+        {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
+        <View>
+          <Button
+            title='Mock'
+            onPress={() => {
+              this.MockScan()
+            }}
+          />
+        </View>
       </View>
     )
   }

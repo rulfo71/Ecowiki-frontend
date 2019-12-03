@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, View, Picker } from 'react-native'
 import { Input, Button, Text } from 'react-native-elements'
 import Product from '../../Models/Products'
@@ -17,41 +17,58 @@ interface IState {
   BarCode: string
 }
 
-var product: Product
+// var product: Product
+// var toastRef
 
 export default class SetMaterial extends Component<IProps, IState> {
   constructor(props) {
     super(props)
-    product = new Product()
-    product.BarCode = this.props.navigation.getParam('barCode', '')
-    console.log('product.BarCode')
-    console.log(product.BarCode)
+    // product = new Product()
+    console.log('SetMaterial constructor')
+    var barCode = this.props.navigation.getParam('barCode', '')
+    console.log('barcode ' + barCode)
+    this.state = {
+      BarCode: barCode,
+      Material: '',
+      Description: '',
+      Name: ''
+    }
+    console.log(this.state)
+
+    // toastRef = this.props.navigation.getParam('toast')
+    // console.log('toastRef')
+    // console.log(toastRef)
   }
 
-  updateMaterial = async material => {
-    product.Material = material
-    console.log('update Material')
-    console.log(product)
-  }
-
-  buttonCancelar = () => {
+  buttonCancel = () => {
     console.log('Boton Cancelar')
     //TODO: ProductService.EmptyProduct()
-    ;(product.Material = ''),
-      (product.Name = ''),
-      (product.Description = ''),
-      (product.BarCode = '')
+    // product.Material = ''
+    // product.Name = ''
+    // product.Description = ''
+    // product.BarCode = ''
     this.props.navigation.goBack()
   }
 
-  buttonAceptar = async () => {
+  buttonAccept = async () => {
     console.log('Boton Aceptar')
+    console.log(this.state)
+    console.log(product)
+
+    var product = new Product()
+    product.BarCode = this.state.BarCode
+    product.Description = this.state.Description
+    product.Name = this.state.Name
+    product.Material = this.state.Material
+
+    console.log('product: ')
+
+    console.log(product)
 
     var productsRepository = new ProductsRepository()
     await productsRepository
       .updateProduct(product)
       .then(response => {
-        this.props.navigation.goBack()
         if (response) {
           console.log('El pproducto fue guardado correctamente')
           this.props.navigation.goBack()
@@ -63,23 +80,32 @@ export default class SetMaterial extends Component<IProps, IState> {
       .catch(error => {
         // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
         console.log('error desde SetMaterial')
-
+        this.props.navigation.goBack()
         // this.setState({ loading: false })
       })
   }
-  setName = name => {
-    product.Name = name
-  }
-  setDescription = async description => {
-    product.Description = description
-  }
+  // setName = name => {
+  //   product.Name = name
+  // }
+  // setDescription = async description => {
+  //   product.Description = description
+  // }
+  // setMaterial = async material => {
+  //   console.log('setMaterial')
+  //   console.log(material)
+  //   product.Material = material
+  //   console.log(product.Material)
+  // }
 
   render() {
+    console.log('y ahora toca renderizar!')
+
     return (
       <View style={styles.ViewOverlay}>
+        <Input disabled={true}>{this.state.BarCode}</Input>
         <Picker
-          selectedValue={product.Material}
-          onValueChange={this.updateMaterial}
+          selectedValue={this.state.Material}
+          onValueChange={value => this.setState({ Material: value })}
         >
           <Picker.Item label='Elija un material' value='' />
           <Picker.Item label='Plastico' value='plastico' />
@@ -90,12 +116,12 @@ export default class SetMaterial extends Component<IProps, IState> {
         </Picker>
         <Input
           placeholder='Nombre (opcional)'
-          onChange={e => this.setName(e.nativeEvent.text)}
+          onChange={e => this.setState({ Name: e.nativeEvent.text })}
         ></Input>
         <Input
           style={styles.description}
           placeholder='Datos Adicionales (opcional)'
-          onChange={e => this.setDescription(e.nativeEvent.text)}
+          onChange={e => this.setState({ Description: e.nativeEvent.text })}
         ></Input>
 
         <View style={styles.buttonContainer}>
@@ -103,17 +129,18 @@ export default class SetMaterial extends Component<IProps, IState> {
             buttonStyle={styles.buttonCancel}
             title='Cancelar'
             onPress={() => {
-              this.buttonCancelar()
+              this.buttonCancel()
             }}
           />
           <Button
             buttonStyle={styles.buttonSave}
             title='Guardar'
             onPress={() => {
-              this.buttonAceptar()
+              this.buttonAccept()
             }}
           />
         </View>
+        {/* <Toast position='center' opacity={0.5}></Toast> */}
       </View>
     )
   }
@@ -133,14 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    // padding: 20,
-    // borderColor: "#00a680",
     backgroundColor: '#fff'
-    // borderLeftWidth: 2,
-    // borderRightWidth: 2,
-    // borderTopWidth: 2,
-    // borderBottomWidth: 2,
-    // borderRadius: 5
   },
   buttonContainer: {
     flex: 1,
@@ -150,16 +170,11 @@ const styles = StyleSheet.create({
   },
   buttonCancel: {
     backgroundColor: '#990000'
-    // padding: 10
   },
   buttonSave: {
     backgroundColor: '#00a680'
-    // padding: 10
   },
   description: {
     height: 50
   }
-  // descriptionContainer: {
-  //   height: 50
-  // }
 })
