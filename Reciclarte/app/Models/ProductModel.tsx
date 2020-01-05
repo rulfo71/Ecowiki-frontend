@@ -1,4 +1,4 @@
-export default class Products {
+export default class ProductModel {
   BarCode: string
   Material: string
   Name: string

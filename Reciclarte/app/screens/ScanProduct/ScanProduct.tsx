@@ -8,7 +8,8 @@ import {
   ActivityIndicator
 } from 'react-native'
 import * as Permissions from 'expo-permissions'
-import ProductsRepository from '../../Repositories/products'
+import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
+import { getProductByBarCode } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay } from 'react-native-elements'
 // import { Toast } from 'react-native-easy-toast'
@@ -80,9 +81,8 @@ export default class ScanProduct extends Component<IProps, IState> {
       scanned: true,
       loading: true
     })
-    var productsRepository = new ProductsRepository()
-    await productsRepository
-      .lookForBarCode(data)
+
+    await getProductByBarCode(data)
       .then(foundProduct => {
         this.setState({
           loading: false,
@@ -91,9 +91,9 @@ export default class ScanProduct extends Component<IProps, IState> {
         if (foundProduct) {
           alert(
             'este producto va en ' +
-              foundProduct.Material +
-              ' . Descripcion: ' +
-              foundProduct.Description
+            foundProduct.Material +
+            ' . Descripcion: ' +
+            foundProduct.Description
           )
         } else {
           this.addProductAlert()
@@ -102,6 +102,63 @@ export default class ScanProduct extends Component<IProps, IState> {
       .catch(error => {
         // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
         console.log('error')
+        this.setState({ loading: false })
+      })
+
+    // var productsRepository = new ProductsRepository()
+    // await productsRepository
+    //   .lookForBarCode(data)
+    //   .then(foundProduct => {
+    //     this.setState({
+    //       loading: false,
+    //       barCode: data
+    //     })
+    //     if (foundProduct) {
+    //       alert(
+    //         'este producto va en ' +
+    //           foundProduct.Material +
+    //           ' . Descripcion: ' +
+    //           foundProduct.Description
+    //       )
+    //     } else {
+    //       this.addProductAlert()
+    //     }
+    //   })
+    //   .catch(error => {
+    //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+    //     console.log('error')
+    //     this.setState({ loading: false })
+    //   })
+  }
+
+  mockeoParaBorrar = async () => {
+    console.log('mockeoParaBorrar')
+
+    await getProductByBarCode('4002604064767')
+      .then(foundProduct => {
+        console.log('foundProduct desde scanproduct');
+        console.log(foundProduct);
+        this.setState({
+          loading: false,
+          barCode: '4002604064767'
+        })
+
+        if (foundProduct) {
+          alert(
+            'este producto va en ' +
+            foundProduct.Material +
+            ' . Descripcion: ' +
+            foundProduct.Description
+          )
+        } else {
+          this.addProductAlert()
+        }
+      })
+      .catch(error => {
+        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+        console.log('error en scanProduct')
+        console.log(error);
+
         this.setState({ loading: false })
       })
   }
@@ -126,7 +183,7 @@ export default class ScanProduct extends Component<IProps, IState> {
   MockScan = () => {
     // TODO: Remove mock
     this.props.navigation.push('SetMaterial', {
-      barCode: '01010101'
+      barCode: '0101'
       // toastRef: { toastRef }
     })
   }
@@ -175,9 +232,17 @@ export default class ScanProduct extends Component<IProps, IState> {
         {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
         <View>
           <Button
-            title='Mock'
+            title='Ir a set material'
             onPress={() => {
               this.MockScan()
+            }}
+          />
+        </View>
+        <View>
+          <Button
+            title='Mock escaneo producto'
+            onPress={() => {
+              this.mockeoParaBorrar()
             }}
           />
         </View>

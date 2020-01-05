@@ -7,3 +7,6 @@ Reciclarte\app\screens\ScanProduct\SetMaterial.tsx
 
 
 - Logica que agregue cuando 15 personas hayan dicho y que al que lo agregó le aparezca.
+- Agregar Toasts
+- Agregar validaciones
+- Agregar Logger?

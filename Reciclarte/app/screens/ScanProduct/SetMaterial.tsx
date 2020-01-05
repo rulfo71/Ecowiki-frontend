@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Picker } from 'react-native'
 import { Input, Button, Text } from 'react-native-elements'
-import Product from '../../Models/Products'
-import ProductsRepository from '../../Repositories/products'
+import Product from '../../Models/ProductModel'
+import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
+import { setProduct } from '../../Repositories/ProductsRepository'
 import { bool } from 'prop-types'
 
 interface IProps {
@@ -24,17 +25,13 @@ export default class SetMaterial extends Component<IProps, IState> {
   constructor(props) {
     super(props)
     // product = new Product()
-    console.log('SetMaterial constructor')
     var barCode = this.props.navigation.getParam('barCode', '')
-    console.log('barcode ' + barCode)
     this.state = {
       BarCode: barCode,
       Material: '',
       Description: '',
       Name: ''
     }
-    console.log(this.state)
-
     // toastRef = this.props.navigation.getParam('toast')
     // console.log('toastRef')
     // console.log(toastRef)
@@ -51,26 +48,17 @@ export default class SetMaterial extends Component<IProps, IState> {
   }
 
   buttonAccept = async () => {
-    console.log('Boton Aceptar')
-    console.log(this.state)
-    console.log(product)
-
     var product = new Product()
     product.BarCode = this.state.BarCode
     product.Description = this.state.Description
     product.Name = this.state.Name
     product.Material = this.state.Material
+    console.log('acccept desde setMaterial')
 
-    console.log('product: ')
-
-    console.log(product)
-
-    var productsRepository = new ProductsRepository()
-    await productsRepository
-      .updateProduct(product)
+    await setProduct(product)
       .then(response => {
         if (response) {
-          console.log('El pproducto fue guardado correctamente')
+          console.log('El producto fue guardado correctamente')
           this.props.navigation.goBack()
         } else {
           console.log('El producto no se pudo guardar')
@@ -83,6 +71,24 @@ export default class SetMaterial extends Component<IProps, IState> {
         this.props.navigation.goBack()
         // this.setState({ loading: false })
       })
+    // var productsRepository = new ProductsRepository()
+    // await productsRepository
+    //   .updateProduct(product)
+    //   .then(response => {
+    //     if (response) {
+    //       console.log('El producto fue guardado correctamente')
+    //       this.props.navigation.goBack()
+    //     } else {
+    //       console.log('El producto no se pudo guardar')
+    //       this.props.navigation.goBack()
+    //     }
+    //   })
+    //   .catch(error => {
+    //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+    //     console.log('error desde SetMaterial')
+    //     this.props.navigation.goBack()
+    //     // this.setState({ loading: false })
+    //   })
   }
   // setName = name => {
   //   product.Name = name
@@ -98,8 +104,6 @@ export default class SetMaterial extends Component<IProps, IState> {
   // }
 
   render() {
-    console.log('y ahora toca renderizar!')
-
     return (
       <View style={styles.ViewOverlay}>
         <Input disabled={true}>{this.state.BarCode}</Input>
