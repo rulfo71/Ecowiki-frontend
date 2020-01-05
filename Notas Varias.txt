@@ -1,7 +1,0 @@
-Cambio en node modules
-hay que ir al curso de udemy y buscar firebase, es una pregunta que dice esto: SOLUCION AL WARNING "Setting a timer for a long period of time, i.e. multiple minutes" en ANDROID
-
-
-Cambio en git para que use ssh en vez de https
-
-https://help.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
