@@ -1,8 +1,8 @@
-const server = 'http://192.168.0.5:3000/'
+const server = 'http://192.168.1.120:3000/'
 
 export const setProduct = product => {
-  console.log('entre a setProduct en ProductsRepositorio')
   var uriSetProduct = server + 'setProduct'
+  console.log(uriSetProduct);
 
   const data = JSON.stringify({
     BarCode: product.BarCode,
@@ -10,6 +10,8 @@ export const setProduct = product => {
     Name: product.Name,
     Material: product.Material
   })
+  console.log('body: ');
+
   console.log(data)
 
   return fetch(uriSetProduct, {
@@ -49,7 +51,7 @@ export const getProductByBarCode = async barCode => {
     .then(json)
     .then(function (data) {
       console.log('Request succeeded with JSON response', data);
-      return data
+      return data;
     }).catch(function (error) {
       console.log('Request failed', error);
     });

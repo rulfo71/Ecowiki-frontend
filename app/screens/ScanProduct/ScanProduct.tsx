@@ -84,6 +84,9 @@ export default class ScanProduct extends Component<IProps, IState> {
 
     await getProductByBarCode(data)
       .then(foundProduct => {
+        console.log('En ScanProduct/getProductByBarCode');
+        console.log('foundProduct: ');
+        console.log(foundProduct);
         this.setState({
           loading: false,
           barCode: data
