@@ -1,4 +1,4 @@
-const server = 'http://192.168.1.120:3000/'
+const server = 'http://192.168.1.121:3000/'
 
 export const setProduct = product => {
   var uriSetProduct = server + 'setProduct'
@@ -107,4 +107,39 @@ export const getProductByBarCode = async barCode => {
   //     console.log('Error getting documents: ', error)
   //   })
   // return foundProduct
+}
+export const getProductByName = async name => {
+  var foundProduct = null
+  var uriGetProduct = server + 'getProductByName/' + name
+
+  console.log('estoy en getProductByName')
+  console.log('uriGetProduct: ' + uriGetProduct)
+
+  return await fetch(uriGetProduct, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function (data) {
+      console.log('Request succeeded with JSON response', data);
+      return data;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+    });
+
+  function status(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return Promise.resolve(response)
+    } else {
+      return Promise.reject(new Error(response.statusText))
+    }
+  }
+
+  function json(response) {
+    return response.json()
+  }
 }
