@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Picker } from 'react-native'
-import { Input, Button, Text } from 'react-native-elements'
+import { Input, Button } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
 import { setProduct } from '../../Repositories/ProductsRepository'
@@ -9,6 +9,7 @@ import { bool } from 'prop-types'
 interface IProps {
   BarCode: string
   navigation: any
+  Name: string
 }
 
 interface IState {
@@ -24,13 +25,16 @@ interface IState {
 export default class SetMaterial extends Component<IProps, IState> {
   constructor(props) {
     super(props)
+    // console.log(this.state.BarCode);
+
     // product = new Product()
     var barCode = this.props.navigation.getParam('barCode', '')
+    var name = this.props.navigation.getParam('name', '')
     this.state = {
       BarCode: barCode,
       Material: '',
       Description: '',
-      Name: ''
+      Name: name
     }
     // toastRef = this.props.navigation.getParam('toast')
     // console.log('toastRef')
@@ -71,25 +75,32 @@ export default class SetMaterial extends Component<IProps, IState> {
         this.props.navigation.goBack()
         // this.setState({ loading: false })
       })
-    // var productsRepository = new ProductsRepository()
-    // await productsRepository
-    //   .updateProduct(product)
-    //   .then(response => {
-    //     if (response) {
-    //       console.log('El producto fue guardado correctamente')
-    //       this.props.navigation.goBack()
-    //     } else {
-    //       console.log('El producto no se pudo guardar')
-    //       this.props.navigation.goBack()
-    //     }
-    //   })
-    //   .catch(error => {
-    //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-    //     console.log('error desde SetMaterial')
-    //     this.props.navigation.goBack()
-    //     // this.setState({ loading: false })
-    //   })
   }
+  // var productsRepository = new ProductsRepository()
+  // await productsRepository
+  //   .updateProduct(product)
+  //   .then(response => {
+  //     if (response) {
+  //       console.log('El producto fue guardado correctamente')
+  //       this.props.navigation.goBack()
+  //     } else {
+  //       console.log('El producto no se pudo guardar')
+  //       this.props.navigation.goBack()
+  //     }
+  //   })
+  //   .catch(error => {
+  //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+  //     console.log('error desde SetMaterial')
+  //     this.props.navigation.goBack()
+  //     // this.setState({ loading: false })
+  //   })
+
+  // function BarCode() {
+  //   if (this.state.BarCode) {
+  //     return <Input disabled={true}>{this.state.BarCode}</Input>
+  //   }
+  //   else return
+  // }
   // setName = name => {
   //   product.Name = name
   // }
@@ -104,9 +115,26 @@ export default class SetMaterial extends Component<IProps, IState> {
   // }
 
   render() {
+    let barCodeInput;
+    let barCode = this.state.BarCode;
+    if (barCode !== '') {
+      barCodeInput = <Input disabled={true}>{this.state.BarCode}</Input>
+    }
+    let nameInput
+    let name = this.state.Name
+    if (name !== '') {
+      nameInput = <Input disabled={true}>{this.state.Name}</Input>
+    }
+    else {
+      nameInput = <Input
+        placeholder='Nombre (opcional)'
+        onChange={e => this.setState({ Name: e.nativeEvent.text })}
+      ></Input>
+    }
+
     return (
       <View style={styles.ViewOverlay}>
-        <Input disabled={true}>{this.state.BarCode}</Input>
+        {barCodeInput}
         <Picker
           selectedValue={this.state.Material}
           onValueChange={value => this.setState({ Material: value })}
@@ -118,10 +146,8 @@ export default class SetMaterial extends Component<IProps, IState> {
           <Picker.Item label='Metal' value='metal' />
           <Picker.Item label='Orgánico' value='organico' />
         </Picker>
-        <Input
-          placeholder='Nombre (opcional)'
-          onChange={e => this.setState({ Name: e.nativeEvent.text })}
-        ></Input>
+        {nameInput}
+
         <Input
           style={styles.description}
           placeholder='Datos Adicionales (opcional)'

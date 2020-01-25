@@ -9,9 +9,9 @@ import {
 } from 'react-native'
 import * as Permissions from 'expo-permissions'
 import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
-import { getProductByBarCode } from '../../Repositories/ProductsRepository'
+import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { Text as TextElem, Overlay } from 'react-native-elements'
+import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 // import { Toast } from 'react-native-easy-toast'
 
 interface IProps {
@@ -27,11 +27,13 @@ interface IState {
   overlayComponent?: any
   loading: boolean
   barCode: string
+  searchBar: string
 }
 
-// var toastRef
 
 export default class ScanProduct extends Component<IProps, IState> {
+  searchBarRef: any
+
   constructor(props) {
     super(props)
 
@@ -39,8 +41,10 @@ export default class ScanProduct extends Component<IProps, IState> {
       hasCameraPermission: null,
       scanned: false,
       loading: false,
-      barCode: ''
+      barCode: '',
+      searchBar: ''
     }
+    this.searchBarRef = React.createRef();
 
     // toastRef = useRef()
   }
@@ -49,16 +53,26 @@ export default class ScanProduct extends Component<IProps, IState> {
     this.getPermissionsAsync()
   }
 
+  updateSearch = searchBar => {
+    this.setState({ searchBar });
+  };
+
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     this.setState({ hasCameraPermission: status === 'granted' })
   }
   goToSetMaterial = async () => {
-    console.log('vamos pa set material con barcode ' + this.state.barCode)
-
     this.props.navigation.push('SetMaterial', {
-      barCode: this.state.barCode
+      barCode: this.state.barCode,
+      name: this.state.searchBar
       // toastRef: { toastRef }
+    })
+  }
+  goToProductInfo = async (product) => {
+    console.log('vamos pa productInfo con product ' + product.name)
+
+    this.props.navigation.push('ProductInfo', {
+      product: product
     })
   }
 
@@ -107,31 +121,6 @@ export default class ScanProduct extends Component<IProps, IState> {
         console.log('error')
         this.setState({ loading: false })
       })
-
-    // var productsRepository = new ProductsRepository()
-    // await productsRepository
-    //   .lookForBarCode(data)
-    //   .then(foundProduct => {
-    //     this.setState({
-    //       loading: false,
-    //       barCode: data
-    //     })
-    //     if (foundProduct) {
-    //       alert(
-    //         'este producto va en ' +
-    //           foundProduct.Material +
-    //           ' . Descripcion: ' +
-    //           foundProduct.Description
-    //       )
-    //     } else {
-    //       this.addProductAlert()
-    //     }
-    //   })
-    //   .catch(error => {
-    //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-    //     console.log('error')
-    //     this.setState({ loading: false })
-    //   })
   }
 
   mockeoParaBorrar = async () => {
@@ -147,6 +136,7 @@ export default class ScanProduct extends Component<IProps, IState> {
         })
 
         if (foundProduct) {
+          //goto 
           alert(
             'este producto va en ' +
             foundProduct.Material +
@@ -178,11 +168,56 @@ export default class ScanProduct extends Component<IProps, IState> {
       },
       {
         text: 'Si',
-        onPress: async () => await this.goToSetMaterial()
+        onPress: async () => {
+          console.log('onPressAddProductAlert - this.state.barCode');
+          console.log(this.state);
+          await this.goToSetMaterial();
+        }
       }
     ])
+    this.searchBarRef.clear();
   }
 
+  searchSubmit = async () => {
+    this.setState({
+      loading: true
+    })
+
+    await getProductByName(this.state.searchBar)
+      .then(foundProduct => {
+        console.log('En ScanProduct/getProductByName');
+        console.log('foundProduct: ');
+        console.log(foundProduct);
+        this.setState({
+          loading: false,
+          barCode: ''
+        })
+        if (foundProduct) {
+          this.goToProductInfo(foundProduct)
+          // alert(
+          //   'este producto va en ' +
+          //   foundProduct.Material +
+          //   ' . Descripcion: ' +
+          //   foundProduct.Description
+          // )
+          this.searchBarRef.clear();
+
+        } else {
+          await this.addProductAlert()
+          this.searchBarRef.clear();
+        }
+      })
+      .catch(error => {
+        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+        console.log('error')
+        this.setState({ loading: false })
+        this.searchBarRef.clear();
+      })
+
+
+  }
+
+  //TODO: BORRAR
   MockScan = () => {
     // TODO: Remove mock
     this.props.navigation.push('SetMaterial', {
@@ -196,7 +231,8 @@ export default class ScanProduct extends Component<IProps, IState> {
       hasCameraPermission,
       scanned,
       overlayComponent,
-      loading
+      loading,
+      searchBar
     } = this.state
 
     if (hasCameraPermission === null) {
@@ -212,6 +248,16 @@ export default class ScanProduct extends Component<IProps, IState> {
           style={StyleSheet.absoluteFillObject}
         />
 
+        <SearchBar
+          ref={search => this.searchBarRef = search}
+          round
+          lightTheme
+          returnKeyType='search'
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={searchBar}
+          onSubmitEditing={this.searchSubmit}
+        />
         {scanned && (
           <Button
             title={'Tap to Scan Again'}
