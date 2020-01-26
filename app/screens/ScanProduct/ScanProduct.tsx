@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import {
   Text,
   View,
@@ -8,7 +8,6 @@ import {
   ActivityIndicator
 } from 'react-native'
 import * as Permissions from 'expo-permissions'
-import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
@@ -30,7 +29,6 @@ interface IState {
   searchBar: string
 }
 
-
 export default class ScanProduct extends Component<IProps, IState> {
   searchBarRef: any
 
@@ -51,6 +49,8 @@ export default class ScanProduct extends Component<IProps, IState> {
 
   async componentDidMount() {
     this.getPermissionsAsync()
+
+    // this.searchBarRef.clear();
   }
 
   updateSearch = searchBar => {
@@ -69,8 +69,6 @@ export default class ScanProduct extends Component<IProps, IState> {
     })
   }
   goToProductInfo = async (product) => {
-    console.log('vamos pa productInfo con product ' + product.name)
-
     this.props.navigation.push('ProductInfo', {
       product: product
     })
@@ -98,22 +96,40 @@ export default class ScanProduct extends Component<IProps, IState> {
 
     await getProductByBarCode(data)
       .then(foundProduct => {
-        console.log('En ScanProduct/getProductByBarCode');
-        console.log('foundProduct: ');
-        console.log(foundProduct);
         this.setState({
           loading: false,
           barCode: data
         })
         if (foundProduct) {
-          alert(
-            'este producto va en ' +
-            foundProduct.Material +
-            ' . Descripcion: ' +
-            foundProduct.Description
-          )
+          this.goToProductInfo(foundProduct)
         } else {
           this.addProductAlert()
+        }
+      })
+      .catch(error => {
+        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+        console.log('error')
+        this.setState({ loading: false })
+      })
+  }
+
+  searchSubmit = async () => {
+    this.setState({
+      loading: true
+    })
+
+    await getProductByName(this.state.searchBar)
+      .then(foundProduct => {
+        this.setState({
+          loading: false,
+          barCode: ''
+        })
+        if (foundProduct) {
+          this.goToProductInfo(foundProduct)
+          this.searchBarRef.clear();
+        } else {
+          this.addProductAlert();
+          this.searchBarRef.clear();
         }
       })
       .catch(error => {
@@ -175,46 +191,6 @@ export default class ScanProduct extends Component<IProps, IState> {
         }
       }
     ])
-    this.searchBarRef.clear();
-  }
-
-  searchSubmit = async () => {
-    this.setState({
-      loading: true
-    })
-
-    await getProductByName(this.state.searchBar)
-      .then(foundProduct => {
-        console.log('En ScanProduct/getProductByName');
-        console.log('foundProduct: ');
-        console.log(foundProduct);
-        this.setState({
-          loading: false,
-          barCode: ''
-        })
-        if (foundProduct) {
-          this.goToProductInfo(foundProduct)
-          // alert(
-          //   'este producto va en ' +
-          //   foundProduct.Material +
-          //   ' . Descripcion: ' +
-          //   foundProduct.Description
-          // )
-          this.searchBarRef.clear();
-
-        } else {
-          await this.addProductAlert()
-          this.searchBarRef.clear();
-        }
-      })
-      .catch(error => {
-        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-        console.log('error')
-        this.setState({ loading: false })
-        this.searchBarRef.clear();
-      })
-
-
   }
 
   //TODO: BORRAR
@@ -245,9 +221,8 @@ export default class ScanProduct extends Component<IProps, IState> {
       <View style={styles.view}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
+          style={[StyleSheet.absoluteFill, styles.barCodescanner]}
         />
-
         <SearchBar
           ref={search => this.searchBarRef = search}
           round
@@ -257,7 +232,9 @@ export default class ScanProduct extends Component<IProps, IState> {
           onChangeText={this.updateSearch}
           value={searchBar}
           onSubmitEditing={this.searchSubmit}
+          style={styles.searchBar}
         />
+
         {scanned && (
           <Button
             title={'Tap to Scan Again'}
@@ -279,7 +256,7 @@ export default class ScanProduct extends Component<IProps, IState> {
           </View>
         </Overlay>
         {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-        <View>
+        {/* <View>
           <Button
             title='Ir a set material'
             onPress={() => {
@@ -294,7 +271,7 @@ export default class ScanProduct extends Component<IProps, IState> {
               this.mockeoParaBorrar()
             }}
           />
-        </View>
+        </View> */}
       </View>
     )
   }
@@ -310,9 +287,16 @@ const styles = StyleSheet.create({
   overlayLoading: {
     padding: 20
   },
+  barCodescanner: {
+    flex: 1
+  },
   overlayLoadingText: {
     color: '#00a680',
     marginBottom: 20,
     fontSize: 20
+  },
+  searchBar: {
+    position: 'absolute',
+    top: 0
   }
 })
