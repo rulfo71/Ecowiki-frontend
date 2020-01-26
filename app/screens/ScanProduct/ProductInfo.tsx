@@ -10,7 +10,8 @@ import {
 } from 'react-native'
 
 interface IProps {
-  product: Product
+  product: Product,
+  navigation: any
 }
 
 interface IState {
@@ -21,7 +22,14 @@ interface IState {
 export default class ProductInfo extends Component<IProps, IState> {
   constructor(props) {
     super(props)
-    // var barCode = this.props.navigation.getParam('barCode', '')
+    var product = this.props.navigation.getParam('product', '')
+    console.log('estoy en productInfo con product: ');
+    console.log(product);
+
+
+    this.state = {
+      product: product
+    }
   }
 
   render() {
