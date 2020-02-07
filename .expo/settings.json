@@ -1,8 +1,8 @@
 {
+  "urlRandomness": "qu-ncm",
   "hostType": "lan",
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": "k2-cyy",
   "https": false
 }

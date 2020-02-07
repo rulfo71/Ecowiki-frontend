@@ -1,6 +1,17 @@
-const server = 'http://192.168.1.121:3000/'
+const server = 'http://192.168.0.5:3000/'
+import { NetworkInfo } from 'react-native-network-info';
+import { firebaseApp } from '../utils/firebase'
+import firebase from 'firebase/app'
 
 export const setProduct = product => {
+  // require module
+  var NetworkInfo = require('react-native-network-info');
+
+  // Get Local IP
+  NetworkInfo.getIPAddress(ip => {
+    console.log('ip');
+    console.log(ip);
+  });
   var uriSetProduct = server + 'setProduct'
   console.log(uriSetProduct);
 
@@ -109,10 +120,31 @@ export const getProductByBarCode = async barCode => {
   // return foundProduct
 }
 export const getProductByName = async name => {
+
+  console.log('getProductByName');
+  // console.log('firebaseApp');
+  // console.log(firebaseApp);
+
+
+  // const functions = firebase.functions(firebaseApp);
+
+  // console.log('functions');
+  // console.log(functions);
+
+  // var getProductByName = functions.httpsCallable('getProductByName');
+  // getProductByName({ text: name }).then(function (result) {
+  //   console.log('getProductByName cloud functions');
+  //   console.log(result.data.text);
+  // });
+
   var foundProduct = null
   var uriGetProduct = server + 'getProductByName/' + name
 
   console.log('estoy en getProductByName')
+  // Get Local IP
+  // NetworkInfo.getIPV4Address().then(ipv4Address => {
+  //   console.log(ipv4Address);
+  // });
   console.log('uriGetProduct: ' + uriGetProduct)
 
   return await fetch(uriGetProduct, {

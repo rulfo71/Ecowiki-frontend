@@ -11,6 +11,7 @@ import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
+import Product from '../../Models/ProductModel'
 // import { Toast } from 'react-native-easy-toast'
 
 interface IProps {
@@ -68,7 +69,7 @@ export default class ScanProduct extends Component<IProps, IState> {
       // toastRef: { toastRef }
     })
   }
-  goToProductInfo = async (product) => {
+  goToProductInfo = async (product: Product) => {
     this.props.navigation.push('ProductInfo', {
       product: product
     })
@@ -194,12 +195,13 @@ export default class ScanProduct extends Component<IProps, IState> {
   }
 
   //TODO: BORRAR
-  MockScan = () => {
+  MockProductInfo = () => {
     // TODO: Remove mock
-    this.props.navigation.push('SetMaterial', {
-      barCode: '0101'
-      // toastRef: { toastRef }
-    })
+    var product = new Product();
+    product.Name = 'Filtros';
+    product.Description = 'alguna descripcion';
+    product.Material = 'Plastico'
+    this.goToProductInfo(product);
   }
 
   render() {
@@ -232,7 +234,7 @@ export default class ScanProduct extends Component<IProps, IState> {
           onChangeText={this.updateSearch}
           value={searchBar}
           onSubmitEditing={this.searchSubmit}
-          style={styles.searchBar}
+          style={styles.SearchBar}
         />
 
         {scanned && (
@@ -256,15 +258,15 @@ export default class ScanProduct extends Component<IProps, IState> {
           </View>
         </Overlay>
         {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-        {/* <View>
+        <View>
           <Button
-            title='Ir a set material'
+            title='Ir a ProductInfo'
             onPress={() => {
-              this.MockScan()
+              this.MockProductInfo()
             }}
           />
         </View>
-        <View>
+        {/* <View>
           <Button
             title='Mock escaneo producto'
             onPress={() => {
@@ -281,22 +283,23 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'stretch'
+    // justifyContent: 'flex-end',
+    // alignItems: 'stretch'
   },
   overlayLoading: {
     padding: 20
   },
   barCodescanner: {
-    flex: 1
+    marginHorizontal: 0, marginLeft: 0, marginStart: 0,
+      paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
+      height: '115%',
+      padding: 0
   },
   overlayLoadingText: {
     color: '#00a680',
     marginBottom: 20,
     fontSize: 20
   },
-  searchBar: {
-    position: 'absolute',
-    top: 0
-  }
+  SearchBar: {
+  },
 })
