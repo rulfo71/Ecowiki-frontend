@@ -1,55 +1,21 @@
-import React, { Component, useState, useEffect } from 'react'
-import { StyleSheet, View, Picker } from 'react-native'
+import React, { Component, useState, useEffect, useRef } from 'react'
+import { StyleSheet, View, Picker, ActivityIndicator } from 'react-native'
 import { Input, Button } from 'react-native-elements'
+import { Text, Overlay, } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { setProduct } from '../../Repositories/ProductsRepository'
 import {withNavigation} from 'react-navigation'
-
-// interface IProps {
-//   BarCode: string
-//   navigation: any
-//   Name: string
-// }
-
-// interface IState {
-//   Material: string
-//   Name: string
-//   Description: string
-//   BarCode: string
-// }
-
-// var product: Product
-// var toastRef
+import Toast from 'react-native-easy-toast'
 
 export default withNavigation(SetMaterial);
 
 function SetMaterial({navigation}){
+  const toastRef = useRef();
   let [barCode, setBarCode] = useState(navigation.getParam('barCode'));
   let [name, setName] = useState(navigation.getParam('name'));
   let [description, setDescription] = useState('');
   let [material, setMaterial] = useState('');
-
-//     var name = this.props.navigation.getParam('name', '')
-
-
-// export default class SetMaterial extends Component<IProps, IState> {
-//   constructor(props) {
-//     super(props)
-//     // console.log(this.state.BarCode);
-
-//     // product = new Product()
-//     var barCode = this.props.navigation.getParam('barCode', '')
-//     var name = this.props.navigation.getParam('name', '')
-//     this.state = {
-//       BarCode: barCode,
-//       Material: '',
-//       Description: '',
-//       Name: name
-//     }
-//     // toastRef = this.props.navigation.getParam('toast')
-//     // console.log('toastRef')
-//     // console.log(toastRef)
-//   }
+  let [loading, setLoading] = useState(false);
 
   const buttonCancel = () => {
     console.log('Boton Cancelar')
@@ -58,7 +24,8 @@ function SetMaterial({navigation}){
     // product.Name = ''
     // product.Description = ''
     // product.BarCode = ''
-    this.props.navigation.goBack()
+      // navigation.goBack();
+    navigation.goBack();
   }
 
   const buttonAccept = async () => {
@@ -68,61 +35,30 @@ function SetMaterial({navigation}){
     product.Name = name
     product.Material = material
     console.log('acccept desde setMaterial')
-  
+    setLoading(true);
     await setProduct(product)  
       .then(response => {
+        setLoading(false);
         if (response) {
-          console.log('El producto fue guardado correctamente')
-          this.props.navigation.goBack()
+          console.log('El producto fueee guardado correctamente')
+          toastRef.current.show('El producto fue guardado correctamente', 500,() => {
+            navigation.goBack();
+          });
         } else {
           console.log('El producto no se pudo guardar')
-          this.props.navigation.goBack()
+          toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500,() => {
+            navigation.goBack();
+          });
         }
       })
       .catch(error => {
-        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
+        setLoading(false);
         console.log('error desde SetMaterial')
-        this.props.navigation.goBack()
-        // this.setState({ loading: false })
+        toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500,() => {
+          navigation.goBack();
+        });
       })
   }
-  // var productsRepository = new ProductsRepository()
-  // await productsRepository
-  //   .updateProduct(product)
-  //   .then(response => {
-  //     if (response) {
-  //       console.log('El producto fue guardado correctamente')
-  //       this.props.navigation.goBack()
-  //     } else {
-  //       console.log('El producto no se pudo guardar')
-  //       this.props.navigation.goBack()
-  //     }
-  //   })
-  //   .catch(error => {
-  //     // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-  //     console.log('error desde SetMaterial')
-  //     this.props.navigation.goBack()
-  //     // this.setState({ loading: false })
-  //   })
-
-  // function BarCode() {
-  //   if (this.state.BarCode) {
-  //     return <Input disabled={true}>{this.state.BarCode}</Input>
-  //   }
-  //   else return
-  // }
-  // setName = name => {
-  //   product.Name = name
-  // }
-  // setDescription = async description => {
-  //   product.Description = description
-  // }
-  // setMaterial = async material => {
-  //   console.log('setMaterial')
-  //   console.log(material)
-  //   product.Material = material
-  //   console.log(product.Material)
-  // }
 
   function BarCode(){
     if (barCode !== ''){
@@ -137,30 +73,12 @@ function SetMaterial({navigation}){
       return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)}/>
   }
 
-  // render() {
-  //   let barCodeInput;
-  //   if (barCode !== '') {
-  //     barCodeInput = <Input disabled={true}>{barCode}</Input>
-  //   }
-  //   let nameInput
-  //   if (name !== '') {
-  //     nameInput = <Input disabled={true}>{this.state.Name}</Input>
-  //   }
-  //   else {
-  //     nameInput = <Input
-  //       placeholder='Nombre (opcional)'
-  //       onChange={e => setName(e.nativeEvent.text)}
-  //     ></Input>
-  //   }
-
   return (
     <View style={styles.ViewOverlay}>
-      {/* {barCodeInput} */}
       <BarCode/>
       <Picker
         selectedValue={material}
-        onValueChange={value => setMaterial(value)}
-      >
+        onValueChange={value => setMaterial(value)}>
         <Picker.Item label='Elija un material' value='' />
         <Picker.Item label='Plastico' value='plastico' />
         <Picker.Item label='Papel y Carton' value='papelCarton' />
@@ -187,10 +105,21 @@ function SetMaterial({navigation}){
           onPress={buttonAccept}
         />
       </View>
-      {/* <Toast position='center' opacity={0.5}></Toast> */}
+      <Overlay
+        overlayStyle={styles.overlayLoading}
+        isVisible={loading}
+        width='auto'
+        height='auto'>
+        <View>
+          <Text style={styles.overlayLoadingText}>
+            Guardando el producto
+          </Text>
+          <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
+        </View>
+      </Overlay>
+      <Toast ref={toastRef} position='center'/>
     </View>
   )
-  // }
 }
 
 const styles = StyleSheet.create({
@@ -223,5 +152,13 @@ const styles = StyleSheet.create({
   },
   description: {
     height: 50
+  },
+  overlayLoading: {
+    padding: 20
+  },
+  overlayLoadingText: {
+    color: '#00a680',
+    marginBottom: 20,
+    fontSize: 20
   }
 })

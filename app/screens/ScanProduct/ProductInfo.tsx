@@ -52,6 +52,7 @@ function ProductInfo({navigation}) {
     if (product.Description !== '') { 
       return <Text>Descripcion adicional: {product.Description} </Text>
     }
+    return null;
   }
 
   return (

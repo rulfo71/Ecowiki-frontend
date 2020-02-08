@@ -7,6 +7,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
+import Toast from 'react-native-easy-toast'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
@@ -14,9 +15,11 @@ import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
 // import { Toast } from 'react-native-easy-toast'
+export default withNavigation (ScanProduct);
 
-function ScanProduct(props) {
+function ScanProduct (props) {
   let searchBarRef = useRef(null);
+  const toastRef = useRef(null);
   const {navigation} = props;
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [scanned, setScanned] = useState(false);
@@ -26,7 +29,8 @@ function ScanProduct(props) {
   let [searchBar, setSearchBar] = useState('');
 
   useEffect(() => {
-    getPermissionsAsync()
+    getPermissionsAsync();
+    searchBarRef.current.clear();
   },[]);
 
   const updateSearch = searchBar => {
@@ -67,8 +71,9 @@ function ScanProduct(props) {
         }
       })
       .catch(error => {
-        console.log('error')
         setLoading(false);
+        console.log('error')
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
       })
   }
 
@@ -81,16 +86,16 @@ function ScanProduct(props) {
         setBarCode('');
         if (foundProduct) {
           goToProductInfo(foundProduct)
-          // this.searchBarRef.clear();
+          searchBarRef.current.clear();
         } else {
           addProductAlert();
-          // this.searchBarRef.clear();
+          searchBarRef.current.clear();
         }
       })
       .catch(error => {
-        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-        console.log('error')
         setLoading(false);
+        console.log('error')
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
       })
   }
 
@@ -115,10 +120,10 @@ function ScanProduct(props) {
         }
       })
       .catch(error => {
-        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
-        console.log('error en scanProduct')
-        console.log(error);
         setLoading(false);
+        console.log(error);
+        console.log('error en scanProduct')
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
       })
   }
 
@@ -135,6 +140,10 @@ function ScanProduct(props) {
         }
       }
     ])
+  }
+  const showToast = () =>{
+    toastRef.current.show('El producto fue guardado correctamente',600)
+    searchBarRef.current.clear();
   }
 
   //TODO: BORRAR
@@ -162,7 +171,7 @@ function ScanProduct(props) {
         style={[StyleSheet.absoluteFill, styles.barCodescanner]}
       />
       <SearchBar
-        ref={search => searchBarRef}
+        ref={searchBarRef}
         round
         lightTheme
         returnKeyType='search'
@@ -203,6 +212,14 @@ function ScanProduct(props) {
           }}
         />
       </View>
+      <View>
+        <Button
+          title='a ver ese toast'
+          onPress={() => {
+            showToast()
+          }}
+        />
+      </View>
       {/* <View>
         <Button
           title='Mock escaneo producto'
@@ -211,10 +228,11 @@ function ScanProduct(props) {
           }}
         />
       </View> */}
+      <Toast ref={toastRef} position='center'/>
+
     </View>
   )
 }
-export default withNavigation(ScanProduct);
 
 const styles = StyleSheet.create({
   view: {
@@ -226,16 +244,16 @@ const styles = StyleSheet.create({
   overlayLoading: {
     padding: 20
   },
+  overlayLoadingText: {
+    color: '#00a680',
+    marginBottom: 20,
+    fontSize: 20
+  },
   barCodescanner: {
     marginHorizontal: 0, marginLeft: 0, marginStart: 0,
       paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
       height: '115%',
       padding: 0
-  },
-  overlayLoadingText: {
-    color: '#00a680',
-    marginBottom: 20,
-    fontSize: 20
   },
   SearchBar: {
   },

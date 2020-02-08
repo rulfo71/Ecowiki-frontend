@@ -4,14 +4,6 @@ import { firebaseApp } from '../utils/firebase'
 import firebase from 'firebase/app'
 
 export const setProduct = product => {
-  // require module
-  // var NetworkInfo = require('react-native-network-info');
-
-  // Get Local IP
-  // NetworkInfo.getIPAddress(ip => {
-  //   console.log('ip');  
-  //   console.log(ip);
-  // });
   console.log('setProduct');
   
   var uriSetProduct = server + 'setProduct'
@@ -33,15 +25,13 @@ export const setProduct = product => {
       'Content-type': 'application/json; charset=UTF-8'
     },
     body: data
-  })
-    .then(response => {
+  }).then(response => {
       console.log('entre al then')
-      return response
+      console.log(response);
+      return response;
     })
     .catch(error => {
-      console.log('error: ')
-      console.log(error)
-
+      console.log('error: ',error)
       console.error(error)
     })
 }
