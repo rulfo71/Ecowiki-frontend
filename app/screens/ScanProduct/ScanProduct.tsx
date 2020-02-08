@@ -7,6 +7,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
+import Scanneador from '../../utils/scanneador'
 import Toast from 'react-native-easy-toast'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
@@ -15,9 +16,9 @@ import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
 // import { Toast } from 'react-native-easy-toast'
-export default withNavigation (ScanProduct);
+export default withNavigation(ScanProduct);
 
-function ScanProduct (props) {
+function ScanProduct(props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
   const { navigation } = props;
@@ -166,10 +167,11 @@ function ScanProduct (props) {
   return (
     <View style={styles.view}>
       {cameraPermission}
-      <BarCodeScanner
+      <Scanneador></Scanneador>
+      {/* <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFill, styles.barCodescanner]}
-      />
+      /> */}
       <SearchBar
         ref={searchBarRef}
         round
