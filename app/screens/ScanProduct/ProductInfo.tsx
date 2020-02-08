@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import {TouchableHighlight} from 'react-native'
+import {withNavigation} from 'react-navigation'
 import { Icon } from "react-native-elements";
+
 import Product from '../../Models/ProductModel'
 import {
   Text,
@@ -11,81 +13,67 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-interface IProps {
-  product: Product,
-  navigation: any
-}
+export default withNavigation(ProductInfo);
 
-interface IState {
-  product: Product,
-}
+function ProductInfo({navigation}) {
+  let [product, setProduct] = useState(navigation.getParam('product'));
+    console.log('estoy en productInfo con product: ',product);
+  useEffect(() => {
 
-
-export default class ProductInfo extends Component<IProps, IState> {
-  constructor(props) {
-    super(props)
-    var product = this.props.navigation.getParam('product', '')
-    console.log('estoy en productInfo con product: ');
-    console.log(product);
-
-    this.state = {
-      product: product
-    }
-  }
+  },[]);
  
-  dontAgree = () => {
+  const dontAgree = () => {
       Alert.alert('¿Querés agregarlo?', '', [
         {
           text: 'No',
-          onPress: () => this.goBack()
+          onPress: () => goBack()
         },
         {
           text: 'Si',
           onPress: async () => {
-            await this.goToSetMaterial();
+            goToSetMaterial();
           }
         }
       ])
   }
-  goToSetMaterial = () => {
-    this.props.navigation.push('SetMaterial', {
-      barCode: this.state.product.BarCode,
-      name: this.state.product.Name
-    })
+  const goToSetMaterial = () => {
+    navigation.navigate('SetMaterial', {
+      barCode: product.BarCode,
+      name: product.Name
+    });
   }
 
-  goBack = () => {
-    this.props.navigation.goBack()
+  const goBack = () => {
+    navigation.goBack();
   }
 
-  render() {
-
-    let description;
-    if (this.state.product.Description !== '') {
-      description = <Text>Descripcion adicional: {this.state.product.Description} </Text>
+  function Description() {
+    console.log('description');
+    if (product.Description !== '') { 
+      return <Text>Descripcion adicional: {product.Description} </Text>
     }
-
-    return (
-      <View style={styles.ViewOverlay}>
-        <Text>{this.state.product.Name} va en {this.state.product.Material} </Text>
-        {description}
-        <View style={styles.IconsAgree}>
-          <TouchableHighlight onPress={this.dontAgree} >
-            <View>
-              <Icon name="thumbs-down" size={60} type="font-awesome" />
-              <Text> No estoy de acuerdo </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this.goBack}>
-            <View >
-              <Icon name="thumbs-up" size={60} type="font-awesome" />
-              <Text> Gracias! </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-      </View>
-    )
   }
+
+  return (
+    <View style={styles.ViewOverlay}>
+      <Text>{product.Name} va en {product.Material} </Text>
+      <Description/>
+      <View style={styles.IconsAgree}>
+        <TouchableHighlight onPress={dontAgree} >
+          <View>
+            <Icon name="thumbs-down" size={60} type="font-awesome" />
+            <Text> No estoy de acuerdo </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={goBack}>
+          <View >
+            <Icon name="thumbs-up" size={60} type="font-awesome" />
+            <Text> Gracias! </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

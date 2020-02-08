@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import React, { Component, useEffect, useState, useRef } from 'react'
 import {
   Text,
   View,
@@ -12,148 +12,98 @@ import { getProductByBarCode, getProductByName } from '../../Repositories/Produc
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
+import { withNavigation } from 'react-navigation'
 // import { Toast } from 'react-native-easy-toast'
 
-interface IProps {
-  hasCameraPermission?: any
-  scanned?: boolean
-  overlayComponent?: any
-  navigation?: any
-}
+function ScanProduct(props) {
+  let searchBarRef = useRef(null);
+  const {navigation} = props;
+  let [hasCameraPermission, setCameraPermission] = useState(null);
+  let [scanned, setScanned] = useState(false);
+  let [overlayComponent, setOverlayComponent] = useState(null);
+  let [loading, setLoading] = useState(false);
+  let [barCode, setBarCode] = useState('');
+  let [searchBar, setSearchBar] = useState('');
 
-interface IState {
-  hasCameraPermission?: any
-  scanned?: boolean
-  overlayComponent?: any
-  loading: boolean
-  barCode: string
-  searchBar: string
-}
+  useEffect(() => {
+    getPermissionsAsync()
+  },[]);
 
-export default class ScanProduct extends Component<IProps, IState> {
-  searchBarRef: any
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      hasCameraPermission: null,
-      scanned: false,
-      loading: false,
-      barCode: '',
-      searchBar: ''
-    }
-    this.searchBarRef = React.createRef();
-
-    // toastRef = useRef()
-  }
-
-  async componentDidMount() {
-    this.getPermissionsAsync()
-
-    // this.searchBarRef.clear();
-  }
-
-  updateSearch = searchBar => {
-    this.setState({ searchBar });
+  const updateSearch = searchBar => {
+    setSearchBar(searchBar);
   };
 
-  getPermissionsAsync = async () => {
+  const getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
-    this.setState({ hasCameraPermission: status === 'granted' })
+    setCameraPermission(status === 'granted');
   }
-  goToSetMaterial = async () => {
-    this.props.navigation.push('SetMaterial', {
-      barCode: this.state.barCode,
-      name: this.state.searchBar
-      // toastRef: { toastRef }
-    })
+  const goToSetMaterial = async () => {
+    navigation.navigate('SetMaterial', {
+      barCode: barCode,
+      name: searchBar
+    });
   }
-  goToProductInfo = async (product: Product) => {
-    this.props.navigation.push('ProductInfo', {
+  const goToProductInfo = async (product: Product) => {
+    console.log('vamos para productInfo con ',product);
+    
+    navigation.navigate("ProductInfo", {
       product: product
-    })
+    });
   }
 
-  updateProduct = async () => {
-    this.setState({
-      overlayComponent: null
-    })
-  }
-
-  closeOverlay = async () => {
-    this.setState({
-      overlayComponent: null
-    })
-  }
-
-  handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     console.log('handleBarCodeScanned')
-
-    this.setState({
-      scanned: true,
-      loading: true
-    })
+    setScanned(true);
+    setLoading(true);
 
     await getProductByBarCode(data)
       .then(foundProduct => {
-        this.setState({
-          loading: false,
-          barCode: data
-        })
+        setLoading(false);
+        setBarCode(data);
         if (foundProduct) {
-          this.goToProductInfo(foundProduct)
+          goToProductInfo(foundProduct)
         } else {
-          this.addProductAlert()
+          addProductAlert()
         }
       })
       .catch(error => {
-        // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
         console.log('error')
-        this.setState({ loading: false })
+        setLoading(false);
       })
   }
 
-  searchSubmit = async () => {
-    this.setState({
-      loading: true
-    })
+  const searchSubmit = async () => {
+    setLoading(true);
 
-    await getProductByName(this.state.searchBar)
+    await getProductByName(searchBar)
       .then(foundProduct => {
-        this.setState({
-          loading: false,
-          barCode: ''
-        })
+        setLoading(false);
+        setBarCode('');
         if (foundProduct) {
-          this.goToProductInfo(foundProduct)
-          this.searchBarRef.clear();
+          goToProductInfo(foundProduct)
+          // this.searchBarRef.clear();
         } else {
-          this.addProductAlert();
-          this.searchBarRef.clear();
+          addProductAlert();
+          // this.searchBarRef.clear();
         }
       })
       .catch(error => {
         // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
         console.log('error')
-        this.setState({ loading: false })
+        setLoading(false);
       })
   }
 
-  mockeoParaBorrar = async () => {
+  const mockeoParaBorrar = async () => {
     console.log('mockeoParaBorrar')
 
     await getProductByBarCode('4002604064767')
       .then(foundProduct => {
         console.log('foundProduct desde scanproduct');
         console.log(foundProduct);
-        this.setState({
-          loading: false,
-          barCode: '4002604064767'
-        })
-
+        setLoading(false);
+        setBarCode('4002604064767');
         if (foundProduct) {
-          //goto 
           alert(
             'este producto va en ' +
             foundProduct.Material +
@@ -161,23 +111,18 @@ export default class ScanProduct extends Component<IProps, IState> {
             foundProduct.Description
           )
         } else {
-          this.addProductAlert()
+          addProductAlert()
         }
       })
       .catch(error => {
         // this.refs.toast.show('Error de servidor, intente de nuevo mas tarde')
         console.log('error en scanProduct')
         console.log(error);
-
-        this.setState({ loading: false })
+        setLoading(false);
       })
   }
 
-  // goToScreen = (screen) => {
-  //   this.props.navigation.navigate(screen);
-  // }
-
-  addProductAlert = () => {
+  const addProductAlert = () => {
     Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?', [
       {
         text: 'No',
@@ -186,98 +131,90 @@ export default class ScanProduct extends Component<IProps, IState> {
       {
         text: 'Si',
         onPress: async () => {
-          console.log('onPressAddProductAlert - this.state.barCode');
-          console.log(this.state);
-          await this.goToSetMaterial();
+          await goToSetMaterial();
         }
       }
     ])
   }
 
   //TODO: BORRAR
-  MockProductInfo = () => {
+  const mockProductInfo = () => {
     // TODO: Remove mock
     var product = new Product();
     product.Name = 'Filtros';
     product.Description = 'alguna descripcion';
     product.Material = 'Plastico'
-    this.goToProductInfo(product);
+    goToProductInfo(product);
   }
-
-  render() {
-    const {
-      hasCameraPermission,
-      scanned,
-      overlayComponent,
-      loading,
-      searchBar
-    } = this.state
-
+  const cameraPermission = () => {
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>
     }
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>
     }
-    return (
-      <View style={styles.view}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
-          style={[StyleSheet.absoluteFill, styles.barCodescanner]}
-        />
-        <SearchBar
-          ref={search => this.searchBarRef = search}
-          round
-          lightTheme
-          returnKeyType='search'
-          placeholder="Type Here..."
-          onChangeText={this.updateSearch}
-          value={searchBar}
-          onSubmitEditing={this.searchSubmit}
-          style={styles.SearchBar}
-        />
-
-        {scanned && (
-          <Button
-            title={'Tap to Scan Again'}
-            onPress={() => this.setState({ scanned: false })}
-          />
-        )}
-        {overlayComponent}
-        <Overlay
-          overlayStyle={styles.overlayLoading}
-          isVisible={loading}
-          width='auto'
-          height='auto'
-        >
-          <View>
-            <TextElem style={styles.overlayLoadingText}>
-              Buscando el producto
-            </TextElem>
-            <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
-          </View>
-        </Overlay>
-        {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-        <View>
-          <Button
-            title='Ir a ProductInfo'
-            onPress={() => {
-              this.MockProductInfo()
-            }}
-          />
-        </View>
-        {/* <View>
-          <Button
-            title='Mock escaneo producto'
-            onPress={() => {
-              this.mockeoParaBorrar()
-            }}
-          />
-        </View> */}
-      </View>
-    )
   }
+  return (
+    <View style={styles.view}>
+      {cameraPermission}
+      <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={[StyleSheet.absoluteFill, styles.barCodescanner]}
+      />
+      <SearchBar
+        ref={search => searchBarRef}
+        round
+        lightTheme
+        returnKeyType='search'
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={searchBar}
+        onSubmitEditing={searchSubmit}
+        style={styles.SearchBar}
+      />
+
+      {scanned && (
+        <Button
+          title={'Tap to Scan Again'}
+          onPress={() => setScanned(false)}
+          // onPress={() => this.setState({ scanned: false })}
+        />
+      )}
+      {overlayComponent}
+      <Overlay
+        overlayStyle={styles.overlayLoading}
+        isVisible={loading}
+        width='auto'
+        height='auto'
+      >
+        <View>
+          <TextElem style={styles.overlayLoadingText}>
+            Buscando el producto
+          </TextElem>
+          <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
+        </View>
+      </Overlay>
+      {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
+      <View>
+        <Button
+          title='Ir a ProductInfo'
+          onPress={() => {
+            mockProductInfo()
+          }}
+        />
+      </View>
+      {/* <View>
+        <Button
+          title='Mock escaneo producto'
+          onPress={() => {
+            mockeoParaBorrar()
+          }}
+        />
+      </View> */}
+    </View>
+  )
 }
+export default withNavigation(ScanProduct);
 
 const styles = StyleSheet.create({
   view: {

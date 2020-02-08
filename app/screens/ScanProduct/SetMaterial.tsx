@@ -1,47 +1,57 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { StyleSheet, View, Picker } from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
-import ProductsRepository from '../../Repositories/ProductsRepositorioParaBorrar'
 import { setProduct } from '../../Repositories/ProductsRepository'
-import { bool } from 'prop-types'
+import {withNavigation} from 'react-navigation'
 
-interface IProps {
-  BarCode: string
-  navigation: any
-  Name: string
-}
+// interface IProps {
+//   BarCode: string
+//   navigation: any
+//   Name: string
+// }
 
-interface IState {
-  Material: string
-  Name: string
-  Description: string
-  BarCode: string
-}
+// interface IState {
+//   Material: string
+//   Name: string
+//   Description: string
+//   BarCode: string
+// }
 
 // var product: Product
 // var toastRef
 
-export default class SetMaterial extends Component<IProps, IState> {
-  constructor(props) {
-    super(props)
-    // console.log(this.state.BarCode);
+export default withNavigation(SetMaterial);
 
-    // product = new Product()
-    var barCode = this.props.navigation.getParam('barCode', '')
-    var name = this.props.navigation.getParam('name', '')
-    this.state = {
-      BarCode: barCode,
-      Material: '',
-      Description: '',
-      Name: name
-    }
-    // toastRef = this.props.navigation.getParam('toast')
-    // console.log('toastRef')
-    // console.log(toastRef)
-  }
+function SetMaterial({navigation}){
+  let [barCode, setBarCode] = useState(navigation.getParam('barCode'));
+  let [name, setName] = useState(navigation.getParam('name'));
+  let [description, setDescription] = useState('');
+  let [material, setMaterial] = useState('');
 
-  buttonCancel = () => {
+//     var name = this.props.navigation.getParam('name', '')
+
+
+// export default class SetMaterial extends Component<IProps, IState> {
+//   constructor(props) {
+//     super(props)
+//     // console.log(this.state.BarCode);
+
+//     // product = new Product()
+//     var barCode = this.props.navigation.getParam('barCode', '')
+//     var name = this.props.navigation.getParam('name', '')
+//     this.state = {
+//       BarCode: barCode,
+//       Material: '',
+//       Description: '',
+//       Name: name
+//     }
+//     // toastRef = this.props.navigation.getParam('toast')
+//     // console.log('toastRef')
+//     // console.log(toastRef)
+//   }
+
+  const buttonCancel = () => {
     console.log('Boton Cancelar')
     //TODO: ProductService.EmptyProduct()
     // product.Material = ''
@@ -51,15 +61,15 @@ export default class SetMaterial extends Component<IProps, IState> {
     this.props.navigation.goBack()
   }
 
-  buttonAccept = async () => {
+  const buttonAccept = async () => {
     var product = new Product()
-    product.BarCode = this.state.BarCode
-    product.Description = this.state.Description
-    product.Name = this.state.Name
-    product.Material = this.state.Material
+    product.BarCode = barCode;
+    product.Description = description;  
+    product.Name = name
+    product.Material = material
     console.log('acccept desde setMaterial')
-
-    await setProduct(product)
+  
+    await setProduct(product)  
       .then(response => {
         if (response) {
           console.log('El producto fue guardado correctamente')
@@ -114,66 +124,73 @@ export default class SetMaterial extends Component<IProps, IState> {
   //   console.log(product.Material)
   // }
 
-  render() {
-    let barCodeInput;
-    let barCode = this.state.BarCode;
-    if (barCode !== '') {
-      barCodeInput = <Input disabled={true}>{this.state.BarCode}</Input>
+  function BarCode(){
+    if (barCode !== ''){
+      return <Input disabled={true}>{barCode}</Input>
     }
-    let nameInput
-    let name = this.state.Name
-    if (name !== '') {
-      nameInput = <Input disabled={true}>{this.state.Name}</Input>
-    }
-    else {
-      nameInput = <Input
-        placeholder='Nombre (opcional)'
-        onChange={e => this.setState({ Name: e.nativeEvent.text })}
-      ></Input>
-    }
-
-    return (
-      <View style={styles.ViewOverlay}>
-        {barCodeInput}
-        <Picker
-          selectedValue={this.state.Material}
-          onValueChange={value => this.setState({ Material: value })}
-        >
-          <Picker.Item label='Elija un material' value='' />
-          <Picker.Item label='Plastico' value='plastico' />
-          <Picker.Item label='Papel y Carton' value='papelCarton' />
-          <Picker.Item label='Vidrio' value='vidrio' />
-          <Picker.Item label='Metal' value='metal' />
-          <Picker.Item label='Orgánico' value='organico' />
-        </Picker>
-        {nameInput}
-
-        <Input
-          style={styles.description}
-          placeholder='Datos Adicionales (opcional)'
-          onChange={e => this.setState({ Description: e.nativeEvent.text })}
-        ></Input>
-
-        <View style={styles.buttonContainer}>
-          <Button
-            buttonStyle={styles.buttonCancel}
-            title='Cancelar'
-            onPress={() => {
-              this.buttonCancel()
-            }}
-          />
-          <Button
-            buttonStyle={styles.buttonSave}
-            title='Guardar'
-            onPress={() => {
-              this.buttonAccept()
-            }}
-          />
-        </View>
-        {/* <Toast position='center' opacity={0.5}></Toast> */}
-      </View>
-    )
+    return null;
   }
+  function Name(){
+    if (name !== '')
+      return <Input disabled={true}>{name}</Input>
+    else
+      return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)}/>
+  }
+
+  // render() {
+  //   let barCodeInput;
+  //   if (barCode !== '') {
+  //     barCodeInput = <Input disabled={true}>{barCode}</Input>
+  //   }
+  //   let nameInput
+  //   if (name !== '') {
+  //     nameInput = <Input disabled={true}>{this.state.Name}</Input>
+  //   }
+  //   else {
+  //     nameInput = <Input
+  //       placeholder='Nombre (opcional)'
+  //       onChange={e => setName(e.nativeEvent.text)}
+  //     ></Input>
+  //   }
+
+  return (
+    <View style={styles.ViewOverlay}>
+      {/* {barCodeInput} */}
+      <BarCode/>
+      <Picker
+        selectedValue={material}
+        onValueChange={value => setMaterial(value)}
+      >
+        <Picker.Item label='Elija un material' value='' />
+        <Picker.Item label='Plastico' value='plastico' />
+        <Picker.Item label='Papel y Carton' value='papelCarton' />
+        <Picker.Item label='Vidrio' value='vidrio' />
+        <Picker.Item label='Metal' value='metal' />
+        <Picker.Item label='Orgánico' value='organico' />
+      </Picker>
+      <Name/>
+      <Input
+        style={styles.description}
+        placeholder='Datos Adicionales (opcional)'
+        onChange={e => setDescription(e.nativeEvent.text)}
+      ></Input>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          buttonStyle={styles.buttonCancel}
+          title='Cancelar'
+          onPress={buttonCancel}
+        />
+        <Button
+          buttonStyle={styles.buttonSave}
+          title='Guardar'
+          onPress={buttonAccept}
+        />
+      </View>
+      {/* <Toast position='center' opacity={0.5}></Toast> */}
+    </View>
+  )
+  // }
 }
 
 const styles = StyleSheet.create({

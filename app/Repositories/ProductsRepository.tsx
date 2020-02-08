@@ -5,13 +5,15 @@ import firebase from 'firebase/app'
 
 export const setProduct = product => {
   // require module
-  var NetworkInfo = require('react-native-network-info');
+  // var NetworkInfo = require('react-native-network-info');
 
   // Get Local IP
-  NetworkInfo.getIPAddress(ip => {
-    console.log('ip');
-    console.log(ip);
-  });
+  // NetworkInfo.getIPAddress(ip => {
+  //   console.log('ip');  
+  //   console.log(ip);
+  // });
+  console.log('setProduct');
+  
   var uriSetProduct = server + 'setProduct'
   console.log(uriSetProduct);
 
