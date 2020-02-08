@@ -4,12 +4,12 @@ import { Input, Button } from 'react-native-elements'
 import { Text, Overlay, } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { setProduct } from '../../Repositories/ProductsRepository'
-import {withNavigation} from 'react-navigation'
+import { withNavigation } from 'react-navigation'
 import Toast from 'react-native-easy-toast'
 
 export default withNavigation(SetMaterial);
 
-function SetMaterial({navigation}){
+function SetMaterial({ navigation }) {
   const toastRef = useRef();
   let [barCode, setBarCode] = useState(navigation.getParam('barCode'));
   let [name, setName] = useState(navigation.getParam('name'));
@@ -24,29 +24,36 @@ function SetMaterial({navigation}){
     // product.Name = ''
     // product.Description = ''
     // product.BarCode = ''
-      // navigation.goBack();
+    // navigation.goBack();
     navigation.goBack();
   }
 
   const buttonAccept = async () => {
+
+    if (material === '') {
+      toastRef.current.show('Debes completar el material');
+      return;
+    }
+
     var product = new Product()
     product.BarCode = barCode;
-    product.Description = description;  
+    product.Description = description;
     product.Name = name
     product.Material = material
     console.log('acccept desde setMaterial')
+
     setLoading(true);
-    await setProduct(product)  
+    await setProduct(product)
       .then(response => {
         setLoading(false);
         if (response) {
           console.log('El producto fueee guardado correctamente')
-          toastRef.current.show('El producto fue guardado correctamente', 500,() => {
+          toastRef.current.show('El producto fue guardado correctamente', 500, () => {
             navigation.goBack();
           });
         } else {
           console.log('El producto no se pudo guardar')
-          toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500,() => {
+          toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500, () => {
             navigation.goBack();
           });
         }
@@ -54,28 +61,28 @@ function SetMaterial({navigation}){
       .catch(error => {
         setLoading(false);
         console.log('error desde SetMaterial')
-        toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500,() => {
+        toastRef.current.show('El producto no se pudo guardar. Intente de nuevo mas tarde', 500, () => {
           navigation.goBack();
         });
       })
   }
 
-  function BarCode(){
-    if (barCode !== ''){
+  function BarCode() {
+    if (barCode !== '') {
       return <Input disabled={true}>{barCode}</Input>
     }
     return null;
   }
-  function Name(){
+  function Name() {
     if (name !== '')
       return <Input disabled={true}>{name}</Input>
     else
-      return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)}/>
+      return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)} />
   }
 
   return (
     <View style={styles.ViewOverlay}>
-      <BarCode/>
+      <BarCode />
       <Picker
         selectedValue={material}
         onValueChange={value => setMaterial(value)}>
@@ -86,7 +93,7 @@ function SetMaterial({navigation}){
         <Picker.Item label='Metal' value='metal' />
         <Picker.Item label='Orgánico' value='organico' />
       </Picker>
-      <Name/>
+      <Name />
       <Input
         style={styles.description}
         placeholder='Datos Adicionales (opcional)'
@@ -117,7 +124,7 @@ function SetMaterial({navigation}){
           <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
         </View>
       </Overlay>
-      <Toast ref={toastRef} position='center'/>
+      <Toast ref={toastRef} position='center' />
     </View>
   )
 }

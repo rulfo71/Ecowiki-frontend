@@ -20,7 +20,7 @@ export default withNavigation (ScanProduct);
 function ScanProduct (props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
-  const {navigation} = props;
+  const { navigation } = props;
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [scanned, setScanned] = useState(false);
   let [overlayComponent, setOverlayComponent] = useState(null);
@@ -31,7 +31,7 @@ function ScanProduct (props) {
   useEffect(() => {
     getPermissionsAsync();
     searchBarRef.current.clear();
-  },[]);
+  }, []);
 
   const updateSearch = searchBar => {
     setSearchBar(searchBar);
@@ -48,8 +48,8 @@ function ScanProduct (props) {
     });
   }
   const goToProductInfo = async (product: Product) => {
-    console.log('vamos para productInfo con ',product);
-    
+    console.log('vamos para productInfo con ', product);
+
     navigation.navigate("ProductInfo", {
       product: product
     });
@@ -73,7 +73,7 @@ function ScanProduct (props) {
       .catch(error => {
         setLoading(false);
         console.log('error')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
       })
   }
 
@@ -95,7 +95,7 @@ function ScanProduct (props) {
       .catch(error => {
         setLoading(false);
         console.log('error')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
       })
   }
 
@@ -123,7 +123,7 @@ function ScanProduct (props) {
         setLoading(false);
         console.log(error);
         console.log('error en scanProduct')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde',600)
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
       })
   }
 
@@ -141,8 +141,8 @@ function ScanProduct (props) {
       }
     ])
   }
-  const showToast = () =>{
-    toastRef.current.show('El producto fue guardado correctamente',600)
+  const showToast = () => {
+    toastRef.current.show('El producto fue guardado correctamente', 600)
     searchBarRef.current.clear();
   }
 
@@ -157,10 +157,10 @@ function ScanProduct (props) {
   }
   const cameraPermission = () => {
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>
+      return <Text>Pidiendo permisos para acceder a la camara</Text>
     }
     if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>
+      return <Text>No tenemos permisos para acceder a tu camara</Text>
     }
   }
   return (
@@ -179,14 +179,14 @@ function ScanProduct (props) {
         onChangeText={updateSearch}
         value={searchBar}
         onSubmitEditing={searchSubmit}
-        style={styles.SearchBar}
+        containerStyle={styles.SearchBar}
+      // style={styles.SearchBar}
       />
 
       {scanned && (
         <Button
           title={'Tap to Scan Again'}
           onPress={() => setScanned(false)}
-          // onPress={() => this.setState({ scanned: false })}
         />
       )}
       {overlayComponent}
@@ -204,7 +204,7 @@ function ScanProduct (props) {
         </View>
       </Overlay>
       {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-      <View>
+      {/* <View>
         <Button
           title='Ir a ProductInfo'
           onPress={() => {
@@ -219,7 +219,7 @@ function ScanProduct (props) {
             showToast()
           }}
         />
-      </View>
+      </View> */}
       {/* <View>
         <Button
           title='Mock escaneo producto'
@@ -228,7 +228,7 @@ function ScanProduct (props) {
           }}
         />
       </View> */}
-      <Toast ref={toastRef} position='center'/>
+      <Toast ref={toastRef} position='center' />
 
     </View>
   )
@@ -250,11 +250,19 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   barCodescanner: {
-    marginHorizontal: 0, marginLeft: 0, marginStart: 0,
-      paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
-      height: '115%',
-      padding: 0
+    flex: 1,
+    // height: 
+    // marginHorizontal: 0, marginLeft: 0, marginStart: 0,
+    // paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
+    // padding: 0
   },
   SearchBar: {
+    marginTop: 50,
+    opacity: 1,
+    position: 'absolute',
+    flex: 1,
+    width: 'auto'
+    // width: 100
+    // alignSelf: 'stretch'
   },
 })
