@@ -8,13 +8,14 @@ import {
   ActivityIndicator
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
-import CodeScanner from '../../utils/barcodescaneador'
+import CodeScanner from '../../utils/barcodescaneadorts'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
+import Spinner from "react-native-loading-spinner-overlay";
 // import { Toast } from 'react-native-easy-toast'
 export default withNavigation(ScanProduct);
 
@@ -22,6 +23,7 @@ function ScanProduct(props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
   const { navigation } = props;
+
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [scanned, setScanned] = useState(false);
   let [overlayComponent, setOverlayComponent] = useState(null);
@@ -192,20 +194,8 @@ function ScanProduct(props) {
           onPress={() => setScanned(false)}
         />
       )} */}
-      {overlayComponent}
-      <Overlay
-        overlayStyle={styles.overlayLoading}
-        isVisible={loading}
-        width='auto'
-        height='auto'
-      >
-        <View>
-          <TextElem style={styles.overlayLoadingText}>
-            Buscando el producto
-          </TextElem>
-          <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
-        </View>
-      </Overlay>
+      <Spinner visible={loading} />
+
       {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
       {/* <View>
         <Button

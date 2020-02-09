@@ -16,6 +16,7 @@ function SetMaterial({ navigation }) {
   let [description, setDescription] = useState('');
   let [material, setMaterial] = useState('');
   let [loading, setLoading] = useState(false);
+  const initialName = name;
 
   const buttonCancel = () => {
     console.log('Boton Cancelar')
@@ -34,6 +35,10 @@ function SetMaterial({ navigation }) {
       toastRef.current.show('Debes completar el material');
       return;
     }
+    if (barCode === '' && name === '') {
+      toastRef.current.show('Debes completar el material');
+      return;
+    }
 
     var product = new Product()
     product.BarCode = barCode;
@@ -47,7 +52,7 @@ function SetMaterial({ navigation }) {
       .then(response => {
         setLoading(false);
         if (response) {
-          console.log('El producto fueee guardado correctamente')
+          console.log('El producto fue guardado correctamente')
           toastRef.current.show('El producto fue guardado correctamente', 500, () => {
             navigation.goBack();
           });
@@ -74,7 +79,7 @@ function SetMaterial({ navigation }) {
     return null;
   }
   function Name() {
-    if (name !== '')
+    if (initialName !== '')
       return <Input disabled={true}>{name}</Input>
     else
       return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)} />
