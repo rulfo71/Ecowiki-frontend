@@ -9,7 +9,6 @@ import { getProductByBarCode } from "../Repositories/ProductsRepository";
 import { useState, useEffect, useRef } from "react";
 import { withNavigation } from 'react-navigation'
 import Toast from "react-native-easy-toast";
-// import { Toast } from 'react-native-easy-toast'
 import Spinner from "react-native-loading-spinner-overlay";
 export default withNavigation(CodeScanner);
 
@@ -37,32 +36,19 @@ function CodeScanner(props) {
     };
 
     const handleBarCodeScanned = async ({ type, data }) => {
-        console.log('handleBarCodeScanned en barcodescaneador')
-        console.log('el tipo de data es ', typeof data);
-        console.log('type es ', type);
-        console.log('llamo a getProductByBarCode con data: ', data);
 
-        // await setBarCode(data);
-        // console.log('barCode: ', barCode);
         setScanned(true);
         setLoading(true);
-        setBarCode(data);
-        console.log(barCode);
-
-        // setBarCode(data.toString());
 
         await getProductByBarCode(data)
             .then(foundProduct => {
-                console.log('entre al then de getProductByBarCode en handleBarCodeScanned');
-                console.log(foundProduct);
+                setBarCode(data);
                 setLoading(false);
-                console.log('barCode en then de getProductBybarcode');
-                console.log(barCode);
                 if (foundProduct) {
                     goToProductInfo(foundProduct);
                     setScanned(false);
                 } else {
-                    addProductAlert()
+                    addProductAlert(data)
                 }
             })
             .catch(error => {
@@ -71,21 +57,18 @@ function CodeScanner(props) {
                 toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
             })
     }
-    const goToSetMaterial = () => {
-        console.log('gotoSetMaterial. Barcode: ', barCode);
-
+    const goToSetMaterial = (data) => {
         navigation.navigate('SetMaterial', {
-            barCode: barCode,
+            barCode: data,
             name: ''
         });
     }
     const goToProductInfo = async (product: Product) => {
-        console.log('vamos para productInfo con ', product);
         navigation.navigate("ProductInfo", {
             product: product
         });
     }
-    const addProductAlert = () => {
+    const addProductAlert = (data) => {
         Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?', [
             {
                 text: 'No',
@@ -97,7 +80,7 @@ function CodeScanner(props) {
             {
                 text: 'Si',
                 onPress: async () => {
-                    goToSetMaterial();
+                    goToSetMaterial(data);
                     setScanned(false);
                 }
             }

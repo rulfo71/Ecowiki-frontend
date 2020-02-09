@@ -8,10 +8,9 @@ import {
   ActivityIndicator
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
-import CodeScanner from '../../utils/barcodescaneadorts'
+import CodeScanner from '../../utils/CodeScanner'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
-import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
@@ -56,28 +55,6 @@ function ScanProduct(props) {
     navigation.navigate("ProductInfo", {
       product: product
     });
-  }
-
-  const handleBarCodeScanned = async ({ type, data }) => {
-    console.log('handleBarCodeScanned')
-    setScanned(true);
-    setLoading(true);
-
-    await getProductByBarCode(data)
-      .then(foundProduct => {
-        setLoading(false);
-        setBarCode(data);
-        if (foundProduct) {
-          goToProductInfo(foundProduct)
-        } else {
-          addProductAlert()
-        }
-      })
-      .catch(error => {
-        setLoading(false);
-        console.log('error')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
-      })
   }
 
   const searchSubmit = async () => {
@@ -167,11 +144,6 @@ function ScanProduct(props) {
   }
   return (
     <View style={styles.view}>
-      {/* {cameraPermission} */}
-      {/* <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={[StyleSheet.absoluteFill, styles.barCodescanner]}
-      /> */}
       <CodeScanner></CodeScanner>
       <SearchBar
         ref={searchBarRef}
@@ -241,13 +213,6 @@ const styles = StyleSheet.create({
     color: '#00a680',
     marginBottom: 20,
     fontSize: 20
-  },
-  barCodescanner: {
-    flex: 1,
-    // height: 
-    // marginHorizontal: 0, marginLeft: 0, marginStart: 0,
-    // paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
-    // padding: 0
   },
   SearchBarContainer: {
     // marginTop: 50,
