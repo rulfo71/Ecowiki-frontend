@@ -16,7 +16,7 @@ function SetMaterial({ navigation }) {
   let [description, setDescription] = useState('');
   let [material, setMaterial] = useState('');
   let [loading, setLoading] = useState(false);
-  const initialName = name;
+  let [emptyInputName, setEmptyInputName] = (name === '') ? useState(true) : useState(false)
 
   const buttonCancel = () => {
     console.log('Boton Cancelar')
@@ -36,7 +36,7 @@ function SetMaterial({ navigation }) {
       return;
     }
     if (barCode === '' && name === '') {
-      toastRef.current.show('Debes completar el material');
+      toastRef.current.show('Debes completar el nombre');
       return;
     }
 
@@ -78,12 +78,6 @@ function SetMaterial({ navigation }) {
     }
     return null;
   }
-  function Name() {
-    if (initialName !== '')
-      return <Input disabled={true}>{name}</Input>
-    else
-      return <Input placeholder='Nombre (opcional)' onChange={e => setName(e.nativeEvent.text)} />
-  }
 
   return (
     <View style={styles.ViewOverlay}>
@@ -98,7 +92,13 @@ function SetMaterial({ navigation }) {
         <Picker.Item label='Metal' value='metal' />
         <Picker.Item label='Orgánico' value='organico' />
       </Picker>
-      <Name />
+      {/* <Name /> */}
+      <Input
+        placeholder='Nombre (opcional)'
+        disabled={!emptyInputName}
+        value={name}
+        onChange={e => setName(e.nativeEvent.text)} />
+
       <Input
         style={styles.description}
         placeholder='Datos Adicionales (opcional)'
