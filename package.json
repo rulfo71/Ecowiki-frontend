@@ -10,6 +10,7 @@
   "dependencies": {
     "expo": "^35.0.0",
     "expo-barcode-scanner": "~7.0.0",
+    "expo-camera": "^8.0.0",
     "firebase": "^7.3.0",
     "firebase-tools": "^7.8.1",
     "react": "16.8.3",

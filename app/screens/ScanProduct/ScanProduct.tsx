@@ -8,6 +8,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
+import CodeScanner from '../../utils/barcodescaneador'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
 import { BarCodeScanner } from 'expo-barcode-scanner'
@@ -15,9 +16,9 @@ import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
 // import { Toast } from 'react-native-easy-toast'
-export default withNavigation (ScanProduct);
+export default withNavigation(ScanProduct);
 
-function ScanProduct (props) {
+function ScanProduct(props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
   const { navigation } = props;
@@ -79,7 +80,6 @@ function ScanProduct (props) {
 
   const searchSubmit = async () => {
     setLoading(true);
-
     await getProductByName(searchBar)
       .then(foundProduct => {
         setLoading(false);
@@ -165,11 +165,12 @@ function ScanProduct (props) {
   }
   return (
     <View style={styles.view}>
-      {cameraPermission}
-      <BarCodeScanner
+      {/* {cameraPermission} */}
+      {/* <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFill, styles.barCodescanner]}
-      />
+      /> */}
+      <CodeScanner></CodeScanner>
       <SearchBar
         ref={searchBarRef}
         round
@@ -179,16 +180,18 @@ function ScanProduct (props) {
         onChangeText={updateSearch}
         value={searchBar}
         onSubmitEditing={searchSubmit}
-        containerStyle={styles.SearchBar}
+        containerStyle={styles.SearchBarContainer}
+        inputContainerStyle={styles.SearchBar}
+        inputStyle={styles.SearchBar}
       // style={styles.SearchBar}
       />
 
-      {scanned && (
+      {/* {scanned && (
         <Button
           title={'Tap to Scan Again'}
           onPress={() => setScanned(false)}
         />
-      )}
+      )} */}
       {overlayComponent}
       <Overlay
         overlayStyle={styles.overlayLoading}
@@ -256,13 +259,18 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
     // padding: 0
   },
-  SearchBar: {
-    marginTop: 50,
-    opacity: 1,
+  SearchBarContainer: {
+    // marginTop: 50,
+    // opacity: 0,
+    width: '100%',
+    top: 50,
+    borderRadius: 5,
     position: 'absolute',
-    flex: 1,
-    width: 'auto'
-    // width: 100
-    // alignSelf: 'stretch'
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+    backgroundColor: 'transparent'
+  },
+  SearchBar: {
+    opacity: 1,
   },
 })
