@@ -1,11 +1,8 @@
-const server = 'http://192.168.0.5:3000/'
-import { NetworkInfo } from 'react-native-network-info';
-import { firebaseApp } from '../utils/firebase'
-import firebase from 'firebase/app'
+const server = 'http://192.168.1.118:3000/'
 
 export const setProduct = product => {
   console.log('setProduct');
-  
+
   var uriSetProduct = server + 'setProduct'
   console.log(uriSetProduct);
 
@@ -26,12 +23,43 @@ export const setProduct = product => {
     },
     body: data
   }).then(response => {
-      console.log('entre al then')
-      console.log(response);
-      return response;
-    })
+    console.log('entre al then')
+    console.log(response);
+    return response;
+  })
     .catch(error => {
-      console.log('error: ',error)
+      console.log('error: ', error)
+      console.error(error)
+    })
+}
+
+export const setUnregisteredProduct = product => {
+  console.log('setUnregisteredProduct');
+
+  var uriSetUnregisteredProduct = server + 'setUnregisteredProduct'
+  console.log(uriSetUnregisteredProduct);
+
+  const data = JSON.stringify({
+    BarCode: product.BarCode,
+    Name: product.Name,
+  })
+  console.log('body: ');
+
+  console.log(data)
+
+  return fetch(uriSetUnregisteredProduct, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: data
+  }).then(response => {
+    console.log('entre al then')
+    console.log(response);
+    return response;
+  })
+    .catch(error => {
+      console.log('error: ', error)
       console.error(error)
     })
 }
@@ -70,64 +98,10 @@ export const getProductByBarCode = async barCode => {
   function json(response) {
     return response.json()
   }
-  // .then(async response => {
-  //   console.log('entre al then')
-  //   console.log('response: ')
-  //   await response.json().then(function (data) {
-  //     console.log(data);
-  //     return data
-  //   })
-  // .then(async response => {
-  //   console.log(response);
-  //   return await response
-  // })
-  // .catch(error => {
-  //   console.log('error en productsRepository');
-  // })
-  // })
-  //     .catch (error => {
-  //   console.log('error: ')
-  //   console.log(error)
-  //   console.error(error)
-  // })
-
-  // await db
-  //   .collection('productos')
-  //   .where('BarCode', '==', data)
-  //   .get()
-  //   .then(function(querySnapshot) {
-  //     if (querySnapshot.empty) {
-  //       foundProduct = null
-  //     } else {
-  //       querySnapshot.forEach(function(doc) {
-  //         var productModel = new ProductModel()
-  //         productModel = doc.data()
-  //         foundProduct = productModel
-  //       })
-  //     }
-  //   })
-  //   .catch(function(error) {
-  //     console.log('Error getting documents: ', error)
-  //   })
-  // return foundProduct
 }
 export const getProductByName = async name => {
 
   console.log('getProductByName');
-  // console.log('firebaseApp');
-  // console.log(firebaseApp);
-
-
-  // const functions = firebase.functions(firebaseApp);
-
-  // console.log('functions');
-  // console.log(functions);
-
-  // var getProductByName = functions.httpsCallable('getProductByName');
-  // getProductByName({ text: name }).then(function (result) {
-  //   console.log('getProductByName cloud functions');
-  //   console.log(result.data.text);
-  // });
 
   var foundProduct = null
   var uriGetProduct = server + 'getProductByName/' + name
@@ -166,4 +140,15 @@ export const getProductByName = async name => {
   function json(response) {
     return response.json()
   }
+}
+export const getMaterialLogo = async material => {
+
+  console.log('getMaterialLogo');
+
+  var foundProduct = null
+  var uriGetProduct = server + 'getProductByName/' + name
+
+  console.log('estoy en getProductByName')
+
+
 }

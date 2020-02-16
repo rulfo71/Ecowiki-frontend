@@ -10,12 +10,11 @@ import {
 import Toast from 'react-native-easy-toast'
 import CodeScanner from '../../utils/CodeScanner'
 import * as Permissions from 'expo-permissions'
-import { getProductByBarCode, getProductByName } from '../../Repositories/ProductsRepository'
+import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '../../Repositories/ProductsRepository'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { withNavigation } from 'react-navigation'
 import Spinner from "react-native-loading-spinner-overlay";
-// import { Toast } from 'react-native-easy-toast'
 export default withNavigation(ScanProduct);
 
 function ScanProduct(props) {
@@ -24,8 +23,6 @@ function ScanProduct(props) {
   const { navigation } = props;
 
   let [hasCameraPermission, setCameraPermission] = useState(null);
-  let [scanned, setScanned] = useState(false);
-  let [overlayComponent, setOverlayComponent] = useState(null);
   let [loading, setLoading] = useState(false);
   let [barCode, setBarCode] = useState('');
   let [searchBar, setSearchBar] = useState('');
@@ -67,7 +64,7 @@ function ScanProduct(props) {
           goToProductInfo(foundProduct)
           searchBarRef.current.clear();
         } else {
-          addProductAlert();
+          addProductAlert()
           searchBarRef.current.clear();
         }
       })
@@ -110,7 +107,14 @@ function ScanProduct(props) {
     Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?', [
       {
         text: 'No',
-        onPress: () => console.log('No quiere agregarlo')
+        onPress: () => {
+          console.log('No quiere agregarlo')
+          var product = new Product();
+          product.Name = searchBar;
+          console.log(product.Name);
+          setUnregisteredProduct(product);
+        }
+
       },
       {
         text: 'Si',
@@ -169,7 +173,7 @@ function ScanProduct(props) {
       <Spinner visible={loading} />
 
       {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-      {/* <View>
+      <View>
         <Button
           title='Ir a ProductInfo'
           onPress={() => {
@@ -177,7 +181,7 @@ function ScanProduct(props) {
           }}
         />
       </View>
-      <View>
+      {/* <View>
         <Button
           title='a ver ese toast'
           onPress={() => {

@@ -5,7 +5,7 @@ import * as Permissions from "expo-permissions";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
 import Product from '../Models/ProductModel'
-import { getProductByBarCode } from "../Repositories/ProductsRepository";
+import { getProductByBarCode, setUnregisteredProduct } from "../Repositories/ProductsRepository";
 import { useState, useEffect, useRef } from "react";
 import { withNavigation } from 'react-navigation'
 import Toast from "react-native-easy-toast";
@@ -73,7 +73,11 @@ function CodeScanner(props) {
             {
                 text: 'No',
                 onPress: () => {
-                    console.log('No quiere agregarlo')
+                    console.log('No quiere agregarlop')
+                    var product = new Product();
+                    product.BarCode = data;
+                    console.log(product.BarCode);
+                    setUnregisteredProduct(product);
                     setScanned(false);
                 }
             },
