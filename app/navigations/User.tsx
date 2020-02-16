@@ -75,14 +75,16 @@ const RootStack = createBottomTabNavigator(
     Scan: {
       screen: scanScreenStack,
       navigationOptions: ({ navigation }) => ({
-        tabBarLabel: "Scan",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon
-            name="barcode-scan"
-            type="material-community"
-            color={tintColor}
-          />
-        )
+        tabBarVisible: false,
+        //TODO: Descomentar esto para que aparezca la barra
+        // tabBarLabel: "Scan",
+        // tabBarIcon: ({ tintColor }) => (
+        //   <Icon
+        //     name="barcode-scan"
+        //     type="material-community"
+        //     color={tintColor}
+        //   />
+        // )
       })
     }
   },
@@ -90,7 +92,7 @@ const RootStack = createBottomTabNavigator(
     initialRouteName: "Scan",
     tabBarOptions: {
       inactiveTintColor: "#646464",
-      activeTintColor: "#00a680"
+      activeTintColor: "#00a680",
     }
   }
 );
