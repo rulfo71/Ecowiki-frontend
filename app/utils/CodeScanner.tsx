@@ -140,7 +140,7 @@ function CodeScanner(props) {
                         containerStyle={styles.torchIcon}
                         name="flashlight"
                         type="material-community"
-                        color='green'
+                        color='#03AF11'
                         size={30}
                         onPress={async () => handleTorch()}
                     />

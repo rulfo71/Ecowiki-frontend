@@ -1,4 +1,5 @@
-const server = 'http://192.168.1.118:3000/'
+const server = 'https://reciclarte-63ba5.appspot.com/'
+
 
 export const setProduct = product => {
   console.log('setProduct');
@@ -128,27 +129,34 @@ export const getProductByName = async name => {
     }).catch(function (error) {
       console.log('Request failed', error);
     });
-
-  function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response)
-    } else {
-      return Promise.reject(new Error(response.statusText))
-    }
-  }
-
-  function json(response) {
-    return response.json()
+}
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response)
+  } else {
+    return Promise.reject(new Error(response.statusText))
   }
 }
+
+function json(response) {
+  return response.json()
+}
 export const getMaterialLogo = async material => {
-
-  console.log('getMaterialLogo');
-
-  var foundProduct = null
-  var uriGetProduct = server + 'getProductByName/' + name
-
-  console.log('estoy en getProductByName')
-
-
+  var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
+  console.log('uriGetMaterialLogo: ', uriGetMaterialLogo);
+  return fetch(uriGetMaterialLogo, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function (uriLogo) {
+      console.log('Request succeeded with JSON response', uriLogo);
+      return uriLogo.url;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+    });
 }

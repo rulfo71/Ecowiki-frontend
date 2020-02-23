@@ -82,6 +82,13 @@ function SetMaterial({ navigation }) {
   return (
     <View style={styles.ViewOverlay}>
       <BarCode />
+      {/* <Name /> */}
+      <Input
+        placeholder='Nombre (opcional)'
+        disabled={!emptyInputName}
+        value={name}
+        onChange={e => setName(e.nativeEvent.text)} />
+
       <Picker
         selectedValue={material}
         onValueChange={value => setMaterial(value)}>
@@ -92,13 +99,6 @@ function SetMaterial({ navigation }) {
         <Picker.Item label='Metal' value='metal' />
         <Picker.Item label='Orgánico' value='organico' />
       </Picker>
-      {/* <Name /> */}
-      <Input
-        placeholder='Nombre (opcional)'
-        disabled={!emptyInputName}
-        value={name}
-        onChange={e => setName(e.nativeEvent.text)} />
-
       <Input
         style={styles.description}
         placeholder='Datos Adicionales (opcional)'

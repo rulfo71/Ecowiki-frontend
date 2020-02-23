@@ -48,7 +48,8 @@ const scanScreenStack = createStackNavigator({
   ProductInfo: {
     screen: ProductInfoScreen,
     navigationOptions: ({ navigation }) => ({
-      title: "Product Info Screen"
+      title: "",
+      headerShown: false
     })
   }
 });
