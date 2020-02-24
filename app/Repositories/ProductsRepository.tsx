@@ -1,5 +1,5 @@
 // const server = 'https://reciclarte-63ba5.appspot.com/'
-const server = 'http://192.168.1.117:3000/'
+const server = 'http://192.168.0.6:3000/'
 
 
 
@@ -171,7 +171,7 @@ export const getProductByName = async name => {
     .then(status)
     .then(json)
     .then(function (data) {
-      console.log('Request succeeded with JSON response', data);
+      console.log('Respuesta getProductByName: ', data);
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);

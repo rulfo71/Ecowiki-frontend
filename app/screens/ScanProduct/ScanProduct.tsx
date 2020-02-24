@@ -48,7 +48,6 @@ function ScanProduct(props) {
   }
   const goToProductInfo = async (product: Product) => {
     console.log('vamos para productInfo con ', product);
-
     navigation.navigate("ProductInfo", {
       product: product
     });
@@ -60,7 +59,7 @@ function ScanProduct(props) {
       .then(foundProduct => {
         setLoading(false);
         setBarCode('');
-        if (foundProduct) {
+        if (foundProduct && !emptyProduct(foundProduct)) {
           goToProductInfo(foundProduct)
           searchBarRef.current.clear();
         } else {
@@ -73,6 +72,10 @@ function ScanProduct(props) {
         console.log('error')
         toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
       })
+  }
+
+  const emptyProduct = (product: Product): boolean => {
+    return (product.BarCode === '' && product.Description === '' && product.Name === '' && product.Material === '')
   }
 
   const mockeoParaBorrar = async () => {
