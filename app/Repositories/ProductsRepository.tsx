@@ -1,4 +1,6 @@
-const server = 'https://reciclarte-63ba5.appspot.com/'
+// const server = 'https://reciclarte-63ba5.appspot.com/'
+const server = 'http://192.168.1.117:3000/'
+
 
 
 export const setProduct = product => {
@@ -34,6 +36,71 @@ export const setProduct = product => {
     })
 }
 
+export const addVote = product => {
+  console.log('addVote');
+
+  var uriAddVote = server + 'addVote'
+  console.log(uriAddVote);
+
+  const data = JSON.stringify({
+    BarCode: product.BarCode,
+    Description: product.Description,
+    Name: product.Name,
+    Material: product.Material
+  })
+  console.log('body: ');
+
+  console.log(data)
+
+  return fetch(uriAddVote, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: data
+  }).then(response => {
+    console.log('entre al then')
+    console.log(response);
+    // return response;
+  })
+    .catch(error => {
+      console.log('error: ', error)
+      console.error(error)
+    })
+}
+
+export const subtractVote = product => {
+  console.log('setProduct');
+
+  var uriSubtractVote = server + 'subtractVote'
+  console.log(uriSubtractVote);
+
+  const data = JSON.stringify({
+    BarCode: product.BarCode,
+    Description: product.Description,
+    Name: product.Name,
+    Material: product.Material
+  })
+  console.log('body: ');
+
+  console.log(data)
+
+  return fetch(uriSubtractVote, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: data
+  }).then(response => {
+    console.log('entre al then')
+    console.log(response);
+  })
+    .catch(error => {
+      console.log('error: ', error)
+      console.error(error)
+    })
+}
+
 export const setUnregisteredProduct = product => {
   console.log('setUnregisteredProduct');
 
@@ -57,7 +124,7 @@ export const setUnregisteredProduct = product => {
   }).then(response => {
     console.log('entre al then')
     console.log(response);
-    return response;
+    // return response;
   })
     .catch(error => {
       console.log('error: ', error)
@@ -66,7 +133,6 @@ export const setUnregisteredProduct = product => {
 }
 
 export const getProductByBarCode = async barCode => {
-  var foundProduct = null
   var uriGetProduct = server + 'getProductByBarCode/' + barCode
 
   console.log('estoy en getProductByBarCode')
@@ -87,31 +153,12 @@ export const getProductByBarCode = async barCode => {
     }).catch(function (error) {
       console.log('Request failed', error);
     });
-
-  function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response)
-    } else {
-      return Promise.reject(new Error(response.statusText))
-    }
-  }
-
-  function json(response) {
-    return response.json()
-  }
 }
 export const getProductByName = async name => {
-
   console.log('getProductByName');
-
-  var foundProduct = null
   var uriGetProduct = server + 'getProductByName/' + name
 
   console.log('estoy en getProductByName')
-  // Get Local IP
-  // NetworkInfo.getIPV4Address().then(ipv4Address => {
-  //   console.log(ipv4Address);
-  // });
   console.log('uriGetProduct: ' + uriGetProduct)
 
   return await fetch(uriGetProduct, {
@@ -129,17 +176,6 @@ export const getProductByName = async name => {
     }).catch(function (error) {
       console.log('Request failed', error);
     });
-}
-function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response)
-  } else {
-    return Promise.reject(new Error(response.statusText))
-  }
-}
-
-function json(response) {
-  return response.json()
 }
 export const getMaterialLogo = async material => {
   var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
@@ -159,4 +195,16 @@ export const getMaterialLogo = async material => {
     }).catch(function (error) {
       console.log('Request failed', error);
     });
+}
+
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response)
+  } else {
+    return Promise.reject(new Error(response.statusText))
+  }
+}
+
+function json(response) {
+  return response.json()
 }

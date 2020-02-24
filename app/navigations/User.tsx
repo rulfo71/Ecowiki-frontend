@@ -42,7 +42,8 @@ const scanScreenStack = createStackNavigator({
   SetMaterial: {
     screen: SetMaterialScreen,
     navigationOptions: ({ navigation }) => ({
-      title: "Cargar Producto"
+      title: "",
+      headerShown: false
     })
   },
   ProductInfo: {

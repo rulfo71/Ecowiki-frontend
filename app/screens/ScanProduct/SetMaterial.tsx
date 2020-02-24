@@ -74,37 +74,79 @@ function SetMaterial({ navigation }) {
 
   function BarCode() {
     if (barCode !== '') {
-      return <Input disabled={true}>{barCode}</Input>
+      return (
+        <View>
+          <Text style={styles.name}>{"Codigo de barras"} </Text>
+          <Input disabled={true}>{barCode}</Input>
+        </View>
+      )
     }
     return null;
   }
 
   return (
     <View style={styles.ViewOverlay}>
-      <BarCode />
-      {/* <Name /> */}
-      <Input
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          {/* <View
+            style={{
+              // flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          > */}
+          <Text style={styles.headerTitle}>{"CARGAR PRODUCTO"}</Text>
+          {/* </View> */}
+        </View>
+        <BarCode />
+        {/* <View> */}
+        <Text style={styles.inputName}>{"Nombre"} </Text>
+        <View>
+          <Input
+            multiline
+            numberOfLines={2}
+            placeholder='Nombre'
+            // disabled={!emptyInputName}
+            style={styles.inputText}
+            value={name}
+            onChange={e => setName(e.nativeEvent.text)} />
+        </View>
+        {/* </View> */}
+
+
+        {/* <Name /> */}
+        {/* <Input
         placeholder='Nombre (opcional)'
         disabled={!emptyInputName}
         value={name}
-        onChange={e => setName(e.nativeEvent.text)} />
-
-      <Picker
-        selectedValue={material}
-        onValueChange={value => setMaterial(value)}>
-        <Picker.Item label='Elija un material' value='' />
-        <Picker.Item label='Plastico' value='plastico' />
-        <Picker.Item label='Papel y Carton' value='papelCarton' />
-        <Picker.Item label='Vidrio' value='vidrio' />
-        <Picker.Item label='Metal' value='metal' />
-        <Picker.Item label='Orgánico' value='organico' />
-      </Picker>
-      <Input
-        style={styles.description}
-        placeholder='Datos Adicionales (opcional)'
-        onChange={e => setDescription(e.nativeEvent.text)}
-      ></Input>
-
+        onChange={e => setName(e.nativeEvent.text)} /> */}
+        {/* <View> */}
+        <Text style={styles.inputName}>{"Material"} </Text>
+        <View>
+          <Picker
+            selectedValue={material}
+            onValueChange={value => setMaterial(value)}>
+            <Picker.Item label='Elija un material' value='' />
+            <Picker.Item label='Plastico' value='plastico' />
+            <Picker.Item label='Papel y Carton' value='papelCarton' />
+            <Picker.Item label='Vidrio' value='vidrio' />
+            <Picker.Item label='Metal' value='metal' />
+            <Picker.Item label='Orgánico' value='organico' />
+            <Picker.Item label='No se recicla' value='noSeRecicla' />
+          </Picker>
+        </View>
+        <Text style={styles.inputName}>{"Datos adicionales"} </Text>
+        <View>
+          <Input
+            multiline
+            numberOfLines={2}
+            style={styles.inputText}
+            placeholder='Datos Adicionales'
+            onChange={e => setDescription(e.nativeEvent.text)}
+          ></Input>
+        </View>
+      </View>
+      {/* </View> */}
       <View style={styles.buttonContainer}>
         <Button
           buttonStyle={styles.buttonCancel}
@@ -126,7 +168,7 @@ function SetMaterial({ navigation }) {
           <Text style={styles.overlayLoadingText}>
             Guardando el producto
           </Text>
-          <ActivityIndicator size='large' color='#00a680'></ActivityIndicator>
+          <ActivityIndicator size='large' color='#03960A'></ActivityIndicator>
         </View>
       </Overlay>
       <Toast ref={toastRef} position='center' />
@@ -148,29 +190,76 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    alignContent: 'center',
+    justifyContent: 'space-between'
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     padding: 15
   },
   buttonCancel: {
     backgroundColor: '#990000'
   },
   buttonSave: {
-    backgroundColor: '#00a680'
-  },
-  description: {
-    height: 50
+    backgroundColor: '#03960A'
   },
   overlayLoading: {
     padding: 20
   },
   overlayLoadingText: {
-    color: '#00a680',
+    color: '#03960A',
     marginBottom: 20,
     fontSize: 20
+  },
+  mainContainer: {
+    flex: 1,
+    marginTop: 10,
+    borderRadius: 10,
+    paddingBottom: 15,
+  },
+  headerContainer: {
+    // paddingBottom: 15,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    flexDirection: "row",
+    backgroundColor: 'green'
+  },
+  headerTitle: {
+    fontWeight: "bold",
+    letterSpacing: 1.2,
+    paddingTop: 20,
+    paddingBottom: 10,
+    color: "white",
+    fontSize: 18,
+    // opacity: 0.8
+  },
+  inputName: {
+    fontSize: 15,
+    fontWeight: "bold",
+    letterSpacing: 1.2,
+    opacity: 0.8,
+    alignSelf: "center",
+    paddingTop: 20,
+    marginBottom: 10,
+    color: '#03960A'
+  },
+  inputText: {
+    fontSize: 15,
+    letterSpacing: 1.2,
+    marginTop: 50,
+    opacity: 0.8,
+    alignSelf: "center",
+    marginBottom: 10,
+    borderBottomWidth: 0,
+  },
+  picker: {
+    borderRadius: 10,
+    backgroundColor: '#03960A',
+    opacity: 0.8
   }
 })

@@ -104,25 +104,26 @@ function ScanProduct(props) {
   }
 
   const addProductAlert = () => {
-    Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?', [
-      {
-        text: 'No',
-        onPress: () => {
-          console.log('No quiere agregarlo')
-          var product = new Product();
-          product.Name = searchBar;
-          console.log(product.Name);
-          setUnregisteredProduct(product);
+    Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            console.log('No quiere agregarlo')
+            var product = new Product();
+            product.Name = searchBar;
+            console.log(product.Name);
+            setUnregisteredProduct(product);
+          }
+        },
+        {
+          text: 'Si',
+          onPress: async () => {
+            await goToSetMaterial();
+          }
         }
-
-      },
-      {
-        text: 'Si',
-        onPress: async () => {
-          await goToSetMaterial();
-        }
-      }
-    ])
+      ],
+    )
   }
   const showToast = () => {
     toastRef.current.show('El producto fue guardado correctamente', 600)
@@ -154,7 +155,7 @@ function ScanProduct(props) {
         round
         lightTheme
         returnKeyType='search'
-        placeholder="Type Here..."
+        placeholder="Buscá por nombre acá"
         onChangeText={updateSearch}
         value={searchBar}
         onSubmitEditing={searchSubmit}
@@ -173,14 +174,14 @@ function ScanProduct(props) {
       <Spinner visible={loading} />
 
       {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-      <View>
+      {/* <View>
         <Button
           title='Ir a ProductInfo'
           onPress={() => {
             mockProductInfo()
           }}
         />
-      </View>
+      </View> */}
       {/* <View>
         <Button
           title='a ver ese toast'

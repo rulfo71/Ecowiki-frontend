@@ -1,4 +1,5 @@
 import * as React from "react";
+import BarcodeMask from 'react-native-barcode-mask';
 import { Text, View, StyleSheet, StatusBar, SafeAreaView, Alert, ActivityIndicator } from "react-native";
 import { Icon, Overlay } from "react-native-elements";
 import * as Permissions from "expo-permissions";
@@ -123,6 +124,7 @@ function CodeScanner(props) {
             }}
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         >
+            <BarcodeMask width={300} edgeColor={'#03960A'} height={150} showAnimatedLine={true} />
             {cameraPermission}
             <StatusBar barStyle="light-content" />
             <SafeAreaView
