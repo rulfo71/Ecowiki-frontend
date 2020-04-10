@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import { withNavigation } from 'react-navigation'
 import Toast from "react-native-easy-toast";
 import Spinner from "react-native-loading-spinner-overlay";
+import { isEmptyProduct } from "../Services/ProductsService";
 export default withNavigation(CodeScanner);
 
 function CodeScanner(props) {
@@ -43,9 +44,9 @@ function CodeScanner(props) {
 
         await getProductByBarCode(data)
             .then(foundProduct => {
-                setBarCode(data);
+                // setBarCode(data);
                 setLoading(false);
-                if (foundProduct) {
+                if (foundProduct && !isEmptyProduct(foundProduct)) {
                     goToProductInfo(foundProduct);
                     setScanned(false);
                 } else {

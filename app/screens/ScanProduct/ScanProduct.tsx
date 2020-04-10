@@ -13,6 +13,7 @@ import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '../../Repositories/ProductsRepository'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
+import { isEmptyProduct } from '../../Services/ProductsService'
 import { withNavigation } from 'react-navigation'
 import Spinner from "react-native-loading-spinner-overlay";
 export default withNavigation(ScanProduct);
@@ -59,7 +60,7 @@ function ScanProduct(props) {
       .then(foundProduct => {
         setLoading(false);
         setBarCode('');
-        if (foundProduct && !emptyProduct(foundProduct)) {
+        if (foundProduct && !isEmptyProduct(foundProduct)) {
           goToProductInfo(foundProduct)
           searchBarRef.current.clear();
         } else {
@@ -70,38 +71,6 @@ function ScanProduct(props) {
       .catch(error => {
         setLoading(false);
         console.log('error')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
-      })
-  }
-
-  const emptyProduct = (product: Product): boolean => {
-    return (product.BarCode === '' && product.Description === '' && product.Name === '' && product.Material === '')
-  }
-
-  const mockeoParaBorrar = async () => {
-    console.log('mockeoParaBorrar')
-
-    await getProductByBarCode('4002604064767')
-      .then(foundProduct => {
-        console.log('foundProduct desde scanproduct');
-        console.log(foundProduct);
-        setLoading(false);
-        setBarCode('4002604064767');
-        if (foundProduct) {
-          alert(
-            'este producto va en ' +
-            foundProduct.Material +
-            ' . Descripcion: ' +
-            foundProduct.Description
-          )
-        } else {
-          addProductAlert()
-        }
-      })
-      .catch(error => {
-        setLoading(false);
-        console.log(error);
-        console.log('error en scanProduct')
         toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
       })
   }
@@ -128,28 +97,7 @@ function ScanProduct(props) {
       ],
     )
   }
-  const showToast = () => {
-    toastRef.current.show('El producto fue guardado correctamente', 600)
-    searchBarRef.current.clear();
-  }
 
-  //TODO: BORRAR
-  const mockProductInfo = () => {
-    // TODO: Remove mock
-    var product = new Product();
-    product.Name = 'Filtros';
-    product.Description = 'alguna descripcion';
-    product.Material = 'Plastico'
-    goToProductInfo(product);
-  }
-  const cameraPermission = () => {
-    if (hasCameraPermission === null) {
-      return <Text>Pidiendo permisos para acceder a la camara</Text>
-    }
-    if (hasCameraPermission === false) {
-      return <Text>No tenemos permisos para acceder a tu camara</Text>
-    }
-  }
   return (
     <View style={styles.view}>
       <CodeScanner></CodeScanner>
@@ -165,42 +113,8 @@ function ScanProduct(props) {
         containerStyle={styles.SearchBarContainer}
         inputContainerStyle={styles.SearchBar}
         inputStyle={styles.SearchBar}
-      // style={styles.SearchBar}
       />
-
-      {/* {scanned && (
-        <Button
-          title={'Tap to Scan Again'}
-          onPress={() => setScanned(false)}
-        />
-      )} */}
       <Spinner visible={loading} />
-
-      {/* <Toast ref={toastRef} position='center' opacity={0.5}></Toast> */}
-      {/* <View>
-        <Button
-          title='Ir a ProductInfo'
-          onPress={() => {
-            mockProductInfo()
-          }}
-        />
-      </View> */}
-      {/* <View>
-        <Button
-          title='a ver ese toast'
-          onPress={() => {
-            showToast()
-          }}
-        />
-      </View> */}
-      {/* <View>
-        <Button
-          title='Mock escaneo producto'
-          onPress={() => {
-            mockeoParaBorrar()
-          }}
-        />
-      </View> */}
       <Toast ref={toastRef} position='center' />
 
     </View>
@@ -211,8 +125,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'column',
-    // justifyContent: 'flex-end',
-    // alignItems: 'stretch'
   },
   overlayLoading: {
     padding: 20
@@ -223,8 +135,6 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   SearchBarContainer: {
-    // marginTop: 50,
-    // opacity: 0,
     width: '100%',
     top: 50,
     borderRadius: 5,
