@@ -37,7 +37,7 @@ function SetMaterial({ navigation }) {
       toastRef.current.show('Debes completar el material');
       return;
     }
-    if (barCode === '' && name === '') {
+    if (name === '') {
       toastRef.current.show('Debes completar el nombre');
       return;
     }
@@ -132,7 +132,7 @@ function SetMaterial({ navigation }) {
             <Text style={styles.title}>{"Datos adicionales"} </Text>
             <Input
               multiline
-              numberOfLines={5}
+              numberOfLines={3}
               style={styles.inputText}
               placeholder='Acá podés ingresar cualquier consejo que te parezca util'
               onChange={e => setDescription(e.nativeEvent.text)}
@@ -256,8 +256,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     opacity: 0.8,
     alignSelf: "center",
-    paddingTop: 20,
-    marginBottom: 10,
+    marginBottom: 5,
     color: Colors.brandGreenColor
   },
   inputText: {
