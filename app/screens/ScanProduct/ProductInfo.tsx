@@ -3,7 +3,7 @@ import { TouchableHighlight } from 'react-native'
 import { getMaterialLogo, addVote, subtractVote } from '../../Repositories/ProductsRepository'
 import { withNavigation } from 'react-navigation'
 import { Icon, Image } from "react-native-elements";
-import { Colors, white } from '../../Common/Constants/Colors'
+import { Colors } from '../../Common/Constants/Colors'
 import {
   Text,
   View,
@@ -28,6 +28,7 @@ function ProductInfo({ navigation }) {
   console.log('uriImageInicial: ', uriImage);
   useEffect(() => {
     console.log('getMaterialLogo dentro de useEffect');
+    setProduct(navigation.getParam('product'));
     getLogo();
   }, []);
 
@@ -43,7 +44,7 @@ function ProductInfo({ navigation }) {
       });
   }
 
-  const dontAgree = () => {
+  const doesntAgree = () => {
     Alert.alert('¿Querés modificarlo?', '', [
       {
         text: 'No',
@@ -133,7 +134,7 @@ function ProductInfo({ navigation }) {
         <Description style={styles} />
       </View>
       <View style={styles.IconsAgreeContainer}>
-        <TouchableHighlight onPress={dontAgree} >
+        <TouchableHighlight onPress={doesntAgree} >
           <View>
             <Icon name="thumbs-down" color={Colors.cancelColor} size={60} type="font-awesome" />
             <Text> No estoy de acuerdo </Text>
