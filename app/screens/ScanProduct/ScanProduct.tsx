@@ -14,11 +14,11 @@ import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '.
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { isEmptyProduct } from '../../Services/ProductsService'
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 import Spinner from "react-native-loading-spinner-overlay";
-export default withNavigation(ScanProduct);
+// export default withNavigation(ScanProduct);
 
-function ScanProduct(props) {
+export default function ScanProduct(props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
   const { navigation } = props;

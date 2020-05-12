@@ -7,7 +7,7 @@ import { Icon } from "react-native-elements";
 //Screens
 import HomeScreen from "../screens/Home";
 import MapScreen from "../screens/Map";
-import MyAccountScreen from "../screens/MyAccount";
+import AccountScreen from "../screens/Account/Account";
 //Screens Scan Product
 import ScanProductScreen from "../screens/ScanProduct/ScanProduct";
 import SetMaterialScreen from "../screens/ScanProduct/SetMaterial";
@@ -54,9 +54,9 @@ const scanScreenStack = createStackNavigator({
     })
   }
 });
-const myAccountScreenStack = createStackNavigator({
+const AccountScreenStack = createStackNavigator({
   Map: {
-    screen: MyAccountScreen,
+    screen: AccountScreen,
     navigationOptions: ({ navigation }) => ({
       title: "My Account Screen"
     })
@@ -77,16 +77,31 @@ const RootStack = createBottomTabNavigator(
     Scan: {
       screen: scanScreenStack,
       navigationOptions: ({ navigation }) => ({
-        tabBarVisible: false,
-        //TODO: Descomentar esto para que aparezca la barra
-        // tabBarLabel: "Scan",
-        // tabBarIcon: ({ tintColor }) => (
-        //   <Icon
-        //     name="barcode-scan"
-        //     type="material-community"
-        //     color={tintColor}
-        //   />
-        // )
+        tabBarVisible: true,
+        // TODO: Descomentar esto para que  aparezca la barra
+        tabBarLabel: "Scan",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            name="barcode-scan"
+            type="material-community"
+            color={tintColor}
+          />
+        )
+      })
+    },
+    MyAccount: {
+      screen: AccountScreenStack,
+      navigationOptions: ({ navigation }) => ({
+        tabBarVisible: true,
+        // TODO: Descomentar esto para que  aparezca la barra
+        tabBarLabel: "Mi cuenta",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            name="account" 
+            type="material-community"
+            color={tintColor}
+          />
+        )
       })
     }
   },

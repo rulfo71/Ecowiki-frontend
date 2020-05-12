@@ -1,38 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Avatar } from "react-native-elements";
-import UserNavigation from "./app/navigations/User";
+// import UserNavigation from "./app/navigations/User";
+import Navigation from './app/navigations/Navigation'
 import HomeScreen from "./app/screens/Home";
-import { firebaseApp } from "./app/utils/firebase";
+import { firebaseConfig } from './app/utils/firebase';
+import * as firebase from 'firebase'
 
-export default class App extends React.Component {
-  buttonOnClick = value => {
-    console.log(`Click en mi primer boton ${value}`);
-  };
+export default function App() {
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <UserNavigation></UserNavigation>
-      </View>
+  console.log('holis');
 
-      // <HomeScreen />
-      // <View style={styles.container}>
-      //   <Avatar
-      //     rounded
-      //     source={{
-      //       uri:
-      //         "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"
-      //     }}
-      //   />
-      //   <Text>Aplicacion Abierta</Text>
-      //   <Button
-      //     title="Mi Primer Boton"
-      //     onPress={() => this.buttonOnClick("Hola Mundo")}
-      //   ></Button>
-      // </View>
-    );
-  }
+  firebase.initializeApp(firebaseConfig);
+  return <Navigation />
+
+  //return (
+  // <View style={styles.container}>
+  // <UserNavigation></UserNavigation> 
+
+  // </View>
+
+  // <HomeScreen />
+  // <View style={styles.container}>
+  //   <Avatar
+  //     rounded
+  //     source={{
+  //       uri:
+  //         "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"
+  //     }}
+  //   />
+  //   <Text>Aplicacion Abierta</Text>
+  //   <Button
+  //     title="Mi Primer Boton"
+  //     onPress={() => this.buttonOnClick("Hola Mundo")}
+  //   ></Button>
+  // </View>
+  //);
 }
 
 const styles = StyleSheet.create({

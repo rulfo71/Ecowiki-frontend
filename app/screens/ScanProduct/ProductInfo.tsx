@@ -3,7 +3,7 @@ import { TouchableHighlight } from 'react-native'
 import { getMaterialLogo, addVote, subtractVote } from '../../Repositories/ProductsRepository'
 import { withNavigation } from 'react-navigation'
 import { Icon, Image } from "react-native-elements";
-import { Colors } from '../../Common/Constants/Colors'
+import { Constants } from '../../Common/Constants/Constants'
 import {
   Text,
   View,
@@ -136,13 +136,13 @@ function ProductInfo({ navigation }) {
       <View style={styles.IconsAgreeContainer}>
         <TouchableHighlight onPress={doesntAgree} >
           <View>
-            <Icon name="thumbs-down" color={Colors.cancelColor} size={60} type="font-awesome" />
+            <Icon name="thumbs-down" color={Constants.Colors.cancelColor} size={60} type="font-awesome" />
             <Text> No estoy de acuerdo </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight onPress={agree}>
           <View >
-            <Icon name="thumbs-up" color={Colors.brandGreenColor} size={60} type="font-awesome" />
+            <Icon name="thumbs-up" color={Constants.Colors.brandGreenColor} size={60} type="font-awesome" />
             <Text> Gracias! </Text>
           </View>
         </TouchableHighlight>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'space-around',
-    backgroundColor: Colors.backgroundGrey,
+    backgroundColor: Constants.Colors.backgroundGrey,
   },
   Container: {
     flexDirection: 'column',
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingTop: 20,
     marginBottom: 10,
-    color: Colors.brandGreenColor,
+    color: Constants.Colors.brandGreenColor,
   },
   image: {
     width: 230,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingTop: 20,
     marginBottom: 10,
-    color: Colors.brandGreenColor
+    color: Constants.Colors.brandGreenColor
   },
   headerContainer: {
     marginBottom: 40,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     flexDirection: "row",
-    backgroundColor: Colors.brandGreenColor
+    backgroundColor: Constants.Colors.brandGreenColor
   },
   headerTitle: {
     fontWeight: "bold",
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     paddingBottom: 20,
-    color: Colors.white,
+    color: Constants.Colors.white,
     fontSize: 20,
     // opacity: 0.8
   },

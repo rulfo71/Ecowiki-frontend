@@ -1,7 +1,5 @@
-// const server = 'https://reciclarte-63ba5.appspot.com/'
+//const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/'
-
-
 
 export const setProduct = product => {
   console.log('setProduct');

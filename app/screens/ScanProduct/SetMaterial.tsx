@@ -6,7 +6,7 @@ import Product from '../../Models/ProductModel'
 import { setProduct } from '../../Repositories/ProductsRepository'
 import { withNavigation } from 'react-navigation'
 import Toast from 'react-native-easy-toast'
-import { Colors } from '../../Common/Constants/Colors'
+import { Constants } from '../../Common/Constants/Constants'
 
 
 export default withNavigation(SetMaterial);
@@ -166,7 +166,7 @@ function SetMaterial({ navigation }) {
           <Text style={styles.overlayLoadingText}>
             Guardando el producto
           </Text>
-          <ActivityIndicator size='large' color={Colors.brandGreenColor}></ActivityIndicator>
+          <ActivityIndicator size='large' color={Constants.Colors.brandGreenColor}></ActivityIndicator>
         </View>
       </Overlay>
       <Toast ref={toastRef} position='center' />
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignContent: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundGrey,
+    backgroundColor: Constants.Colors.backgroundGrey,
   },
   headerContainer: {
     // paddingBottom: 15,
@@ -199,14 +199,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     flexDirection: "row",
-    backgroundColor: Colors.brandGreenColor,
+    backgroundColor: Constants.Colors.brandGreenColor,
   },
   headerTitle: {
     fontWeight: "bold",
     letterSpacing: 1.2,
     paddingTop: 20,
     paddingBottom: 10,
-    color: Colors.white,
+    color: Constants.Colors.white,
     fontSize: 18,
     // opacity: 0.8
   },
@@ -223,12 +223,12 @@ const styles = StyleSheet.create({
 
   },
   buttonCancel: {
-    backgroundColor: Colors.cancelColor,
+    backgroundColor: Constants.Colors.cancelColor,
     padding: 15,
     borderRadius: 15
   },
   buttonSave: {
-    backgroundColor: Colors.brandGreenColor,
+    backgroundColor: Constants.Colors.brandGreenColor,
     padding: 15,
     borderRadius: 15
   },
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   overlayLoadingText: {
-    color: Colors.brandGreenColor,
+    color: Constants.Colors.brandGreenColor,
     marginBottom: 20,
     fontSize: 20
   },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     alignSelf: "center",
     marginBottom: 5,
-    color: Colors.brandGreenColor
+    color: Constants.Colors.brandGreenColor
   },
   inputText: {
     fontSize: 15,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     borderRadius: 10,
-    backgroundColor: Colors.brandGreenColor,
+    backgroundColor: Constants.Colors.brandGreenColor,
     opacity: 0.8
   },
   dataContainer: {
