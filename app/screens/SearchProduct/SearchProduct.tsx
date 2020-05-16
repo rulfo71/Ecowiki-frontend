@@ -1,11 +1,8 @@
 import React, { Component, useEffect, useState, useRef } from 'react'
 import {
-  Text,
   View,
   StyleSheet,
-  Button,
   Alert,
-  ActivityIndicator
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
 import CodeScanner from '../../utils/CodeScanner'
@@ -14,14 +11,14 @@ import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '.
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { isEmptyProduct } from '../../Services/ProductsService'
-// import { withNavigation } from 'react-navigation'
 import Spinner from "react-native-loading-spinner-overlay";
-// export default withNavigation(ScanProduct);
+import { useNavigation } from '@react-navigation/native'
+import { Constants } from '../../Common/Constants/Constants'
 
-export default function ScanProduct(props) {
+export default function SearchProduct(props) {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
-  const { navigation } = props;
+  const navigation = useNavigation(); 
 
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [loading, setLoading] = useState(false);
@@ -49,8 +46,8 @@ export default function ScanProduct(props) {
   }
   const goToProductInfo = async (product: Product) => {
     console.log('vamos para productInfo con ', product);
-    navigation.navigate("ProductInfo", {
-      product: product
+    navigation.navigate(Constants.Navigations.SearchProductStack.productInfo, {
+      productParam: product
     });
   }
 

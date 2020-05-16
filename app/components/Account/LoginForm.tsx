@@ -28,7 +28,7 @@ export default function LoginForm (props) {
                 //console.log('Hay campos vacios');
             }
         else if (!validateEmail(formData.email)) {
-            toastRef.current.show('El email no es correcto')
+            toastRef.current.show('El email no es correcto')  
         } 
         else{
             setLoading(true);
@@ -49,7 +49,6 @@ export default function LoginForm (props) {
     const onChange = (e, type) => {
         setFormData({ ...formData,  [type]: e.nativeEvent.text  })
     }
-
 
     return (
         <View style={styles.formContainer}>

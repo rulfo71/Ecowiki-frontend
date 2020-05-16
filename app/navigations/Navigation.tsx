@@ -6,8 +6,9 @@ import { Icon } from 'react-native-elements'
 import AccountStack from './AccountStack'
 
 import Home from '../screens/Home';
-import ScanProduct from '../screens/ScanProduct/ScanProduct';
+import SearchProduct from '../screens/SearchProduct/SearchProduct';
 import { Constants } from '../Common/Constants/Constants';
+import SearchProductStack from './SearchProductStack';
 
 
 const Tab = createBottomTabNavigator();
@@ -32,15 +33,15 @@ export default function Navigation() {
                     component={AccountStack}
                     options={{ title: 'Account' }}
                 />
-                <Tab.Screen
+                {/* <Tab.Screen
                     name='home'
                     component={Home}
                     options={{ title: 'Home' }}
-                />
-                {/* <Tab.Screen
+                /> */}
+                <Tab.Screen
                     name='scan'
-                    component={ScanProduct}
-                    options={{ title: 'Scan' }} /> */}
+                    component={SearchProductStack}
+                    options={{ title: 'Scan' }} />
             </Tab.Navigator>
         </NavigationContainer>
     )
@@ -52,6 +53,9 @@ function screenOptions(route, color) {
     switch (route.name) {
         case 'account':
             iconName = 'account'
+            break;
+        case 'scan':
+            iconName = 'magnify'
             break;
         default:
             break;

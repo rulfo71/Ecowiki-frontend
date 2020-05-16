@@ -9,9 +9,9 @@ import HomeScreen from "../screens/Home";
 import MapScreen from "../screens/Map";
 import AccountScreen from "../screens/Account/Account";
 //Screens Scan Product
-import ScanProductScreen from "../screens/ScanProduct/ScanProduct";
-import SetMaterialScreen from "../screens/ScanProduct/SetMaterial";
-import ProductInfoScreen from "../screens/ScanProduct/ProductInfo";
+import ScanProductScreen from "../screens/SearchProduct/SearchProduct";
+import SetMaterialScreen from "../screens/SearchProduct/SetMaterial";
+import ProductInfoScreen from "../screens/SearchProduct/ProductInfo";
 
 const homeScreenStack = createStackNavigator({
   Home: {

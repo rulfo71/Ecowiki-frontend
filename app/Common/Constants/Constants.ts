@@ -11,6 +11,10 @@ export const Constants = {
             account: 'account',
             login: 'login',
             register: 'register'
+        },
+        SearchProductStack: {
+            searchProduct: 'searchProduct',
+            productInfo: 'productInfo'
         }
     },
     Account: {

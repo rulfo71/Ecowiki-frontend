@@ -8,13 +8,13 @@ import { Camera } from "expo-camera";
 import Product from '../Models/ProductModel'
 import { getProductByBarCode, setUnregisteredProduct } from "../Repositories/ProductsRepository";
 import { useState, useEffect, useRef } from "react";
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 import Toast from "react-native-easy-toast";
 import Spinner from "react-native-loading-spinner-overlay";
 import { isEmptyProduct } from "../Services/ProductsService";
-export default withNavigation(CodeScanner);
+// export default withNavigation(CodeScanner);
 
-function CodeScanner(props) {
+export default function CodeScanner(props) {
 
     const { navigation } = props;
     const toastRef = useRef(null);

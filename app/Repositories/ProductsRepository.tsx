@@ -1,5 +1,5 @@
 //const server = 'https://reciclarte-63ba5.appspot.com/'
-const server = 'http://192.168.0.6:3000/'
+const server = 'http://192.168.0.6:3000/products/'
 
 export const setProduct = product => {
   console.log('setProduct');
@@ -153,10 +153,10 @@ export const getProductByBarCode = async barCode => {
     });
 }
 export const getProductByName = async name => {
-  console.log('getProductByName');
+  console.log('****************************************');  
+  console.log(`ProductsRepository -- getProductByName(name: ${name} `);
+  console.log('****************************************');
   var uriGetProduct = server + 'getProductByName/' + name
-
-  console.log('estoy en getProductByName')
   console.log('uriGetProduct: ' + uriGetProduct)
 
   return await fetch(uriGetProduct, {

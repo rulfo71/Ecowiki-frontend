@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 import { TouchableHighlight } from 'react-native'
 import { getMaterialLogo, addVote, subtractVote } from '../../Repositories/ProductsRepository'
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 import { Icon, Image } from "react-native-elements";
 import { Constants } from '../../Common/Constants/Constants'
 import {
@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native'
 
-export default withNavigation(ProductInfo);
+// export default withNavigation(ProductInfo);
 const materials = {
   plastico: 'Plastico',
   papelCarton: 'Papel y carton',
@@ -21,8 +21,16 @@ const materials = {
   noSeRecicla: 'No se recicla'
 }
 
-function ProductInfo({ navigation }) {
-  let [product, setProduct] = useState(navigation.getParam('product'));
+export default function ProductInfo({ route, navigation }) {
+  console.log('*************');
+  console.log(`ProductInfo--- Params: ${JSON.stringify(route.params)}`)
+  console.log('*************');
+  
+  const {productParam} = route.params
+
+  console.log(`productParam: ${productParam} `);
+
+  let [product, setProduct] = useState(productParam);
   const [uriImage, seturiImage] = useState('');
   console.log('estoy en productInfo con product: ', product);
   console.log('uriImageInicial: ', uriImage);
@@ -40,7 +48,7 @@ function ProductInfo({ navigation }) {
         console.log('uriImageDsp: ', uriImage);
       })
       .catch(error => {
-        console.log('error:', error);
+        console.log('error obteniendo el logo:', error);
       });
   }
 
