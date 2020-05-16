@@ -10,21 +10,27 @@ const Stack = createStackNavigator();
 export default function AccountStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen
+            {/* <Stack.Screen
                 name= {Constants.Navigations.AccountStack.account}
                 component={Account}
                 options={{ title: 'Account' }}
-            />
+            /> */}
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.login}
                 component={Login}
-                options={{ title: 'Iniciar sesión' }}
+                options={{
+                    title: 'Iniciar sesión',
+                    headerTitleAlign: 'center'
+                }}
             />
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.register}
                 component={Register}
-                options={{ title: 'Registrarme' }}
+                options={{
+                    title: 'Registrarme',
+                    headerTitleAlign: 'center'
+                }}
             />
         </Stack.Navigator>
-    )   
+    )
 } 

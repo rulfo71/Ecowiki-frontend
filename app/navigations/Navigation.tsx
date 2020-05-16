@@ -1,6 +1,7 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements'
 
 import AccountStack from './AccountStack'
@@ -9,58 +10,46 @@ import Home from '../screens/Home';
 import SearchProduct from '../screens/SearchProduct/SearchProduct';
 import { Constants } from '../Common/Constants/Constants';
 import SearchProductStack from './SearchProductStack';
+import ProductInfo from '../screens/SearchProduct/ProductInfo';
+import HomeTabs from './HomeTabs';
+import Register from '../screens/Account/Register';
 
 
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName='account'
-                tabBarOptions={{
-                    inactiveTintColor: Constants.Colors.grey,
-                    activeTintColor: Constants.Colors.brandGreenColor
-                }}
-                screenOptions={({ route }) => ({
-                    // tabBarIcon: ({ color }) => <Icon type='material-community' name='account' size={22} color='#808080' />
-                    tabBarIcon: ({ color }) => screenOptions(route, color),
-                })}
-            >
-                <Tab.Screen
-                    name='account'
-                    component={AccountStack}
-                    options={{ title: 'Account' }}
+            <Stack.Navigator>
+                <Stack.Screen name='home' component={HomeTabs}
+                    options={{
+                        title: '',
+                        headerTransparent: true
+                    }}
                 />
-                {/* <Tab.Screen
-                    name='home'
-                    component={Home}
-                    options={{ title: 'Home' }}
-                /> */}
-                <Tab.Screen
-                    name='scan'
+                <Stack.Screen
+                    name={Constants.Navigations.SearchProductStack.productInfo}
                     component={SearchProductStack}
-                    options={{ title: 'Scan' }} />
-            </Tab.Navigator>
+                    options={{
+                        title: '',
+                        headerTransparent: true,
+                        // headerShown: false, 
+                        // headerBackTitleVisible: true,
+                    }}
+                />
+                <Stack.Screen
+                    name={Constants.Navigations.AccountStack.login}
+                    component={AccountStack}
+                    options={{
+                        title: '',
+                        headerTransparent: true,
+                        // headerShown: false, 
+                        // headerBackTitleVisible: true,
+                    }}
+                />
+            </Stack.Navigator>
         </NavigationContainer>
-    )
-}
-
-function screenOptions(route, color) {
-    let iconName;
-
-    switch (route.name) {
-        case 'account':
-            iconName = 'account'
-            break;
-        case 'scan':
-            iconName = 'magnify'
-            break;
-        default:
-            break;
-    }
-    return (
-        <Icon type='material-community' name={iconName} size={22} color={color} />
     )
 }

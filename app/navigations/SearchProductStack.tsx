@@ -10,15 +10,23 @@ export default function SearchProductStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name= {Constants.Navigations.SearchProductStack.searchProduct}
+                name={Constants.Navigations.SearchProductStack.searchProduct}
                 component={SearchProduct}
-                options={{ title: 'Scan Product' }}
+                options={{
+                    title: 'Scan Product',
+                    headerShown: false,
+                }}
             />
             <Stack.Screen
                 name={Constants.Navigations.SearchProductStack.productInfo}
                 component={ProductInfo}
-                options={{ title: 'Product Info' }}
+                options={{
+                    title: '',
+                    headerTransparent: true,
+                    // headerShown: false,
+                    // headerBackTitleVisible: true,
+                }}
             />
         </Stack.Navigator>
-    )   
+    )
 } 

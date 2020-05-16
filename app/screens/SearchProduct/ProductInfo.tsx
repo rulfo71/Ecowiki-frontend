@@ -25,8 +25,8 @@ export default function ProductInfo({ route, navigation }) {
   console.log('*************');
   console.log(`ProductInfo--- Params: ${JSON.stringify(route.params)}`)
   console.log('*************');
-  
-  const {productParam} = route.params
+
+  const { productParam } = route.params
 
   console.log(`productParam: ${productParam} `);
 
@@ -36,12 +36,12 @@ export default function ProductInfo({ route, navigation }) {
   console.log('uriImageInicial: ', uriImage);
   useEffect(() => {
     console.log('getMaterialLogo dentro de useEffect');
-    setProduct(navigation.getParam('product'));
+    // setProduct(navigation.getParam('product'));
     getLogo();
   }, []);
 
   const getLogo = async () => {
-    await getMaterialLogo(product.Material)
+    await getMaterialLogo(product.material)
       .then(uriImage => {
         console.log('uriImage: ', uriImage);
         seturiImage(uriImage);
@@ -77,8 +77,8 @@ export default function ProductInfo({ route, navigation }) {
 
   const goToSetMaterial = () => {
     navigation.navigate('SetMaterial', {
-      barCode: product.BarCode,
-      name: product.Name
+      barCode: product.barCode,
+      name: product.displayName
     });
   }
 
@@ -88,11 +88,11 @@ export default function ProductInfo({ route, navigation }) {
 
   const Description = (props) => {
     console.log(props.style.Description);
-    if (product.Description !== '') {
+    if (product.description !== '') {
       return (
         <>
           <Text style={styles.title}>{"Descripción"} </Text>
-          <Text style={props.style.Description}> {product.Description} </Text>
+          <Text style={props.style.Description}> {product.description} </Text>
         </>
       )
     }
@@ -110,17 +110,18 @@ export default function ProductInfo({ route, navigation }) {
     }
     return null;
   }
+
   const BasketText = (props) => {
     console.log('materials: ', materials);
-    console.log('product.Material: ', product.Material);
-    console.log('materials[product.Material]', materials[product.Material]);
+    console.log('product.Material: ', product.material);
+    console.log('materials[product.Material]', materials[product.material]);
 
-    if (materials[product.Material]) {
-      if (product.Material !== 'noSeRecicla') {
+    if (materials[product.material]) {
+      if (product.material !== 'noSeRecicla') {
         return (
           <>
             <Text style={styles.title}>{"Tacho"} </Text>
-            <Text style={props.styles.Description}>{materials[product.Material]}</Text>
+            <Text style={props.styles.Description}>{materials[product.material]}</Text>
           </>
         )
       }
@@ -133,10 +134,10 @@ export default function ProductInfo({ route, navigation }) {
   return (
     <View style={styles.AllContainer} >
       <View style={styles.Container}>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>{"INFORMACION DE PRODUCTO"}</Text>
-        </View>
-        <Text style={styles.name} >{product.Name}</Text>
+        </View> */}
+        <Text style={styles.name} >{product.displayName}</Text>
         <MaterialLogo style={styles} />
         <BasketText styles={styles} />
         <Description style={styles} />
