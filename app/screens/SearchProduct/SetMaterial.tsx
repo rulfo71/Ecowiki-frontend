@@ -43,10 +43,10 @@ function SetMaterial({ navigation }) {
     }
 
     var product = new Product()
-    product.BarCode = barCode;
-    product.Description = description;
-    product.Name = name
-    product.Material = material
+    product.barcode = barCode;
+    product.description = description;
+    product.displayName = name
+    product.material = material
     console.log('acccept desde setMaterial')
 
     setLoading(true);

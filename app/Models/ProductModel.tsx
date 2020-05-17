@@ -1,13 +1,16 @@
 export default class ProductModel {
-  BarCode: string
-  Material: string
-  Name: string
-  Description: string
+  barcode: string
+  material: string
+  displayName: string
+  description: string
+  detailsId: string
 
   constructor() {
-    this.BarCode = ''
-    this.Material = ''
-    this.Name = ''
-    this.Description = ''
+    this.barcode = ''
+    this.material = ''
+    this.displayName = ''
+    this.description = ''
+    this.detailsId = ''
+
   }
 }

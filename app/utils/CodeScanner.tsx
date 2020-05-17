@@ -78,8 +78,8 @@ export default function CodeScanner() {
                 onPress: () => {
                     console.log('No quiere agregarlop')
                     var product = new Product();
-                    product.BarCode = data;
-                    console.log(product.BarCode);
+                    product.barcode = data;
+                    console.log(product.barcode);
                     setUnregisteredProduct(product);
                     setScanned(false);
                 }
@@ -144,7 +144,7 @@ export default function CodeScanner() {
                         containerStyle={styles.torchIcon}
                         name="flashlight"
                         type="material-community"
-                        color='#03AF11'
+                        color={Constants.Colors.brandGreenColor}
                         size={30}
                         onPress={async () => handleTorch()}
                     />

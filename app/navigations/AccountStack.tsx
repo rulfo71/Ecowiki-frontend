@@ -20,7 +20,16 @@ export default function AccountStack() {
                 component={Login}
                 options={{
                     title: 'Iniciar sesión',
-                    headerTitleAlign: 'center'
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Constants.Colors.brandGreenColor,
+                        borderBottomStartRadius: 20,
+                        borderBottomEndRadius: 20,
+                    },
+                    headerTitleStyle: {
+                        fontSize: 30,
+                        color: 'white'
+                    },
                 }}
             />
             <Stack.Screen
@@ -28,7 +37,16 @@ export default function AccountStack() {
                 component={Register}
                 options={{
                     title: 'Registrarme',
-                    headerTitleAlign: 'center'
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Constants.Colors.brandGreenColor,
+                        borderBottomStartRadius: 20,
+                        borderBottomEndRadius: 20,
+                    },
+                    headerTitleStyle: {
+                        fontSize: 30,
+                        color: 'white'
+                    },
                 }}
             />
         </Stack.Navigator>

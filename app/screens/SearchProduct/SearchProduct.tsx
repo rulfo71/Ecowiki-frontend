@@ -5,13 +5,14 @@ import {
   Alert,
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
-import CodeScanner from '../../utils/CodeScanner'
 import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '../../Repositories/ProductsRepository'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
+import Spinner from "react-native-loading-spinner-overlay";
+
+import CodeScanner from '../../utils/CodeScanner'
 import Product from '../../Models/ProductModel'
 import { isEmptyProduct } from '../../Services/ProductsService'
-import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
 
@@ -28,6 +29,15 @@ export default function SearchProduct() {
   useEffect(() => {
     getPermissionsAsync();
     searchBarRef.current.clear();
+    // todo: remove mock
+    // let productMock = new Product()
+    // productMock.displayName = 'Botella de coca'
+    // productMock.description = 'aca iria alguna observacion adicional que dejaron escrita'
+    // productMock.material = 'plastico'
+    // productMock.barcode = '101010101010110'
+
+    // goToProductInfo(productMock);
+
   }, []);
 
   const updateSearch = searchBar => {
@@ -80,8 +90,8 @@ export default function SearchProduct() {
           onPress: () => {
             console.log('No quiere agregarlo')
             var product = new Product();
-            product.Name = searchBar;
-            console.log(product.Name);
+            product.displayName = searchBar;
+            console.log(product.displayName);
             setUnregisteredProduct(product);
           }
         },

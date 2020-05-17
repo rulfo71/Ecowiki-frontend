@@ -35,8 +35,7 @@ export default function Navigation() {
                     options={{
                         title: '',
                         headerTransparent: true,
-                        // headerShown: false, 
-                        // headerBackTitleVisible: true,
+                        headerTintColor: 'white'
                     }}
                 />
                 <Stack.Screen
@@ -45,6 +44,7 @@ export default function Navigation() {
                     options={{
                         title: '',
                         headerTransparent: true,
+                        headerTintColor: 'white'
                         // headerShown: false, 
                         // headerBackTitleVisible: true,
                     }}
