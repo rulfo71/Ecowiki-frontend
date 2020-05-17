@@ -15,10 +15,10 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
 
-export default function SearchProduct(props) {
+export default function SearchProduct() {
   let searchBarRef = useRef(null);
   const toastRef = useRef(null);
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [loading, setLoading] = useState(false);

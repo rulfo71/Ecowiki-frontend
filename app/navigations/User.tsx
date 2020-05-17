@@ -13,6 +13,8 @@ import ScanProductScreen from "../screens/SearchProduct/SearchProduct";
 import SetMaterialScreen from "../screens/SearchProduct/SetMaterial";
 import ProductInfoScreen from "../screens/SearchProduct/ProductInfo";
 
+
+///TODO: Este ya habria que eliminarlo no se usa 
 const homeScreenStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
@@ -97,7 +99,7 @@ const RootStack = createBottomTabNavigator(
         tabBarLabel: "Mi cuenta",
         tabBarIcon: ({ tintColor }) => (
           <Icon
-            name="account" 
+            name="account"
             type="material-community"
             color={tintColor}
           />

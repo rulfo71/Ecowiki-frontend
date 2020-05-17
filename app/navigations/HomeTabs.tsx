@@ -26,12 +26,12 @@ export default function HomeTabs() {
             <Tab.Screen
                 name='account'
                 component={Account}
-                options={{ title: 'Account' }}
+                options={{ title: 'Mi Cuenta' }}
             />
             <Tab.Screen
                 name='scan'
                 component={SearchProduct}
-                options={{ title: 'Scan' }} />
+                options={{ title: 'Buscar' }} />
         </Tab.Navigator>
     );
 }

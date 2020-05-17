@@ -1,28 +1,29 @@
 import * as React from "react";
 import BarcodeMask from 'react-native-barcode-mask';
-import { Text, View, StyleSheet, StatusBar, SafeAreaView, Alert, ActivityIndicator } from "react-native";
-import { Icon, Overlay } from "react-native-elements";
+import { Text, View, StyleSheet, StatusBar, SafeAreaView, Alert } from "react-native";
+import { useNavigation } from '@react-navigation/native'
+import { Icon } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
-import Product from '../Models/ProductModel'
 import { getProductByBarCode, setUnregisteredProduct } from "../Repositories/ProductsRepository";
 import { useState, useEffect, useRef } from "react";
-// import { withNavigation } from 'react-navigation'
 import Toast from "react-native-easy-toast";
 import Spinner from "react-native-loading-spinner-overlay";
 import { isEmptyProduct } from "../Services/ProductsService";
-// export default withNavigation(CodeScanner);
+import Product from '../Models/ProductModel'
+import { Constants } from "../Common/Constants/Constants";
 
-export default function CodeScanner(props) {
+export default function CodeScanner() {
 
-    const { navigation } = props;
     const toastRef = useRef(null);
     let [hasCameraPermission, setCameraPermission] = useState(null);
     let [scanned, setScanned] = useState(false);
     let [torchOn, setTorchOn] = useState(false);
     let [barCode, setBarCode] = useState('');
     let [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
+
 
     useEffect(() => {
         getPermissionsAsync();
@@ -44,7 +45,6 @@ export default function CodeScanner(props) {
 
         await getProductByBarCode(data)
             .then(foundProduct => {
-                // setBarCode(data);
                 setLoading(false);
                 if (foundProduct && !isEmptyProduct(foundProduct)) {
                     goToProductInfo(foundProduct);
@@ -66,8 +66,9 @@ export default function CodeScanner(props) {
         });
     }
     const goToProductInfo = async (product: Product) => {
-        navigation.navigate("ProductInfo", {
-            product: product
+        console.log('vamos para productInfo con ', product);
+        navigation.navigate(Constants.Navigations.SearchProductStack.productInfo, {
+            productParam: product
         });
     }
     const addProductAlert = (data) => {

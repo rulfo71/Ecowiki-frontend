@@ -31,7 +31,7 @@ export default function Navigation() {
                 />
                 <Stack.Screen
                     name={Constants.Navigations.SearchProductStack.productInfo}
-                    component={SearchProductStack}
+                    component={ProductInfo}
                     options={{
                         title: '',
                         headerTransparent: true,
