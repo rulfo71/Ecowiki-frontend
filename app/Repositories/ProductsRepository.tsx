@@ -1,5 +1,9 @@
+import Product from '../Models/ProductModel'
+import AddModelDto from '../Models/AddModelDto'
+
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
+
 
 export const setProduct = product => {
   console.log('setProduct');
@@ -34,21 +38,22 @@ export const setProduct = product => {
     })
 }
 
-export const addVote = product => {
-  console.log('addVote');
+export const addVote = (product : Product)  => {
+  console.log('*******');
+  console.log(`addVote: ${JSON.stringify(product)}`);
+  console.log('*******');
 
   var uriAddVote = server + 'addVote'
-  console.log(uriAddVote);
+  // console.log(uriAddVote);
 
-  const data = JSON.stringify({
-    BarCode: product.BarCode,
-    Description: product.Description,
-    Name: product.Name,
-    Material: product.Material
-  })
-  console.log('body: ');
+  let addModelDto : AddModelDto = new AddModelDto()
+  addModelDto.name = product.displayName
+  addModelDto.detailsId = product.detailsId
+  const data = JSON.stringify(addModelDto)
 
-  console.log(data)
+  // console.log('body: ');
+
+  // console.log(addModelDto)
 
   return fetch(uriAddVote, {
     method: 'POST',
@@ -73,15 +78,10 @@ export const subtractVote = product => {
   var uriSubtractVote = server + 'subtractVote'
   console.log(uriSubtractVote);
 
-  const data = JSON.stringify({
-    BarCode: product.BarCode,
-    Description: product.Description,
-    Name: product.Name,
-    Material: product.Material
-  })
-  console.log('body: ');
-
-  console.log(data)
+  let addModelDto : AddModelDto = new AddModelDto()
+  addModelDto.name = product.displayName
+  addModelDto.detailsId = product.detailsId
+  const data = JSON.stringify(addModelDto)
 
   return fetch(uriSubtractVote, {
     method: 'POST',
@@ -91,7 +91,7 @@ export const subtractVote = product => {
     body: data
   }).then(response => {
     console.log('entre al then')
-    console.log(response);
+    console.log(response);  
   })
     .catch(error => {
       console.log('error: ', error)

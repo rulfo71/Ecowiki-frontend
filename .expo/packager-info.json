@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 20928,
+  "expoServerNgrokUrl": "https://3j-tjw.rulfo.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.3j-tjw.rulfo.frontend.exp.direct",
+  "ngrokPid": 15792,
   "webpackServerPort": null
 }
