@@ -17,6 +17,9 @@ export const Constants = {
         SearchProductStack: {
             searchProduct: 'searchProduct',
             productInfo: 'productInfo'
+        },
+        Home: {
+            home: 'home'
         }
     },
     Account: {
