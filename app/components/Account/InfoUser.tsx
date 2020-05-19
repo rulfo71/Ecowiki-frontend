@@ -16,7 +16,6 @@ export default function InfoUser(props) {
 
     console.log(props.userInfo);
 
-
     const changeAvatar = async () => {
         const resultPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         const resultPermissionCamera = resultPermission.permissions.cameraRoll.status;
@@ -76,8 +75,17 @@ export default function InfoUser(props) {
                 rounded
                 size='large'
                 showEditButton
+                editButton={{
+                    name: 'mode-edit',
+                    type: 'material',
+                    size: 13,
+                    color: Constants.Colors.brandGreenColor,
+                    reverseColor: 'white',
+                    reverse: true
+                }}
                 containerStyle={styles.userInfoAvatar}
                 onEditPress={changeAvatar}
+                onPress={changeAvatar}
                 source={
                     photoURL
                         ? { uri: photoURL }
@@ -86,7 +94,7 @@ export default function InfoUser(props) {
             />
             <View>
                 <Text style={styles.displayName}>
-                    {displayName ? displayName : 'Abel Pintos'}
+                    {displayName ? displayName : ''}
                 </Text>
                 <Text>
                     {email ? email : 'Social Login'}
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         backgroundColor: Constants.Colors.backgroundGrey,
-        paddingTop: 30,
+        paddingTop: 40,
         paddingBottom: 30
     },
     userInfoAvatar: {
