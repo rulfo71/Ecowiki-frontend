@@ -142,7 +142,7 @@ export default function CodeScanner() {
                         reverse
                         underlayColor="transparent"
                         containerStyle={styles.torchIcon}
-                        name="flashlight"
+                        name={torchOn ? 'flashlight-off' : 'flashlight'}
                         type="material-community"
                         color={Constants.Colors.brandGreenColor}
                         size={30}
