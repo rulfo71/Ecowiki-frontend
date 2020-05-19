@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { map } from 'lodash';
@@ -7,6 +7,8 @@ import Modal from '../Modal'
 import ChangeDisplayNameForm from './ChangeDisplayNameForm';
 import ChangeEmailForm from './ChangeEmailForm'
 import ChangePasswordForm from './ChangePasswordForm'
+import { Constants } from '../../Common/Constants/Constants'
+import * as firebase from 'firebase';
 
 export default function AccountOptions(props) {
 
@@ -17,30 +19,30 @@ export default function AccountOptions(props) {
 
 
     const selectedComponent = (key) => {
-        switch(key){
-            case 'displayName': 
+        switch (key) {
+            case 'displayName':
                 setRenderComponent(
                     <ChangeDisplayNameForm
                         displayName={userInfo.displayName}
                         setShowModal={setShowModal}
                         toastRef={toastRef}
-                        setReloadUserInfo={setReloadUserInfo} 
+                        setReloadUserInfo={setReloadUserInfo}
                     />
                 )
                 setShowModal(true)
-                break; 
-            case 'email': 
+                break;
+            case 'email':
                 setRenderComponent(
                     <ChangeEmailForm
                         email={userInfo.email}
                         setShowModal={setShowModal}
                         toastRef={toastRef}
-                        setReloadUserInfo={setReloadUserInfo} 
+                        setReloadUserInfo={setReloadUserInfo}
                     />
                 )
                 setShowModal(true)
                 break;
-            case 'password': 
+            case 'password':
                 setRenderComponent(
                     <ChangePasswordForm
                         setShowModal={setShowModal}
@@ -49,7 +51,7 @@ export default function AccountOptions(props) {
                 )
                 setShowModal(true)
                 break;
-            default: 
+            default:
                 setRenderComponent(null)
                 setShowModal(false)
                 break;
@@ -77,8 +79,9 @@ export default function AccountOptions(props) {
                     }}
                     containerStyle={styles.menuItem}
                     onPress={menu.onPress}
+                    onLongPress={menu.onPress}
                 />
-            ))} 
+            ))}
             {renderComponent && (
                 <Modal isVisible={showModal} setIsVisible={setShowModal}>
                     {renderComponent}
@@ -90,40 +93,54 @@ export default function AccountOptions(props) {
     function generateOptions(selectedComponent) {
         return [
             {
-                title: "Cambiar Nombre y Apellido",
+                title: "Cambiar Apodo",
                 iconType: 'material-community',
                 iconNameLeft: 'account-circle',
-                iconColor: '#ccc',
+                iconColor: Constants.Colors.brandGreenColor,
                 iconNameRight: 'chevron-right',
-                iconColorRight: '#ccc',
+                iconColorRight: Constants.Colors.brandGreenColor,
                 onPress: () => selectedComponent('displayName')
             },
             {
                 title: 'Cambiar Email',
                 iconType: 'material-community',
                 iconNameLeft: 'at',
-                iconColor: '#ccc',
+                iconColor: Constants.Colors.brandGreenColor,
                 iconNameRight: 'chevron-right',
-                iconColorRight: '#ccc',
+                iconColorRight: Constants.Colors.brandGreenColor,
                 onPress: () => selectedComponent('email')
             },
             {
                 title: 'Cambiar Contraseña',
                 iconType: 'material-community',
                 iconNameLeft: 'lock-reset',
-                iconColor: '#ccc',
+                iconColor: Constants.Colors.brandGreenColor,
                 iconNameRight: 'chevron-right',
-                iconColorRight: '#ccc',
+                iconColorRight: Constants.Colors.brandGreenColor,
                 onPress: () => selectedComponent('password')
             },
-
+            {
+                title: 'Cerrar Sesión',
+                iconType: 'material-community',
+                iconNameLeft: 'logout',
+                iconColor: Constants.Colors.brandGreenColor,
+                iconNameRight: 'chevron-right',
+                iconColorRight: Constants.Colors.brandGreenColor,
+                onPress: () => firebase.auth().signOut()
+            },
         ]
     }
 }
 
 const styles = StyleSheet.create({
     menuItem: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#e3e3e3'
+        marginTop: 10,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#e3e3e3',
+        padding: 10,
+        width: '90%',
+        alignSelf: 'center'
     }
 })
