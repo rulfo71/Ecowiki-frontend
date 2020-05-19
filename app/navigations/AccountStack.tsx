@@ -10,12 +10,16 @@ const Stack = createStackNavigator();
 export default function AccountStack() {
     return (
         <Stack.Navigator>
-            {/* <Stack.Screen
-                name= {Constants.Navigations.AccountStack.account}
-                component={Account}
-                options={{ title: 'Account' }}
-            /> */}
             <Stack.Screen
+                name={Constants.Navigations.AccountStack.account}
+                component={Account}
+                options={{
+                    title: 'Iniciar Sesi',
+                    headerShown: false,
+                    headerTransparent: false,
+                }}
+            />
+            {/* <Stack.Screen
                 name={Constants.Navigations.AccountStack.login}
                 component={Login}
                 options={{
@@ -27,16 +31,16 @@ export default function AccountStack() {
                         borderBottomEndRadius: 20,
                     },
                     headerTitleStyle: {
-                        fontSize: 30,
+                        fontSize: 25,
                         color: 'white'
                     },
                 }}
-            />
+            /> */}
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.register}
                 component={Register}
                 options={{
-                    title: 'Registrarme',
+                    title: 'Crear Cuenta',
                     headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: Constants.Colors.brandGreenColor,
@@ -44,7 +48,7 @@ export default function AccountStack() {
                         borderBottomEndRadius: 20,
                     },
                     headerTitleStyle: {
-                        fontSize: 30,
+                        fontSize: 25,
                         color: 'white'
                     },
                 }}

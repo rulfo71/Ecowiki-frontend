@@ -10,28 +10,27 @@ import Account from '../screens/Account/Account';
 
 const Tab = createBottomTabNavigator();
 
-export default function HomeTabs() {
+export default function BottomTabBar() {
     return (
         <Tab.Navigator
-            initialRouteName='scan'
+            initialRouteName={Constants.Navigations.AccountStack.account}
             tabBarOptions={{
                 inactiveTintColor: Constants.Colors.grey,
                 activeTintColor: Constants.Colors.brandGreenColor
             }}
             screenOptions={({ route }) => ({
-                // tabBarIcon: ({ color }) => <Icon type='material-community' name='account' size={22} color='#808080' />
                 tabBarIcon: ({ color }) => screenOptions(route, color),
             })}
         >
             <Tab.Screen
-                name='account'
-                component={Account}
+                name={Constants.Navigations.AccountStack.account}
+                component={AccountStack}
                 options={{
                     title: 'Mi Cuenta',
                 }}
             />
             <Tab.Screen
-                name='scan'
+                name={Constants.Navigations.SearchProductStack.searchProduct}
                 component={SearchProduct}
                 options={{ title: 'Buscar' }} />
         </Tab.Navigator>
@@ -42,10 +41,10 @@ function screenOptions(route, color) {
     let iconName;
 
     switch (route.name) {
-        case 'account':
+        case Constants.Navigations.AccountStack.account:
             iconName = 'account'
             break;
-        case 'scan':
+        case Constants.Navigations.SearchProductStack.searchProduct:
             iconName = 'magnify'
             break;
         default:

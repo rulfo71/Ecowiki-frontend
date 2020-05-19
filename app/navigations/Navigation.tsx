@@ -11,9 +11,9 @@ import SearchProduct from '../screens/SearchProduct/SearchProduct';
 import { Constants } from '../Common/Constants/Constants';
 import SearchProductStack from './SearchProductStack';
 import ProductInfo from '../screens/SearchProduct/ProductInfo';
-import HomeTabs from './HomeTabs';
+import BottomTabBar from './BottomTabBar';
 import Register from '../screens/Account/Register';
-
+import Account from '../screens/Account/Account';
 
 // const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -22,29 +22,71 @@ const Stack = createStackNavigator();
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name='home' component={HomeTabs}
+            <Stack.Navigator
+                initialRouteName={Constants.Navigations.Home.home}
+                screenOptions={{
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Constants.Colors.brandGreenColor,
+                        borderBottomStartRadius: 20,
+                        borderBottomEndRadius: 20,
+                    },
+                    headerTitleStyle: {
+                        fontSize: 30,
+                        color: 'white'
+                    },
+                    headerTintColor: 'white'
+                }}
+            >
+                <Stack.Screen
+                    name={Constants.Navigations.Home.home}
+                    component={Home}
                     options={{
-                        title: '',
-                        headerTransparent: true
+                        title: 'Hola! ',
+                        // headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name={Constants.Navigations.SearchProductStack.productInfo}
-                    component={ProductInfo}
+                    name={Constants.Navigations.SearchProductStack.searchProduct}
+                    component={SearchProduct}
                     options={{
-                        title: '',
+                        // title: 'Escaneá el codigo de barras ',
+                        // headerTitleAlign: 'center',
+                        // headerStyle: {
+                        //     backgroundColor: Constants.Colors.brandGreenColor,
+                        //     borderBottomStartRadius: 20,
+                        //     borderBottomEndRadius: 20,
+                        // },
                         headerTransparent: true,
-                        headerTintColor: 'white'
+                        title: '',
+                        // headerTitleStyle: {
+                        //     fontSize: 30,
+                        //     color: 'white'
+                        // },
+                        headerTintColor: Constants.Colors.brandGreenColor
                     }}
                 />
                 <Stack.Screen
-                    name={Constants.Navigations.AccountStack.login}
-                    component={AccountStack}
+                    name={Constants.Navigations.AccountStack.account}
+                    component={Account}
                     options={{
-                        title: '',
-                        headerTransparent: true,
-                        headerTintColor: 'white'
+                        title: 'Mi Cuenta'
+                        // title: 'hola',
+                        // headerTransparent: false,
+                        // headerTintColor: 'white'
+                        // headerShown: false, 
+                        // headerBackTitleVisible: true,
+                    }}
+                />
+                <Stack.Screen
+                    name={Constants.Navigations.AccountStack.register}
+                    component={Register}
+                    options={{
+
+                        title: 'Registrarme'
+                        // title: 'hola',
+                        // headerTransparent: false,
+                        // headerTintColor: 'white'
                         // headerShown: false, 
                         // headerBackTitleVisible: true,
                     }}
