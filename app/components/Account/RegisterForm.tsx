@@ -21,6 +21,7 @@ export default function RegisterForm (props) {
 
     const navigation = useNavigation();
 
+
     const onSubmit = () => {
         if (
             isEmpty(formData.email) || 
@@ -36,9 +37,9 @@ export default function RegisterForm (props) {
         else if (formData.password !== formData.repeatPassword){
             toastRef.current.show('Las contraseñas tienen que ser iguales')
         }
-        else if (size(formData.password) < Constants.Account.minimumCharactersPassword){
-            toastRef.current.show('La contraseña debe tener al menos 6 caracteres')
-        }
+        // else if (size(formData.password) < Constants.Account.minimumCharactersPassword){
+        //     toastRef.current.show('La contraseña debe tener al menos 6 caracteres')
+        // }
         else{
             setLoading(true);
             firebase
@@ -50,10 +51,13 @@ export default function RegisterForm (props) {
             })
             .catch((error) => {
                 setLoading(false);
-                toastRef.current.show('Hubo un error al registrarte')
+                console.log(error);                
+                const errorMessage = getErrorMessage(error)
+                toastRef.current.show(errorMessage)
             });
         }
     }  
+
 
     const onChange = (e, type) => {
         setFormData({ ...formData,  [type]: e.nativeEvent.text  })
@@ -69,7 +73,7 @@ export default function RegisterForm (props) {
                     <Icon
                         type='material-community'
                         name='at'
-                        iconStyle={styles.iconRight}
+                        color= {Constants.Colors.brandGreenColor}
                     />
                 }
             />
@@ -82,7 +86,7 @@ export default function RegisterForm (props) {
                     <Icon
                         type='material-community'
                         name= {showPassword ? 'eye-off-outline' : 'eye-outline' }  
-                        iconStyle={styles.iconRight}
+                        color= {Constants.Colors.brandGreenColor}
                         onPress={()=> setShowPassword(!showPassword)}
                     />
                 }
@@ -96,7 +100,7 @@ export default function RegisterForm (props) {
                     <Icon
                         type='material-community'
                         name= {showRepeatPassword ? 'eye-off-outline' : 'eye-outline' }  
-                        iconStyle={styles.iconRight}
+                        color= {Constants.Colors.brandGreenColor}
                         onPress={()=> setShowRepeatPassword(!showRepeatPassword)}
 
                     />
@@ -111,6 +115,32 @@ export default function RegisterForm (props) {
             <Spinner visible={loading} />
         </View>
     )
+}
+
+
+function getErrorMessage (error) {
+
+    let response = '';
+
+    console.log(error);
+    console.log(error.code);
+    // console.log(error.code instanceof string);
+    console.log(error.message);
+    
+
+    switch (error.code) {
+        case 'auth/email-already-in-use':
+            response = 'Ups. Ya tenemos un usuario registrado con ese mail!'
+            break;
+        case 'auth/weak-password':
+            response = 'La contraseña tiene que tener al menos 6 caracteres'
+            break;
+        default:
+            response = 'Ups.. Hubo un error, intentá de nuevo'
+            break;
+    }
+    return response
+
 }
 
 function defaultFormValue(){
