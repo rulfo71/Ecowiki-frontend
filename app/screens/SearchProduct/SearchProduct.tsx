@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   SearchBarContainer: {
     width: '100%',
-    top: 50,
+    paddingTop: 90,
     borderRadius: 5,
     position: 'absolute',
     borderTopColor: 'transparent',

@@ -8,7 +8,6 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { Constants } from "../../Common/Constants/Constants";
 import AccountOptions from '../../components/Account/AccountOptions';
 import InfoUser from '../../components/Account/InfoUser'
-import Account from "./Account";
 
 
 export default function UserLogged() {
@@ -32,19 +31,19 @@ export default function UserLogged() {
         userInfo={userInfo}
         toastRef={toastRef}
         setLoading={setLoading}
-        
+
       />}
-      <AccountOptions 
-        userInfo={userInfo} 
-        toastRef={toastRef} 
-        setReloadUserInfo={setReloadUserInfo} 
+      <AccountOptions
+        userInfo={userInfo}
+        toastRef={toastRef}
+        setReloadUserInfo={setReloadUserInfo}
       />
-      <Button
+      {/* <Button
         title='Cerrar Sesión'
         buttonStyle={styles.btnCloseSession}
         titleStyle={styles.btnCloseSessionText}
         onPress={() => firebase.auth().signOut()}
-      />
+      /> */}
       <Toast ref={toastRef} position='center' opacity={0.9} />
       <Spinner visible={loading} />
     </View>
@@ -58,14 +57,13 @@ const styles = StyleSheet.create({
   },
   btnCloseSession: {
     marginTop: 30,
-    borderRadius: 0,
+    borderRadius: 10,
     backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e3e3',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e3e3e3',
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderWidth: 1,
+    borderColor: '#e3e3e3',
+    padding: 10,
+    width: '90%',
+    alignSelf: 'center'
 
   },
   btnCloseSessionText: {

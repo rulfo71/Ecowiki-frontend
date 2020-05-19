@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-elements";
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Constants } from "../../Common/Constants/Constants";
 
 export default function UserGuest() {
@@ -17,7 +17,7 @@ export default function UserGuest() {
         onPress={() => navigation.navigate(Constants.Navigations.AccountStack.login)}
       />
     </ScrollView>
-  );     
+  );
 }
 
 const styles = StyleSheet.create({
