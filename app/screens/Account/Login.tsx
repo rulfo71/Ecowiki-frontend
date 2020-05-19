@@ -20,11 +20,28 @@ export default function Login() {
             />  
         <View style={styles.viewContainer}>
             <LoginForm toastRef = {toastRef}/> 
+            <ForgotPassword/>
             <CreateAccount/>
         </View>
         <Divider style={styles.divider}/>
         <Toast ref={toastRef} position='center' opacity={0.9}/>
         </ScrollView>
+    )
+}
+
+function ForgotPassword() {
+    const navigation = useNavigation(); 
+
+    return( 
+        <Text style={styles.textRegister}>
+            ¿Todavía no tenés cuenta? {' '}
+            <Text 
+                style={styles.btnRegister}
+                onPress={() => navigation.navigate(Constants.Navigations.AccountStack.register)}
+            >
+                Registrarme
+            </Text> 
+        </Text>
     )
 }
 
