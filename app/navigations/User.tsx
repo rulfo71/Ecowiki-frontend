@@ -10,7 +10,7 @@ import MapScreen from "../screens/Map";
 import AccountScreen from "../screens/Account/Account";
 //Screens Scan Product
 import ScanProductScreen from "../screens/SearchProduct/SearchProduct";
-import SetMaterialScreen from "../screens/SearchProduct/SetMaterial";
+import SetMaterialScreen from "../screens/SearchProduct/AddProduct";
 import ProductInfoScreen from "../screens/SearchProduct/ProductInfo";
 
 

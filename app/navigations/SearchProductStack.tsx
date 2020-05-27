@@ -10,7 +10,7 @@ export default function SearchProductStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name={Constants.Navigations.SearchProductStack.searchProduct}
+                name={Constants.Navigations.ProductStack.searchProduct}
                 component={SearchProduct}
                 options={{
                     title: 'Scan Product',
@@ -18,7 +18,7 @@ export default function SearchProductStack() {
                 }}
             />
             <Stack.Screen
-                name={Constants.Navigations.SearchProductStack.productInfo}
+                name={Constants.Navigations.ProductStack.productInfo}
                 component={ProductInfo}
                 options={{
                     title: '',
