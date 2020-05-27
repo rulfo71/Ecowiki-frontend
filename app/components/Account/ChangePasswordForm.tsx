@@ -10,7 +10,9 @@ import { reauthenticate }  from '../../utils/api'
 export default function ChangePasswordForm (props) {
     const {setShowModal, toastRef} = props
 
-    const [showPassword, setshowPassword] = useState(false)
+    const [showActualPassword, setshowActualPassword] = useState(false)
+    const [showNewPassword, setshowNewPassword] = useState(false)
+    const [showRepeatNewPassword, setshowRepeatNewPassword] = useState(false)
     const [formData, setFormData] = useState(defaultFormValue())
     const [errors, setErrors] = useState({})
     const [isLoading, setIsLoading] = useState(false)
@@ -78,14 +80,14 @@ export default function ChangePasswordForm (props) {
     return (
         <View style={styles.view}>
             <Input
-                placeholder='Cambiar contraseña'
+                placeholder='Contraseña actual'
                 containerStyle={styles.input}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showActualPassword}
                 rightIcon= {{
                     type: 'material-community',
-                    name: showPassword? 'eye-off-outline' : 'eye-outline',
-                    color: '#c2c2c2',    
-                    onPress: ()=> {setshowPassword(!showPassword)} 
+                    name: showActualPassword? 'eye-off-outline' : 'eye-outline',
+                    color: Constants.Colors.brandGreenColor,    
+                    onPress: ()=> {setshowActualPassword(!showActualPassword)} 
                 }}
                 onChange={(e) => onChange(e,'password')}      
                 errorMessage={errors.password}          
@@ -93,12 +95,12 @@ export default function ChangePasswordForm (props) {
             <Input 
                 placeholder='Nueva contraseña'
                 containerStyle={styles.input}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showNewPassword}
                 rightIcon= {{
                     type: 'material-community',
-                    name: showPassword? 'eye-off-outline' : 'eye-outline',
-                    color: '#c2c2c2',
-                    onPress: ()=> {setshowPassword(!showPassword)} 
+                    name: showNewPassword? 'eye-off-outline' : 'eye-outline',
+                    color: Constants.Colors.brandGreenColor,
+                    onPress: ()=> {setshowNewPassword(!showNewPassword)} 
                 }}            
                 onChange={(e) => onChange(e,'newPassword')}
                 errorMessage={errors.newPassword}
@@ -107,12 +109,12 @@ export default function ChangePasswordForm (props) {
             <Input 
                 placeholder='Repetir nueva contraseña'
                 containerStyle={styles.input}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showRepeatNewPassword}
                 rightIcon= {{
                     type: 'material-community',
-                    name: showPassword? 'eye-off-outline' : 'eye-outline',
-                    color: '#c2c2c2',
-                    onPress: ()=> {setshowPassword(!showPassword)}     
+                    name: showRepeatNewPassword? 'eye-off-outline' : 'eye-outline',
+                    color: Constants.Colors.brandGreenColor,
+                    onPress: ()=> {setshowRepeatNewPassword(!showRepeatNewPassword)}     
                 }}            
                 onChange={(e) => onChange(e,'repeatNewPassword')}
                 errorMessage={errors.repeatNewPassword}
@@ -120,6 +122,7 @@ export default function ChangePasswordForm (props) {
             <Button
                 title='Cambiar contraseña'
                 containerStyle={styles.btnContainer}
+                buttonStyle={styles.btn}
                 onPress={onSubmit}
                 loading={isLoading}
             />
