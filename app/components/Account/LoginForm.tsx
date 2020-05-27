@@ -52,14 +52,14 @@ export default function LoginForm(props) {
     return (
         <View style={styles.formContainer}>
             <Input
-                placeholder='Mail'
+                placeholder='Correo electrónico'
                 containerStyle={styles.inputForm}
                 onChange={e => onChange(e, 'email')}
                 rightIcon={
                     <Icon
                         type='material-community'
                         name='at'
-                        color= {Constants.Colors.brandGreenColor}
+                        color={Constants.Colors.brandGreenColor}
                     />
                 }
             />
@@ -72,7 +72,7 @@ export default function LoginForm(props) {
                     <Icon
                         type='material-community'
                         name={showRepeatPassword ? 'eye-off-outline' : 'eye-outline'}
-                        color= {Constants.Colors.brandGreenColor}
+                        color={Constants.Colors.brandGreenColor}
                         onPress={() => setShowRepeatPassword(!showRepeatPassword)}
 
                     />
