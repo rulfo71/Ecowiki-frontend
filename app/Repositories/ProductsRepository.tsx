@@ -3,6 +3,7 @@ import AddModelDto from '../Models/AddModelDto'
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
+// const server = 'http://192.168.1.140:3000/products/'
 
 
 export const setProduct = product => {
@@ -38,7 +39,7 @@ export const setProduct = product => {
     })
 }
 
-export const addVote = (product : Product)  => {
+export const addVote = (product: Product) => {
   console.log('*******');
   console.log(`addVote: ${JSON.stringify(product)}`);
   console.log('*******');
@@ -46,7 +47,7 @@ export const addVote = (product : Product)  => {
   var uriAddVote = server + 'addVote'
   // console.log(uriAddVote);
 
-  let addModelDto : AddModelDto = new AddModelDto()
+  let addModelDto: AddModelDto = new AddModelDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   const data = JSON.stringify(addModelDto)
@@ -78,7 +79,7 @@ export const subtractVote = product => {
   var uriSubtractVote = server + 'subtractVote'
   console.log(uriSubtractVote);
 
-  let addModelDto : AddModelDto = new AddModelDto()
+  let addModelDto: AddModelDto = new AddModelDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   const data = JSON.stringify(addModelDto)
@@ -91,7 +92,7 @@ export const subtractVote = product => {
     body: data
   }).then(response => {
     console.log('entre al then')
-    console.log(response);  
+    console.log(response);
   })
     .catch(error => {
       console.log('error: ', error)
@@ -153,7 +154,7 @@ export const getProductByBarCode = async barCode => {
     });
 }
 export const getProductByName = async name => {
-  console.log('****************************************');  
+  console.log('****************************************');
   console.log(`ProductsRepository -- getProductByName(name: ${name} `);
   console.log('****************************************');
   var uriGetProduct = server + 'getProductByName/' + name
