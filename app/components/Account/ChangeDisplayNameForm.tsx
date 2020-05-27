@@ -37,10 +37,7 @@ export default function ChangeDisplayNameForm(props) {
                     setError('Error al actualizar el nombre')
                     setIsLoading(false)
                 })
-
         }
-
-
     }
 
     return (
@@ -58,13 +55,13 @@ export default function ChangeDisplayNameForm(props) {
                 errorMessage={error}
             />
             <Button
-                title='Guardar'
+                title='Cambiar apodo'
                 // iconRight
                 // icon={<Icon
                 //     type='material-community'
                 //     name='save'
                 // />}
-                style={styles.btnContainer}
+                containerStyle={styles.btnContainer}
                 buttonStyle={styles.btn}
                 onPress={onSubmit}
                 loading={isLoading}
