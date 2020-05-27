@@ -1,97 +1,57 @@
 import React from 'react'
 import { NavigationContainer, StackActions } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack';
-import { Icon } from 'react-native-elements'
-
-import AccountStack from './AccountStack'
 
 import Home from '../screens/Home';
 import SearchProduct from '../screens/SearchProduct/SearchProduct';
 import { Constants } from '../Common/Constants/Constants';
-import SearchProductStack from './SearchProductStack';
 import ProductInfo from '../screens/SearchProduct/ProductInfo';
-import BottomTabBar from './BottomTabBar';
 import Register from '../screens/Account/Register';
 import Account from '../screens/Account/Account';
+import RecoverPassword from '../screens/Account/RecoverPassword';
+import ModalBottom from '../components/ModalBottom';
+import MainStack from './MainStack';
 
 // const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
+
 
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={Constants.Navigations.Home.home}
-                screenOptions={{
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: Constants.Colors.brandGreenColor,
-                        borderBottomStartRadius: 20,
-                        borderBottomEndRadius: 20,
-                    },
-                    headerTitleStyle: {
-                        fontSize: 30,
-                        color: 'white'
-                    },
-                    headerTintColor: 'white'
-                }}
+            <RootStack.Navigator 
+            screenOptions={{
+                cardStyle: { backgroundColor: 'transparent' },
+                cardOverlayEnabled: true,
+                
+                // cardStyleInterpolator: ({ current: { progress } }) => ({
+                //   cardStyle: {
+                //     opacity: progress.interpolate({
+                //       inputRange: [0, 0.5, 0.9, 1],
+                //       outputRange: [0, 0.25, 0.7, 1],
+                //     }),
+                //   },
+                //   overlayStyle: {
+                //     opacity: progress.interpolate({
+                //       inputRange: [0, 1],
+                //       outputRange: [0, 0.5],
+                //       extrapolate: 'clamp',
+                //     }),
+                //   },
+                // }),
+              }}
+              mode="modal"
+              headerMode="none"
             >
-                <Stack.Screen
-                    name={Constants.Navigations.Home.home}
-                    component={Home}
-                    options={{
-                        title: 'Hola! ',
-                        // headerShown: false,
-                    }}
+                <RootStack.Screen
+                    name="Main"
+                    component={MainStack}
+                    options={{ headerShown: false }}
                 />
-                <Stack.Screen
-                    name={Constants.Navigations.SearchProductStack.searchProduct}
-                    component={SearchProduct}
-                    options={{
-                        // title: 'Escaneá el codigo de barras ',
-                        // headerTitleAlign: 'center',
-                        // headerStyle: {
-                        //     backgroundColor: Constants.Colors.brandGreenColor,
-                        //     borderBottomStartRadius: 20,
-                        //     borderBottomEndRadius: 20,
-                        // },
-                        headerTransparent: true,
-                        title: '',
-                        // headerTitleStyle: {
-                        //     fontSize: 30,
-                        //     color: 'white'
-                        // },
-                        headerTintColor: Constants.Colors.brandGreenColor
-                    }}
-                />
-                <Stack.Screen
-                    name={Constants.Navigations.AccountStack.account}
-                    component={Account}
-                    options={{
-                        title: 'Mi Cuenta'
-                        // title: 'hola',
-                        // headerTransparent: false,
-                        // headerTintColor: 'white'
-                        // headerShown: false, 
-                        // headerBackTitleVisible: true,
-                    }}
-                />
-                <Stack.Screen
-                    name={Constants.Navigations.AccountStack.register}
-                    component={Register}
-                    options={{
-
-                        title: 'Registrarme'
-                        // title: 'hola',
-                        // headerTransparent: false,
-                        // headerTintColor: 'white'
-                        // headerShown: false, 
-                        // headerBackTitleVisible: true,
-                    }}
-                />
-            </Stack.Navigator>
+               <RootStack.Screen name='myModal' component={ModalBottom} />
+            </RootStack.Navigator>            
         </NavigationContainer>
     )
 }
