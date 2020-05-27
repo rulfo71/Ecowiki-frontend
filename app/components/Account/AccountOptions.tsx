@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { map } from 'lodash';
 
@@ -9,6 +9,8 @@ import ChangeEmailForm from './ChangeEmailForm'
 import ChangePasswordForm from './ChangePasswordForm'
 import { Constants } from '../../Common/Constants/Constants'
 import * as firebase from 'firebase';
+import Logout from './Logout';
+import CameraOrGallery from '../CameraOrGallery';
 
 export default function AccountOptions(props) {
 
@@ -45,6 +47,15 @@ export default function AccountOptions(props) {
             case 'password':
                 setRenderComponent(
                     <ChangePasswordForm
+                        setShowModal={setShowModal}
+                        toastRef={toastRef}
+                    />
+                )
+                setShowModal(true)
+                break;
+            case 'logout':
+                setRenderComponent(
+                    <Logout
                         setShowModal={setShowModal}
                         toastRef={toastRef}
                     />
@@ -93,7 +104,7 @@ export default function AccountOptions(props) {
     function generateOptions(selectedComponent) {
         return [
             {
-                title: "Cambiar Apodo",
+                title: "Cambiar apodo",
                 iconType: 'material-community',
                 iconNameLeft: 'account-circle',
                 iconColor: Constants.Colors.brandGreenColor,
@@ -102,7 +113,7 @@ export default function AccountOptions(props) {
                 onPress: () => selectedComponent('displayName')
             },
             {
-                title: 'Cambiar Email',
+                title: 'Cambiar correo electrónico',
                 iconType: 'material-community',
                 iconNameLeft: 'at',
                 iconColor: Constants.Colors.brandGreenColor,
@@ -111,7 +122,7 @@ export default function AccountOptions(props) {
                 onPress: () => selectedComponent('email')
             },
             {
-                title: 'Cambiar Contraseña',
+                title: 'Cambiar contraseña',
                 iconType: 'material-community',
                 iconNameLeft: 'lock-reset',
                 iconColor: Constants.Colors.brandGreenColor,
@@ -120,13 +131,13 @@ export default function AccountOptions(props) {
                 onPress: () => selectedComponent('password')
             },
             {
-                title: 'Cerrar Sesión',
+                title: 'Cerrar sesión',
                 iconType: 'material-community',
                 iconNameLeft: 'logout',
                 iconColor: Constants.Colors.brandGreenColor,
                 iconNameRight: 'chevron-right',
                 iconColorRight: Constants.Colors.brandGreenColor,
-                onPress: () => firebase.auth().signOut()
+                onPress: () => selectedComponent('logout')
             },
         ]
     }
