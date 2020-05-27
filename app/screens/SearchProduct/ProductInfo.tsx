@@ -164,7 +164,7 @@ export default function ProductInfo({ route, navigation }) {
       if (product.material !== 'noSeRecicla') {
         return (
           <>
-            <Text style={styles.title}>{"TACHO"} </Text>
+            <Text style={styles.title}>{"CONTENEDOR"} </Text>
             <Text style={styles.data}>{materials[product.material]}</Text>
           </>
         )

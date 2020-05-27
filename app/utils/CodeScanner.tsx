@@ -67,7 +67,7 @@ export default function CodeScanner() {
     }
     const goToProductInfo = async (product: Product) => {
         console.log('vamos para productInfo con ', product);
-        navigation.navigate(Constants.Navigations.SearchProductStack.productInfo, {
+        navigation.navigate(Constants.Navigations.ProductStack.productInfo, {
             productParam: product
         });
     }
