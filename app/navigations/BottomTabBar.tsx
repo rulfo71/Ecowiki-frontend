@@ -30,7 +30,7 @@ export default function BottomTabBar() {
                 }}
             />
             <Tab.Screen
-                name={Constants.Navigations.SearchProductStack.searchProduct}
+                name={Constants.Navigations.ProductStack.searchProduct}
                 component={SearchProduct}
                 options={{ title: 'Buscar' }} />
         </Tab.Navigator>
@@ -44,7 +44,7 @@ function screenOptions(route, color) {
         case Constants.Navigations.AccountStack.account:
             iconName = 'account'
             break;
-        case Constants.Navigations.SearchProductStack.searchProduct:
+        case Constants.Navigations.ProductStack.searchProduct:
             iconName = 'magnify'
             break;
         default:
