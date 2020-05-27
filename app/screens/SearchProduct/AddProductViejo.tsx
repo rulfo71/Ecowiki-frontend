@@ -1,20 +1,27 @@
 import React, { Component, useState, useEffect, useRef } from 'react'
 import { StyleSheet, View, Picker, ActivityIndicator } from 'react-native'
 import { Input, Button } from 'react-native-elements'
-import { Text, Overlay, } from 'react-native-elements'
+import { Text, Overlay, Icon } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
 import { setProduct } from '../../Repositories/ProductsRepository'
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 import Toast from 'react-native-easy-toast'
 import { Constants } from '../../Common/Constants/Constants'
 
 
-export default withNavigation(SetMaterial);
+// export default withNavigation(AddProduct);
 
-function SetMaterial({ navigation }) {
+export default function AddProductViejo({ route, navigation }) {
+
+  const { nameParam, barcodeParam } = route.params
+
   const toastRef = useRef();
-  let [barCode, setBarCode] = useState(navigation.getParam('barCode'));
-  let [name, setName] = useState(navigation.getParam('name'));
+  let [barcode, setBarCode] = useState(nameParam);
+  let [name, setName] = useState(barcodeParam);
+
+  console.log(`name del state : ${name}`);
+  console.log(`barcode del state: ${barcode}`);
+
   let [description, setDescription] = useState('');
   let [material, setMaterial] = useState('');
   let [loading, setLoading] = useState(false);
@@ -34,16 +41,16 @@ function SetMaterial({ navigation }) {
   const buttonAccept = async () => {
 
     if (material === '') {
-      toastRef.current.show('Debes completar el material');
+      toastRef.current.show('Tenés que completar el material');
       return;
     }
     if (name === '') {
-      toastRef.current.show('Debes completar el nombre');
+      toastRef.current.show('Tenés que completar el nombre');
       return;
     }
 
     var product = new Product()
-    product.barcode = barCode;
+    product.barcode = barcode;
     product.description = description;
     product.displayName = name
     product.material = material
@@ -75,11 +82,11 @@ function SetMaterial({ navigation }) {
   }
 
   function BarCode(props) {
-    if (barCode !== '') {
+    if (barcode !== '') {
       return (
         <View style={props.style.dataItemContainer}>
           <Text style={props.style.title}>{"Codigo de barras"} </Text>
-          <Input disabled={true}>{barCode}</Input>
+          <Input disabled={true}>{barcode}</Input>
         </View>
       )
     }
@@ -89,7 +96,7 @@ function SetMaterial({ navigation }) {
   return (
     <View style={styles.ViewOverlay}>
       <View style={styles.mainContainer}>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           {/* <View
             style={{
               // flex: 1,
@@ -97,9 +104,10 @@ function SetMaterial({ navigation }) {
               alignItems: "center"
             }}
           > */}
-          <Text style={styles.headerTitle}>{"CARGAR PRODUCTO"}</Text>
-          {/* </View> */}
-        </View>
+        {/* <Text style={styles.headerTitle}>{"CARGAR PRODUCTO"}</Text> */}
+        {/* </View> }
+        </View> */}
+        <UploadImage />
         <View style={styles.dataContainer} >
           <BarCode style={styles} />
           {/* <View> */}
@@ -174,6 +182,17 @@ function SetMaterial({ navigation }) {
   )
 }
 
+function UploadImage() {
+  return (<View style={styles.viewImages}>
+    <Icon
+      type='material-community'
+      name='camera'
+      color='#7a7a7a'
+      containerStyle={styles.containerIcon}
+    />
+  </View>)
+}
+
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
@@ -192,15 +211,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Constants.Colors.backgroundGrey,
   },
-  headerContainer: {
-    // paddingBottom: 15,
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    flexDirection: "row",
-    backgroundColor: Constants.Colors.brandGreenColor,
-  },
+  // headerContainer: {
+  //   // paddingBottom: 15,
+  //   alignItems: "center",
+  //   alignContent: "center",
+  //   justifyContent: "center",
+  //   borderRadius: 10,
+  //   flexDirection: "row",
+  //   backgroundColor: Constants.Colors.brandGreenColor,
+  // },
   headerTitle: {
     fontWeight: "bold",
     letterSpacing: 1.2,
@@ -280,5 +299,20 @@ const styles = StyleSheet.create({
   dataItemContainer: {
     marginTop: 30,
     marginBottom: 30
-  }
+  },
+  viewImages: {
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 30,
+  },
+  containerIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    height: 70,
+    width: 70,
+    backgroundColor: '#e3e3e3'
+
+  },
 })
