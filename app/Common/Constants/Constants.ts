@@ -12,15 +12,16 @@ export const Constants = {
         AccountStack: {
             account: 'account',
             login: 'login',
-            register: 'register'
+            register: 'register',
+            recoverPassword: 'recoverPassword'
         },
-        SearchProductStack: {
+        ProductStack: {
             searchProduct: 'searchProduct',
-            productInfo: 'productInfo'
+            productInfo: 'productInfo',
+            addProduct: 'addProduct'
         },
-        Home: {
-            home: 'home'
-        }
+        home: 'home',
+        modalBottom: 'modalBottom'
     },
     Account: {
         minimumCharactersPassword: 6
