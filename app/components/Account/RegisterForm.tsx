@@ -21,33 +21,31 @@ export default function RegisterForm (props) {
 
     const navigation = useNavigation();
 
-
     const onSubmit = () => {
         if (
             isEmpty(formData.email) || 
             isEmpty(formData.password) || 
-            isEmpty(formData.repeatPassword))
+            isEmpty(formData.repeatPassword) ||
+            isEmpty(formData.nickname))
             {
                 toastRef.current.show('Todos los campos son obligatorios')
-                //console.log('Hay campos vacios');
             }
         else if (!validateEmail(formData.email)) {
-            toastRef.current.show('El email no es correcto')
+            toastRef.current.show('El email no es valido')
         } 
         else if (formData.password !== formData.repeatPassword){
-            toastRef.current.show('Las contraseñas tienen que ser iguales')
+            toastRef.current.show('Las contraseñas no coinciden')
         }
-        // else if (size(formData.password) < Constants.Account.minimumCharactersPassword){
-        //     toastRef.current.show('La contraseña debe tener al menos 6 caracteres')
-        // }
         else{
             setLoading(true);
             firebase
             .auth()
             .createUserWithEmailAndPassword(formData.email,formData.password)
             .then (response => {
-                setLoading(false); 
-                navigation.navigate(Constants.Navigations.AccountStack.account);
+                firebase.auth().currentUser.updateProfile({displayName: formData.nickname}).then(()=> {                     
+                    setLoading(false); 
+                    navigation.navigate(Constants.Navigations.AccountStack.account);
+                })
             })
             .catch((error) => {
                 setLoading(false);
@@ -58,13 +56,24 @@ export default function RegisterForm (props) {
         }
     }  
 
-
     const onChange = (e, type) => {
         setFormData({ ...formData,  [type]: e.nativeEvent.text  })
     }
 
     return (
         <View style={styles.formContainer} >
+            <Input
+                placeholder='¿Cómo te gusta que te digan?'
+                containerStyle={styles.inputForm}
+                onChange={e => onChange(e,'nickname')}
+                rightIcon={
+                    <Icon
+                        type='material-community'
+                        name='account'
+                        color= {Constants.Colors.brandGreenColor}
+                    />
+                }
+            />
             <Input
                 placeholder='Correo Electrónico'
                 containerStyle={styles.inputForm}
@@ -120,13 +129,7 @@ export default function RegisterForm (props) {
 
 function getErrorMessage (error) {
 
-    let response = '';
-
-    console.log(error);
-    console.log(error.code);
-    // console.log(error.code instanceof string);
-    console.log(error.message);
-    
+    let response = '';    
 
     switch (error.code) {
         case 'auth/email-already-in-use':
@@ -140,11 +143,11 @@ function getErrorMessage (error) {
             break;
     }
     return response
-
 }
 
 function defaultFormValue(){
     return {
+        nickname: '',
         email: '',
         password: '',
         repeatPassword: ''
@@ -152,7 +155,6 @@ function defaultFormValue(){
 } 
 
 const styles = StyleSheet.create({
-
     formContainer: {
         flex: 1,
         alignItems: 'center',
