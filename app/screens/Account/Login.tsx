@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import { StyleSheet, ScrollView, Image, View, Text} from 'react-native'
-import {Divider} from 'react-native-elements'
+import { StyleSheet, ScrollView, Image, View, Text } from 'react-native'
+import { Divider } from 'react-native-elements'
 import { Constants } from '../../Common/Constants/Constants'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useNavigation } from '@react-navigation/native'
@@ -10,54 +10,71 @@ import Toast from 'react-native-easy-toast'
 
 export default function Login() {
     const toastRef = useRef();
+    const navigation  = useNavigation();
+
+    navigation.setOptions({
+        title: 'Iniciar sesión',
+        headerTitleAlign: 'center',
+        headerStyle: {
+            backgroundColor: Constants.Colors.brandGreenColor,
+            borderBottomStartRadius: 20,
+            borderBottomEndRadius: 20,
+        },
+        headerTitleStyle: { 
+            fontSize: 20,
+            color: 'white'
+        },
+        headerTintColor: 'white',
+      })
 
     return (
-        <ScrollView>            
+        <ScrollView>
             <Image
                 source={require('../../../assets/icon.png')}
                 resizeMode='contain'
                 style={styles.logo}
-            />  
-        <View style={styles.viewContainer}>
-            <LoginForm toastRef = {toastRef}/> 
-            <ForgotPassword/>
-            <CreateAccount/>
-        </View>
-        <Divider style={styles.divider}/>
-        <Toast ref={toastRef} position='center' opacity={0.9}/>
+            />
+            <View style={styles.viewContainer}>
+                <LoginForm toastRef={toastRef} />
+                <ForgotPassword toastRef={toastRef} navigation = {navigation}/>
+                <CreateAccount navigation = {navigation} />
+            </View>
+            <Divider style={styles.divider} />
+            <Toast ref={toastRef} position='center' opacity={0.9} />
         </ScrollView>
     )
 }
 
-function ForgotPassword() {
-    const navigation = useNavigation(); 
+function ForgotPassword(props) {
 
-    return( 
+    const {navigation, toastRef} = props
+
+    return (
         <Text style={styles.textRegister}>
-            ¿Todavía no tenés cuenta? {' '}
-            <Text 
+            ¿Olvidaste tu contraseña? {' '}
+            <Text
                 style={styles.btnRegister}
-                onPress={() => navigation.navigate(Constants.Navigations.AccountStack.register)}
+                onPress={() => navigation.navigate(Constants.Navigations.AccountStack.recoverPassword)}
             >
-                Registrarme
-            </Text> 
+                Recuperala acá
+            </Text>
         </Text>
     )
 }
 
-function CreateAccount () {
+function CreateAccount(props) {
 
-    const navigation = useNavigation(); 
+    const { navigation } = props
 
-    return( 
+    return (
         <Text style={styles.textRegister}>
             ¿Todavía no tenés cuenta? {' '}
-            <Text 
+            <Text
                 style={styles.btnRegister}
                 onPress={() => navigation.navigate(Constants.Navigations.AccountStack.register)}
             >
                 Registrarme
-            </Text> 
+            </Text>
         </Text>
     )
 }
@@ -79,7 +96,7 @@ const styles = StyleSheet.create({
     },
     btnRegister: {
         color: Constants.Colors.brandGreenColor,
-        fontWeight: 'bold', 
+        fontWeight: 'bold',
     },
     divider: {
         backgroundColor: Constants.Colors.brandGreenColor,
