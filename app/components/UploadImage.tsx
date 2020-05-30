@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, Alert, Image, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, Alert, Image, TouchableHighlight, Dimensions } from 'react-native';
 import { isEmpty } from 'lodash';
 import { Icon, Avatar } from 'react-native-elements';
 import * as Permissions from 'expo-permissions'
@@ -11,6 +11,9 @@ import CameraOrGallery from './CameraOrGallery';
 import { Constants } from '../Common/Constants/Constants';
 import ConfirmModal from './ConfirmModal';
 
+const widthScreen = Dimensions.get('window').width
+
+
 export default function UploadImage(props) {
     const { toastRef, imageUri, setImageUri } = props
 
@@ -18,11 +21,11 @@ export default function UploadImage(props) {
     const [photoSource, setPhotoSource] = useState('')
     const [photoSourceUpdate, setPhotoSourceUpdate] = useState(false)
     const [confirmModalResponse, setConfirmModalresponse] = useState(false)
-    const [showConfirmModal, setShowConfirmModal] = useState(false)    
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [imageViewVisible, setImageViewVisible] = useState(false)
 
     useEffect(() => {
-        if (photoSourceUpdate){
+        if (photoSourceUpdate) {
             if (!isEmpty(photoSource)) {
                 if (photoSource == 'camera') {
                     uploadFromCamera()
@@ -34,7 +37,7 @@ export default function UploadImage(props) {
             setPhotoSource('')
             setPhotoSourceUpdate(false)
         }
-        if (confirmModalResponse){
+        if (confirmModalResponse) {
             setShowModalCameraOrGallery(true)
             setShowConfirmModal(false)
             setConfirmModalresponse(false)
@@ -84,20 +87,33 @@ export default function UploadImage(props) {
     return (
         <View style={styles.viewImage}>
             {isEmpty(imageUri) ?
-                <Icon
-                    type='material-community'
-                    name='camera'
-                    color='#7a7a7a'
-                    containerStyle={styles.containerIcon}
-                    onPress={() => setShowModalCameraOrGallery(true)}
-                /> :
-                <TouchableHighlight onPress = {() => {setImageViewVisible(true)}}>
-                    <Image
-                        source={{uri: imageUri}}
-                        style={styles.image}                    
-                        // containerStyle={styles.imageContainer}
+                <TouchableHighlight onPress={() => setShowModalCameraOrGallery(true)} >
+                    <Icon
+                        type='material-community'
+                        name='camera'
+                        color='#7a7a7a'
+                        containerStyle={styles.containerIcon}
                     />
-                </TouchableHighlight>
+                </TouchableHighlight> :
+                <View>
+                    <TouchableHighlight onPress={() => { setImageViewVisible(true) }}>
+                        <Image
+                            source={{ uri: imageUri }}
+                            style={styles.image}
+                        // containerStyle={styles.imageContainer}
+                        />
+
+                    </TouchableHighlight>
+                    {/* TODO: MODIFICAR ESTE ICONO PARA DEJARLO COMO LOS DE LA HOME */}
+                    <Icon
+                        name='mode-edit'
+                        type='material'
+                        color='white'
+                        style={styles.editIcon}
+                        containerStyle={styles.containerEditIcon}
+                        onPress={() => { setShowModalCameraOrGallery(true) }}
+                    />
+                </View>
                 // <Avatar
                 //     rounded={true}
                 //     style={styles.avatarImage}
@@ -115,7 +131,7 @@ export default function UploadImage(props) {
                 //     onEditPress={() => setShowModalCameraOrGallery(true)}
                 //     onPress={ () => setShowConfirmModal(true)}
                 // />
-            } 
+            }
             <ImageView
                 images={[{
                     source: {
@@ -128,7 +144,7 @@ export default function UploadImage(props) {
                 // imageIndex={0}
                 isVisible={imageViewVisible}
                 onClose={() => setImageViewVisible(false)}
-                // renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
+            // renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
             />
             <Modal isVisible={showModalCameraOrGallery} setIsVisible={setShowModalCameraOrGallery}>
                 <CameraOrGallery
@@ -138,12 +154,12 @@ export default function UploadImage(props) {
                     setPhotoSourceUpdate={setPhotoSourceUpdate} />
             </Modal>
             <ConfirmModal
-                showModal= {showConfirmModal}
-                setShowModal = {setShowConfirmModal}
-                questionText = {' ¿ Seguro querés eliminar la imagen ?'}
-                confirmText = {'Si'}
-                cancelText = {'No'}           
-                setResponse = {setConfirmModalresponse}                 
+                showModal={showConfirmModal}
+                setShowModal={setShowConfirmModal}
+                questionText={' ¿ Seguro querés eliminar la imagen ?'}
+                confirmText={'Si'}
+                cancelText={'No'}
+                setResponse={setConfirmModalresponse}
             />
         </View>
     )
@@ -162,6 +178,24 @@ const styles = StyleSheet.create({
         width: 120,
         backgroundColor: '#e3e3e3',
         borderRadius: 50,
+    },
+    editIcon: {
+        backgroundColor: '#ccc',
+        // width: '10%',
+        // fontSize: 10
+        // position: 'absolute',
+        // right: 0,
+        // bottom: 0
+    },
+    containerEditIcon: {
+        backgroundColor: Constants.Colors.brandGreenColor,
+        borderRadius: 50,
+        padding: 5,
+        // width: '25%',
+        // height: '25%',
+        position: 'absolute',
+        right: 0,
+        bottom: 0
     },
     avatarImage: {
         width: 110,
