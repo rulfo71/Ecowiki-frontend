@@ -18,7 +18,8 @@ export const Constants = {
         ProductStack: {
             searchProduct: 'searchProduct',
             productInfo: 'productInfo',
-            addProduct: 'addProduct'
+            addProduct: 'addProduct',
+            addUnregisteredProduct: 'addUnRegisteredProduct',
         },
         home: 'home',
         modalBottom: 'modalBottom'

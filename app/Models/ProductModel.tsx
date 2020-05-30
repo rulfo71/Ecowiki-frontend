@@ -4,6 +4,7 @@ export default class ProductModel {
   displayName: string
   description: string
   detailsId: string
+  addedBy: string
 
   constructor() {
     this.barcode = ''
@@ -11,6 +12,6 @@ export default class ProductModel {
     this.displayName = ''
     this.description = ''
     this.detailsId = ''
-
+    this.addedBy = ''
   }
 }

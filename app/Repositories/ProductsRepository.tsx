@@ -1,42 +1,66 @@
 import Product from '../Models/ProductModel'
-import AddModelDto from '../Models/AddModelDto'
+import AddModelDto from '../Models/AddVoteDto'
+import AddProductDto from '../Models/AddProductDto';
+import AddProductResponse from '../Models/AddProductResponse';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
 // const server = 'http://192.168.1.140:3000/products/'
 
+export const addProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
+  console.log('ProductsRepository - addProduct');
 
-export const setProduct = product => {
-  console.log('setProduct');
+  var uriAddProduct = server + 'addProduct'
+  console.log(`uriAddProduct: ${uriAddProduct}`);
 
-  var uriSetProduct = server + 'setProduct'
-  console.log(uriSetProduct);
+  // const data = JSON.stringify({
+  //   BarCode: product.barcode,
+  //   Description: product.observations,
+  //   Name: product.name,
+  //   Material: product.Material
+  // })
+  console.log(`body: ${JSON.stringify(product)} `);
 
-  const data = JSON.stringify({
-    BarCode: product.BarCode,
-    Description: product.Description,
-    Name: product.Name,
-    Material: product.Material
-  })
-  console.log('body: ');
-
-  console.log(data)
-
-  return fetch(uriSetProduct, {
+  return await fetch(uriAddProduct, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
     },
-    body: data
-  }).then(response => {
-    console.log('entre al then')
-    console.log(response);
-    return response;
+    body: JSON.stringify(product)
   })
-    .catch(error => {
-      console.log('error: ', error)
-      console.error(error)
-    })
+    .then(status)
+    .then(json)
+    .then(function (data) {
+      console.log('Respuesta addProduct: ', data);
+      return data;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+    });
+}
+
+export const addUnregisteredProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
+  console.log('addUnregisteredProduct');
+
+  var uriAddUnregisteredProduct = server + 'addUnregisteredProduct'
+  console.log(uriAddUnregisteredProduct);
+
+  console.log(`body: ${JSON.stringify(product)} `);
+
+  return await fetch(uriAddUnregisteredProduct, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify(product)
+  })
+    .then(status)
+    .then(json)
+    .then(function (data) {
+      console.log('Respuesta addProduct: ', data);
+      return data;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+    });
 }
 
 export const addVote = (product: Product) => {
@@ -93,37 +117,6 @@ export const subtractVote = product => {
   }).then(response => {
     console.log('entre al then')
     console.log(response);
-  })
-    .catch(error => {
-      console.log('error: ', error)
-      console.error(error)
-    })
-}
-
-export const setUnregisteredProduct = product => {
-  console.log('setUnregisteredProduct');
-
-  var uriSetUnregisteredProduct = server + 'setUnregisteredProduct'
-  console.log(uriSetUnregisteredProduct);
-
-  const data = JSON.stringify({
-    BarCode: product.BarCode,
-    Name: product.Name,
-  })
-  console.log('body: ');
-
-  console.log(data)
-
-  return fetch(uriSetUnregisteredProduct, {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    },
-    body: data
-  }).then(response => {
-    console.log('entre al then')
-    console.log(response);
-    // return response;
   })
     .catch(error => {
       console.log('error: ', error)

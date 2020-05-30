@@ -187,6 +187,18 @@ export default function ProductInfo({ route, navigation }) {
     }
     return null;
   }
+  //TODO: ADDED BY 
+  const AddedBy = () => {
+    if (product.addedBy !== '') {
+      return (
+        <>
+          <Text style={styles.title}>{"Agregado por "} </Text>
+          {/* <Text style={styles.data}> {product.description} </Text> */}
+        </>
+      )
+    }
+    return null;
+  }
 
   return (
     <View style={styles.AllContainer} >
@@ -196,6 +208,7 @@ export default function ProductInfo({ route, navigation }) {
         <Barcode />
         <BasketText />
         <Description />
+        <AddedBy />
       </View>
       <View style={styles.IconsAgreeContainer}>
         <TouchableHighlight onPress={doesntAgree} >
