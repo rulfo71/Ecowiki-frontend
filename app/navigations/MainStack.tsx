@@ -11,6 +11,7 @@ import ProductInfo from '../screens/SearchProduct/ProductInfo';
 import RecoverPassword from '../screens/Account/RecoverPassword';
 // import AddProduct from '../screens/SearchProduct/AddProductViejo';
 import AddProduct from '../screens/SearchProduct/AddProduct'
+import AddUnRegisteredProduct from '../screens/SearchProduct/AddUnRegisteredProduct';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,13 @@ export default function MainStack() {
             <Stack.Screen
                 name={Constants.Navigations.ProductStack.addProduct}
                 component={AddProduct}
+                options={{
+                    title: 'Agregar producto'
+                }}
+            />
+            <Stack.Screen
+                name={Constants.Navigations.ProductStack.addUnregisteredProduct}
+                component={AddUnRegisteredProduct}
                 options={{
                     title: 'Agregar producto'
                 }}
