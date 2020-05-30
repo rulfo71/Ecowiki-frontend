@@ -1,14 +1,14 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Input, Button} from 'react-native-elements'
-import {size} from 'lodash'
+import { Input, Button } from 'react-native-elements'
+import { size } from 'lodash'
 import * as firebase from 'firebase'
 
 import { Constants } from '../../Common/Constants/Constants'
-import { reauthenticate }  from '../../utils/api'
+import { reauthenticate } from '../../utils/api'
 
-export default function ChangePasswordForm (props) {
-    const {setShowModal, toastRef} = props
+export default function ChangePasswordForm(props) {
+    const { setShowModal, toastRef } = props
 
     const [showActualPassword, setshowActualPassword] = useState(false)
     const [showNewPassword, setshowNewPassword] = useState(false)
@@ -21,15 +21,15 @@ export default function ChangePasswordForm (props) {
         let isSetErrors = true
         let errorsTmp = {}
         setErrors({})
-        if (!formData.password || 
-            !formData.newPassword || 
+        if (!formData.password ||
+            !formData.newPassword ||
             !formData.repeatNewPassword
-        ){
-            errorsTmp= {
+        ) {
+            errorsTmp = {
                 password: !formData.password ? 'La contraseña no puede estar vacía' : '',
                 newPassword: !formData.newPassword ? 'La contraseña no puede estar vacía' : '',
                 repeatNewPassword: !formData.repeatNewPassword ? 'La contraseña no puede estar vacía' : ''
-            }            
+            }
         }
         else if (formData.newPassword !== formData.repeatNewPassword) {
             errorsTmp = {
@@ -48,33 +48,33 @@ export default function ChangePasswordForm (props) {
             setIsLoading(true)
             await reauthenticate(formData.password).then(async () => {
                 await firebase.auth()
-                .currentUser.updatePassword(formData.newPassword).then(() => {
-                    isSetErrors = false
-                    setIsLoading(false)
-                    setShowModal(false)
-                    firebase.auth().signOut()                    
+                    .currentUser.updatePassword(formData.newPassword).then(() => {
+                        isSetErrors = false
+                        setIsLoading(false)
+                        setShowModal(false)
+                        firebase.auth().signOut()
                     })
                     .catch((error) => {
                         errorsTmp = {
-                            other : 'Error al actualizar la contraseña'
+                            other: 'Error al actualizar la contraseña'
                         }
                         setIsLoading(false)
                     })
-                
-            }) 
-            .catch((error) => {
-                setIsLoading(false)
-                errorsTmp = {
-                    password: 'La contraseña no es correcta'
-                }
+
             })
-            
+                .catch((error) => {
+                    setIsLoading(false)
+                    errorsTmp = {
+                        password: 'La contraseña no es correcta'
+                    }
+                })
+
         }
         isSetErrors && setErrors(errorsTmp)
     }
 
     const onChange = (e, type) => {
-        setFormData({...formData, [type]: e.nativeEvent.text})   
+        setFormData({ ...formData, [type]: e.nativeEvent.text })
     }
 
     return (
@@ -83,40 +83,40 @@ export default function ChangePasswordForm (props) {
                 placeholder='Contraseña actual'
                 containerStyle={styles.input}
                 secureTextEntry={!showActualPassword}
-                rightIcon= {{
+                rightIcon={{
                     type: 'material-community',
-                    name: showActualPassword? 'eye-off-outline' : 'eye-outline',
-                    color: Constants.Colors.brandGreenColor,    
-                    onPress: ()=> {setshowActualPassword(!showActualPassword)} 
+                    name: showActualPassword ? 'eye-off-outline' : 'eye-outline',
+                    color: Constants.Colors.brandGreenColor,
+                    onPress: () => { setshowActualPassword(!showActualPassword) }
                 }}
-                onChange={(e) => onChange(e,'password')}      
-                errorMessage={errors.password}          
+                onChange={(e) => onChange(e, 'password')}
+                errorMessage={errors.password}
             />
-            <Input 
+            <Input
                 placeholder='Nueva contraseña'
                 containerStyle={styles.input}
                 secureTextEntry={!showNewPassword}
-                rightIcon= {{
+                rightIcon={{
                     type: 'material-community',
-                    name: showNewPassword? 'eye-off-outline' : 'eye-outline',
+                    name: showNewPassword ? 'eye-off-outline' : 'eye-outline',
                     color: Constants.Colors.brandGreenColor,
-                    onPress: ()=> {setshowNewPassword(!showNewPassword)} 
-                }}            
-                onChange={(e) => onChange(e,'newPassword')}
+                    onPress: () => { setshowNewPassword(!showNewPassword) }
+                }}
+                onChange={(e) => onChange(e, 'newPassword')}
                 errorMessage={errors.newPassword}
 
             />
-            <Input 
+            <Input
                 placeholder='Repetir nueva contraseña'
                 containerStyle={styles.input}
                 secureTextEntry={!showRepeatNewPassword}
-                rightIcon= {{
+                rightIcon={{
                     type: 'material-community',
-                    name: showRepeatNewPassword? 'eye-off-outline' : 'eye-outline',
+                    name: showRepeatNewPassword ? 'eye-off-outline' : 'eye-outline',
                     color: Constants.Colors.brandGreenColor,
-                    onPress: ()=> {setshowRepeatNewPassword(!showRepeatNewPassword)}     
-                }}            
-                onChange={(e) => onChange(e,'repeatNewPassword')}
+                    onPress: () => { setshowRepeatNewPassword(!showRepeatNewPassword) }
+                }}
+                onChange={(e) => onChange(e, 'repeatNewPassword')}
                 errorMessage={errors.repeatNewPassword}
             />
             <Button
@@ -132,7 +132,7 @@ export default function ChangePasswordForm (props) {
 
 }
 
-function defaultFormValue (){
+function defaultFormValue() {
     return {
         password: '',
         newPassword: '',
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
         width: '95%'
     },
     btn: {
+        borderRadius: 20,
         backgroundColor: Constants.Colors.brandGreenColor
     }
 })

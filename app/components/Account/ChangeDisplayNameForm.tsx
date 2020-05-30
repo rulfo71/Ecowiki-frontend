@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
     btnContainer: {
         marginTop: 20,
         width: '95%',
-
     },
     btn: {
+        borderRadius: 20,
         backgroundColor: Constants.Colors.brandGreenColor
     }
 
