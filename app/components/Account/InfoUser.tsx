@@ -14,8 +14,6 @@ export default function InfoUser(props) {
         setLoading
     } = props;
 
-    console.log(props.userInfo);
-
     const changeAvatar = async () => {
         const resultPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         const resultPermissionCamera = resultPermission.permissions.cameraRoll.status;

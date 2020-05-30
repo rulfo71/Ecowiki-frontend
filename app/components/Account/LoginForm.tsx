@@ -10,10 +10,9 @@ import { validateEmail } from '../../utils/validations';
 
 
 export default function LoginForm(props) {
-    const { toastRef } = props
+    const { toastRef, redirectTo } = props
 
     const [showPassword, setShowPassword] = useState(false);
-    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
     const [formData, setFormData] = useState(defaultFormValue());
     const [loading, setLoading] = useState(false);
 
@@ -36,7 +35,16 @@ export default function LoginForm(props) {
                 .signInWithEmailAndPassword(formData.email, formData.password)
                 .then(response => {
                     setLoading(false);
-                    navigation.navigate(Constants.Navigations.AccountStack.account);
+                    console.log(`navigation: ${JSON.stringify(navigation)} ${navigation}`);
+                    if (isEmpty(redirectTo)) {
+                        navigation.navigate(Constants.Navigations.AccountStack.account)
+                    }
+                    else {
+                        navigation.navigate(redirectTo)
+                    }
+                    // navigation.goBack()
+                    // navigation.goBack()
+                    // navigation.navigate(Constants.Navigations.AccountStack.account);
                 })
                 .catch((error) => {
                     setLoading(false);
@@ -66,14 +74,14 @@ export default function LoginForm(props) {
             <Input
                 placeholder='Contraseña'
                 containerStyle={styles.inputForm}
-                secureTextEntry={!showRepeatPassword}
+                secureTextEntry={!showPassword}
                 onChange={e => onChange(e, 'password')}
                 rightIcon={
                     <Icon
                         type='material-community'
-                        name={showRepeatPassword ? 'eye-off-outline' : 'eye-outline'}
+                        name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                         color={Constants.Colors.brandGreenColor}
-                        onPress={() => setShowRepeatPassword(!showRepeatPassword)}
+                        onPress={() => setShowPassword(!showPassword)}
 
                     />
                 }
