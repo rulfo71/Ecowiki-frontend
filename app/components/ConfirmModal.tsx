@@ -1,24 +1,16 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View, Animated } from 'react-native'
 import { Overlay, Text, Button } from 'react-native-elements'
 import { Constants } from '../Common/Constants/Constants';
 
 
 export default function ConfirmModal(props) {
-    const { showModal, setShowModal, questionText, confirmText, cancelText, setResponse } = props
-
+    const { showModal, setShowModal, questionText, secondaryQuestionText, confirmText, cancelText, setResponse } = props
     const closeModal = () => setShowModal(false);
+
     const onSubmit = (selection: boolean) => {
-
-        
-        // setShowModal(false)
-
-        console.log(`selection: ${selection}`);
-        console.log(showModal);
-        // setPhotoSource(selection)
-        // setPhotoSourceUpdate(true)
         setShowModal(false)
-        setResponse(selection)        
+        setResponse(selection)
     }
 
     return (
@@ -28,24 +20,24 @@ export default function ConfirmModal(props) {
             overlayBackgroundColor='transparent'
             overlayStyle={styles.overlay}
             onBackdropPress={closeModal}
+            animationType='slide'
         >
             <View style={styles.view}>
-            <Text style={styles.text}>{questionText} </Text>
-            <View style={styles.buttonView}>
-                <Button
-                    title= {cancelText}
-                    containerStyle={styles.btnContainer}
-                    buttonStyle={styles.btn}
-                    onPress={() => { onSubmit(false) }}
-                />
+                <Text style={styles.text}>{questionText} </Text>
+                {secondaryQuestionText && <Text style={styles.secondaryText}> {secondaryQuestionText} </Text>}
                 <Button
                     title={confirmText}
                     containerStyle={styles.btnContainer}
                     buttonStyle={styles.btn}
                     onPress={() => { onSubmit(true) }}
                 />
+                <Button
+                    title={cancelText}
+                    containerStyle={styles.btnContainer}
+                    buttonStyle={styles.btn}
+                    onPress={() => { onSubmit(false) }}
+                />
             </View>
-        </View>
         </Overlay>
     )
 }
@@ -53,9 +45,14 @@ export default function ConfirmModal(props) {
 const styles = StyleSheet.create({
     overlay: {
         height: 'auto',
-        width: '90%',
+        width: '100%',
         backgroundColor: '#fff',
-        borderRadius: 10
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        // borderRadius: 10,
+        position: 'absolute',
+        bottom: 0,
+        flexDirection: 'column'
     },
     view: {
         alignItems: 'center',
@@ -68,22 +65,29 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         marginTop: 20,
-        marginRight: 20,
-        marginLeft: 20,
-        width: 80,
+        width: '100%',
+        // marginRight: 20,
+        // marginLeft: 20,
+        // width: ,
         // width: '30%',
     },
     btn: {
         backgroundColor: Constants.Colors.brandGreenColor,
-        borderRadius: 100,
+        borderRadius: 20,
+        marginBottom: 10,
     },
     text: {
         fontWeight: 'bold',
         fontSize: 15,
+        marginBottom: 20,
+    },
+    secondaryText: {
+        fontSize: 15,
+        marginBottom: 20
     },
     buttonView: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        // flexDirection: 'row',
+        // justifyContent: 'space-around',
         // width: '80%'
     }
 })
