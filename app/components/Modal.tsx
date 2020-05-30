@@ -15,6 +15,7 @@ export default function Modal(props) {
             overlayBackgroundColor='transparent'
             overlayStyle={styles.overlay}
             onBackdropPress={closeModal}
+            animationType='slide'
         >
             {children}
         </Overlay>
@@ -23,9 +24,12 @@ export default function Modal(props) {
 
 const styles = StyleSheet.create({
     overlay: {
+        position: 'absolute',
+        bottom: 0,
         height: 'auto',
-        width: '90%',
+        width: '100%',
         backgroundColor: '#fff',
-        borderRadius: 10
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
     }
 })
