@@ -17,20 +17,20 @@ export default function CameraOrGallery(props) {
     return (
         <View style={styles.view}>
             <Text style={styles.text}>¿ Desde donde queres agregar la imagen ? </Text>
-            <View style={styles.buttonView}>
-                <Button
-                    title='Cámara'
-                    containerStyle={styles.btnContainer}
-                    buttonStyle={styles.btn}
-                    onPress={() => { onSubmit('camera') }}
-                />
-                <Button
-                    title='Galeria'
-                    containerStyle={styles.btnContainer}
-                    buttonStyle={styles.btn}
-                    onPress={() => { onSubmit('gallery') }}
-                />
-            </View>
+            {/* <View style={styles.buttonView}> */}
+            <Button
+                title='Cámara'
+                containerStyle={styles.btnContainer}
+                buttonStyle={styles.btn}
+                onPress={() => { onSubmit('camera') }}
+            />
+            <Button
+                title='Galeria'
+                containerStyle={styles.btnContainer}
+                buttonStyle={styles.btn}
+                onPress={() => { onSubmit('gallery') }}
+            />
+            {/* </View> */}
         </View>
     )
 }
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 10,
         paddingBottom: 10,
+        flexDirection: 'column',
         // backgroundColor: '#c3c3c3'
     },
     input: {
@@ -47,10 +48,7 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         marginTop: 20,
-        marginRight: 20,
-        marginLeft: 20,
-        width: 80,
-        // width: '30%',
+        width: '100%',
     },
     btn: {
         backgroundColor: Constants.Colors.brandGreenColor,
