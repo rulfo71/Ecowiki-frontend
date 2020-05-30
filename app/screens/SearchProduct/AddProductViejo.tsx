@@ -3,7 +3,7 @@ import { StyleSheet, View, Picker, ActivityIndicator } from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import { Text, Overlay, Icon } from 'react-native-elements'
 import Product from '../../Models/ProductModel'
-import { setProduct } from '../../Repositories/ProductsRepository'
+import { addProduct } from '../../Repositories/ProductsRepository'
 // import { withNavigation } from 'react-navigation'
 import Toast from 'react-native-easy-toast'
 import { Constants } from '../../Common/Constants/Constants'
@@ -57,7 +57,7 @@ export default function AddProductViejo({ route, navigation }) {
     console.log('acccept desde setMaterial')
 
     setLoading(true);
-    await setProduct(product)
+    await addProduct(product)
       .then(response => {
         setLoading(false);
         if (response) {
