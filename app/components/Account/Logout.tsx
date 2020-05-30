@@ -8,21 +8,21 @@ import { Constants } from '../../Common/Constants/Constants'
 // TODO: Pasarlo al modal nuevo que hice confirmationModal
 export default function Logout(props) {
 
-    const { setShowModal} = props
+    const { setShowModal } = props
     return (
         <View style={styles.view}>
-            <Text style= {styles.text}> ¿ Seguro querés cerrar sesión ? </Text>
-            <Button 
+            <Text style={styles.text}> ¿ Seguro querés cerrar sesión ? </Text>
+            <Button
                 title='No, quedarme logueado'
                 containerStyle={styles.btnContainer}
-                buttonStyle={styles.btnNo}                                
-                onPress={()=> setShowModal(false)}
+                buttonStyle={styles.btnNo}
+                onPress={() => setShowModal(false)}
             />
-            <Button 
+            <Button
                 title='Si, cerrar sesión'
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btnSi}
-                onPress={()=> firebase.auth().signOut()}
+                onPress={async () => await firebase.auth().signOut()}
                 titleStyle={styles.titleButtonLogout}
             />
         </View>
@@ -40,18 +40,19 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         marginTop: 20,
-        width: '95%',
+        width: '100%',
     },
     btnNo: {
-        backgroundColor: Constants.Colors.brandGreenColor
+        backgroundColor: Constants.Colors.brandGreenColor,
+        borderRadius: 20,
     },
     btnSi: {
         backgroundColor: 'transparent',
     },
     text: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
-        paddingBottom: 5,
+        // paddingBottom: 5,
     },
     titleButtonLogout: {
         color: 'black'
