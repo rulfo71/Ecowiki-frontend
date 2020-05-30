@@ -8,9 +8,12 @@ import { useNavigation } from '@react-navigation/native'
 import LoginForm from '../../components/Account/LoginForm'
 import Toast from 'react-native-easy-toast'
 
-export default function Login() {
+export default function Login(props) {
+    const { redirectTo } = props
+
     const toastRef = useRef();
-    const navigation  = useNavigation();
+    const navigation = useNavigation();
+
 
     navigation.setOptions({
         title: 'Iniciar sesión',
@@ -20,12 +23,12 @@ export default function Login() {
             borderBottomStartRadius: 20,
             borderBottomEndRadius: 20,
         },
-        headerTitleStyle: { 
+        headerTitleStyle: {
             fontSize: 20,
             color: 'white'
         },
         headerTintColor: 'white',
-      })
+    })
 
     return (
         <ScrollView>
@@ -35,9 +38,9 @@ export default function Login() {
                 style={styles.logo}
             />
             <View style={styles.viewContainer}>
-                <LoginForm toastRef={toastRef} />
-                <ForgotPassword toastRef={toastRef} navigation = {navigation}/>
-                <CreateAccount navigation = {navigation} />
+                <LoginForm toastRef={toastRef} redirectTo={redirectTo} />
+                <ForgotPassword toastRef={toastRef} navigation={navigation} />
+                <CreateAccount navigation={navigation} />
             </View>
             <Divider style={styles.divider} />
             <Toast ref={toastRef} position='center' opacity={0.9} />
@@ -47,7 +50,7 @@ export default function Login() {
 
 function ForgotPassword(props) {
 
-    const {navigation, toastRef} = props
+    const { navigation, toastRef } = props
 
     return (
         <Text style={styles.textRegister}>

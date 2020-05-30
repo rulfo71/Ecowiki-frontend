@@ -3,10 +3,19 @@ import { StyleSheet, View, Text } from "react-native";
 import * as firebase from 'firebase'
 import Spinner from "react-native-loading-spinner-overlay";
 
+import { Constants } from '../../Common/Constants/Constants';
 import UserLogged from './UserLogged'
 import Login from "./Login";
 
 export default function Account({ route, navigation }) {
+
+
+  // console.log(`Account. route: ${JSON.stringify(route)}, navigation: ${JSON.stringify(navigation)}`);
+  // const { redirectTo } = route.params
+  // console.log(`redirectTo: ${redirectTo}`);
+
+  // console.log(`redirectTo: ${redirectTo}`);
+
   const [login, setLogin] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +28,7 @@ export default function Account({ route, navigation }) {
   if (login === null) return <Spinner visible={login === null} />
 
   return (
-    login ? <UserLogged /> : <Login />
+    login ? <UserLogged /> : <Login redirectTo={Constants.Navigations.AccountStack.account} />
   );
 }
 
