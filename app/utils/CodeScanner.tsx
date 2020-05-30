@@ -6,7 +6,7 @@ import { Icon } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
-import { getProductByBarCode, setUnregisteredProduct } from "../Repositories/ProductsRepository";
+import { getProductByBarCode, addUnregisteredProduct } from "../Repositories/ProductsRepository";
 import { useState, useEffect, useRef } from "react";
 import Toast from "react-native-easy-toast";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -14,19 +14,23 @@ import { isEmptyProduct } from "../Services/ProductsService";
 import Product from '../Models/ProductModel'
 import { Constants } from "../Common/Constants/Constants";
 
-export default function CodeScanner() {
+export default function CodeScanner(props) {
+    const { setBarcodeScanned, setBarcode, scanning, setScanning } = props
 
     const toastRef = useRef(null);
     let [hasCameraPermission, setCameraPermission] = useState(null);
     let [scanned, setScanned] = useState(false);
+    // const [scanning, setScanning] = useState(true)
     let [torchOn, setTorchOn] = useState(false);
     let [barCode, setBarCode] = useState('');
     let [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
-
     useEffect(() => {
+        console.log('entre al useEfffect de CodeScanner');
+
         getPermissionsAsync();
+        // setScanning(true)
     }, []);
 
     const handleTorch = () => {
@@ -40,24 +44,30 @@ export default function CodeScanner() {
 
     const handleBarCodeScanned = async ({ type, data }) => {
 
-        setScanned(true);
-        setLoading(true);
+        console.log('entré a handleBarCodeScanned ', data);
 
-        await getProductByBarCode(data)
-            .then(foundProduct => {
-                setLoading(false);
-                if (foundProduct && !isEmptyProduct(foundProduct)) {
-                    goToProductInfo(foundProduct);
-                    setScanned(false);
-                } else {
-                    addProductAlert(data)
-                }
-            })
-            .catch(error => {
-                setLoading(false);
-                console.log('error')
-                toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
-            })
+        setScanning(false)
+        setBarcode(data)
+        setBarcodeScanned(true)
+
+        // setScanned(true);
+        // setLoading(true);
+
+        // await getProductByBarCode(data)
+        //     .then(foundProduct => {
+        //         setLoading(false);
+        //         if (foundProduct && !isEmptyProduct(foundProduct)) {
+        //             goToProductInfo(foundProduct);
+        //             setScanned(false);
+        //         } else {
+        //             addProductAlert(data)
+        //         }
+        //     })
+        //     .catch(error => {
+        //         setLoading(false);
+        //         console.log('error')
+        //         toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
+        //     })
     }
     const goToSetMaterial = (data) => {
         navigation.navigate('SetMaterial', {
@@ -80,7 +90,7 @@ export default function CodeScanner() {
                     var product = new Product();
                     product.barcode = data;
                     console.log(product.barcode);
-                    setUnregisteredProduct(product);
+                    addUnregisteredProduct(product);
                     setScanned(false);
                 }
             },
@@ -124,7 +134,8 @@ export default function CodeScanner() {
                     BarCodeScanner.Constants.BarCodeType.Code39,
                 ]
             }}
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            // onBarCodeScanned={scanning ? undefined : handleBarCodeScanned}
+            onBarCodeScanned={scanning ? handleBarCodeScanned : undefined}
         >
             <BarcodeMask width={300} edgeColor={'#03960A'} height={150} showAnimatedLine={true} />
             {cameraPermission}

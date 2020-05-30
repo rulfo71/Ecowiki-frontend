@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
 import * as Permissions from 'expo-permissions'
-import { getProductByBarCode, getProductByName, setUnregisteredProduct } from '../../Repositories/ProductsRepository'
+import { getProductByBarCode, getProductByName, addUnregisteredProduct } from '../../Repositories/ProductsRepository'
 import { Text as TextElem, Overlay, SearchBar } from 'react-native-elements'
 import Spinner from "react-native-loading-spinner-overlay";
 
@@ -15,6 +15,7 @@ import Product from '../../Models/ProductModel'
 import { isEmptyProduct } from '../../Services/ProductsService'
 import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
+import ConfirmModal from '../../components/ConfirmModal'
 
 export default function SearchProduct() {
   let searchBarRef = useRef(null);
@@ -23,10 +24,18 @@ export default function SearchProduct() {
 
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [loading, setLoading] = useState(false);
-  let [barCode, setBarCode] = useState('');
   let [searchBar, setSearchBar] = useState('');
+  const [barcode, setBarcode] = useState('');
+  const [barcodeScanned, setBarcodeScanned] = useState(false)
+  const [scanning, setScanning] = useState(true)
+  const [lastSearchedName, setLastSearchedName] = useState('')
+  const [showAddProductModal, setShowAddProductModal] = useState(false)
+  const [addProductModalResponse, setAddProductModalResponse] = useState(false)
 
   useEffect(() => {
+    console.log('entre al useEffect de searchProduct ');
+    // setScanning(true)
+
     getPermissionsAsync();
     searchBarRef.current.clear();
     // todo: remove mock
@@ -37,8 +46,21 @@ export default function SearchProduct() {
     // productMock.barcode = '101010101010110'
 
     // goToProductInfo(productMock);
+    if (addProductModalResponse) {
+      goToAddProduct()
+      setAddProductModalResponse(false)
+      setScanning(false)
+    }
+    //TODO: SI CANCELA Y TIENE NOMBRE mando solo el nombre? 
 
-  }, []);
+    if (barcodeScanned) {
+      onBarcodeScanned()
+      setBarcodeScanned(false)
+      setScanning(false)
+    }
+
+
+  }, [addProductModalResponse, barcodeScanned]);
 
   const updateSearch = searchBar => {
     setSearchBar(searchBar);
@@ -48,11 +70,12 @@ export default function SearchProduct() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     setCameraPermission(status === 'granted');
   }
-  const goToSetMaterial = async () => {
-    navigation.navigate('SetMaterial', {
-      barCode: barCode,
-      name: searchBar
+  const goToAddProduct = async () => {
+    navigation.navigate(Constants.Navigations.ProductStack.addUnregisteredProduct, {
+      barcode: barcode,
+      name: lastSearchedName
     });
+    setLastSearchedName('')
   }
   const goToProductInfo = async (product: Product) => {
     console.log('vamos para productInfo con ', product);
@@ -61,17 +84,41 @@ export default function SearchProduct() {
     });
   }
 
+  const onBarcodeScanned = async () => {
+    console.log(`escaneee el codigo de barras: ${barcode} `);
+    setLoading(true)
+    await getProductByBarCode(barcode)
+      .then(foundProduct => {
+        setLoading(false);
+        if (foundProduct && !isEmptyProduct(foundProduct)) {
+          goToProductInfo(foundProduct);
+          // setScanned(false);
+        } else {
+          // addProductAlert(data)
+          setShowAddProductModal(true)
+        }
+      })
+      .catch(error => {
+        setLoading(false);
+        console.log('error')
+        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
+      })
+  }
+
   const searchSubmit = async () => {
     setLoading(true);
     await getProductByName(searchBar)
       .then(foundProduct => {
         setLoading(false);
-        setBarCode('');
+        setBarcode('');
         if (foundProduct && !isEmptyProduct(foundProduct)) {
-          goToProductInfo(foundProduct)
           searchBarRef.current.clear();
+          setLastSearchedName('')
+          goToProductInfo(foundProduct)
         } else {
-          addProductAlert()
+          setLastSearchedName(searchBar)
+          setShowAddProductModal(true)
+          // addProductAlert()
           searchBarRef.current.clear();
         }
       })
@@ -82,32 +129,9 @@ export default function SearchProduct() {
       })
   }
 
-  const addProductAlert = () => {
-    Alert.alert('No tenemos registrado este producto', 'Queres agregarlo?',
-      [
-        {
-          text: 'No',
-          onPress: () => {
-            console.log('No quiere agregarlo')
-            var product = new Product();
-            product.displayName = searchBar;
-            console.log(product.displayName);
-            setUnregisteredProduct(product);
-          }
-        },
-        {
-          text: 'Si',
-          onPress: async () => {
-            await goToSetMaterial();
-          }
-        }
-      ],
-    )
-  }
-
   return (
     <View style={styles.view}>
-      <CodeScanner></CodeScanner>
+      <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanning={scanning} setScanning={setScanning}></CodeScanner>
       <SearchBar
         ref={searchBarRef}
         round
@@ -123,6 +147,15 @@ export default function SearchProduct() {
       />
       <Spinner visible={loading} />
       <Toast ref={toastRef} position='center' />
+      <ConfirmModal
+        showModal={showAddProductModal}
+        setShowModal={setShowAddProductModal}
+        questionText={'Upss..No tenemos registrado este producto'}
+        secondaryQuestionText={'Si agregás mas informacion, alguien va a poder cargar a que tacho va!'}
+        confirmText={'Aceptar'}
+        cancelText={'Cancelar'}
+        setResponse={setAddProductModalResponse}
+      />
 
     </View>
   )
