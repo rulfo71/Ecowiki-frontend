@@ -16,6 +16,7 @@ import { isEmptyProduct } from '../../Services/ProductsService'
 import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
 import ConfirmModal from '../../components/ConfirmModal'
+import { isEmpty } from 'lodash'
 
 export default function SearchProduct() {
   let searchBarRef = useRef(null);
@@ -27,40 +28,29 @@ export default function SearchProduct() {
   let [searchBar, setSearchBar] = useState('');
   const [barcode, setBarcode] = useState('');
   const [barcodeScanned, setBarcodeScanned] = useState(false)
-  const [scanning, setScanning] = useState(true)
+  // const [scanning, setScanning] = useState(true)
+  const [scanned, setScanned] = useState(false)
+  const [alreadySearched, setAlreadySearched] = useState(false)
   const [lastSearchedName, setLastSearchedName] = useState('')
   const [showAddProductModal, setShowAddProductModal] = useState(false)
   const [addProductModalResponse, setAddProductModalResponse] = useState(false)
 
   useEffect(() => {
-    console.log('entre al useEffect de searchProduct ');
-    // setScanning(true)
 
     getPermissionsAsync();
     searchBarRef.current.clear();
-    // todo: remove mock
-    // let productMock = new Product()
-    // productMock.displayName = 'Botella de coca'
-    // productMock.description = 'aca iria alguna observacion adicional que dejaron escrita'
-    // productMock.material = 'plastico'
-    // productMock.barcode = '101010101010110'
 
-    // goToProductInfo(productMock);
+    if (scanned && !alreadySearched) {
+      onBarcodeScanned()
+      setAlreadySearched(true)
+    }
     if (addProductModalResponse) {
-      goToAddProduct()
       setAddProductModalResponse(false)
-      setScanning(false)
+      goToAddProduct()
     }
     //TODO: SI CANCELA Y TIENE NOMBRE mando solo el nombre? 
 
-    if (barcodeScanned) {
-      onBarcodeScanned()
-      setBarcodeScanned(false)
-      setScanning(false)
-    }
-
-
-  }, [addProductModalResponse, barcodeScanned]);
+  }, [addProductModalResponse, scanned]);
 
   const updateSearch = searchBar => {
     setSearchBar(searchBar);
@@ -86,23 +76,26 @@ export default function SearchProduct() {
 
   const onBarcodeScanned = async () => {
     console.log(`escaneee el codigo de barras: ${barcode} `);
-    setLoading(true)
-    await getProductByBarCode(barcode)
-      .then(foundProduct => {
-        setLoading(false);
-        if (foundProduct && !isEmptyProduct(foundProduct)) {
-          goToProductInfo(foundProduct);
-          // setScanned(false);
-        } else {
-          // addProductAlert(data)
-          setShowAddProductModal(true)
-        }
-      })
-      .catch(error => {
-        setLoading(false);
-        console.log('error')
-        toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
-      })
+    if (!isEmpty(barcode)) {
+      setLoading(true)
+      await getProductByBarCode(barcode)
+        .then(foundProduct => {
+          setLoading(false);
+          if (foundProduct && !isEmptyProduct(foundProduct)) {
+            goToProductInfo(foundProduct);
+            // setScanned(false);
+          } else {
+            // addProductAlert(data)
+            setShowAddProductModal(true)
+          }
+        })
+        .catch(error => {
+          setLoading(false);
+          console.log('error')
+          toastRef.current.show('Error de servidor. Intente de nuevo mas tarde', 600)
+        })
+    }
+    // setBarcode('')
   }
 
   const searchSubmit = async () => {
@@ -131,7 +124,7 @@ export default function SearchProduct() {
 
   return (
     <View style={styles.view}>
-      <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanning={scanning} setScanning={setScanning}></CodeScanner>
+      <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanned={scanned} setScanned={setScanned} setAlreadySearched={setAlreadySearched}></CodeScanner>
       <SearchBar
         ref={searchBarRef}
         round
