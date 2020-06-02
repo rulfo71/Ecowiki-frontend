@@ -9,5 +9,13 @@ export default class AddProductDto {
     // @IsOptional()
     observations: string
     addedBy: string
-    hasImage: boolean
+    photoUrl: string
+    // hasImage: boolean
+    constructor() {
+        this.barcode = ''
+        this.material = ''
+        this.observations = ''
+        this.addedBy = ''
+        this.photoUrl = ''
+      }
 }
