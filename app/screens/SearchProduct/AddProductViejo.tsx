@@ -51,7 +51,7 @@ export default function AddProductViejo({ route, navigation }) {
 
     var product = new Product()
     product.barcode = barcode;
-    product.description = description;
+    product.observations = description;
     product.displayName = name
     product.material = material
     console.log('acccept desde setMaterial')

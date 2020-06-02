@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
 import ConfirmModal from '../../components/ConfirmModal'
 import { isEmpty } from 'lodash'
+import AddProductDto from '../../Dtos/Products/AddProductDto'
 
 export default function SearchProduct() {
   let searchBarRef = useRef(null);
@@ -33,7 +34,7 @@ export default function SearchProduct() {
   const [alreadySearched, setAlreadySearched] = useState(false)
   const [lastSearchedName, setLastSearchedName] = useState('')
   const [showAddProductModal, setShowAddProductModal] = useState(false)
-  const [addProductModalResponse, setAddProductModalResponse] = useState(false)
+  const [addProductModalResponse, setAddProductModalResponse] = useState(null)
 
   useEffect(() => {
 
@@ -45,8 +46,17 @@ export default function SearchProduct() {
       setAlreadySearched(true)
     }
     if (addProductModalResponse) {
-      setAddProductModalResponse(false)
-      goToAddProduct()
+      setAddProductModalResponse(null)
+      goToAddUnregisteredProduct()
+    }
+    else if (addProductModalResponse == false){
+
+      console.log(`le dio que no quiere agregar el producto con: ${lastSearchedName}`);      
+      let addProductDto = new AddProductDto()
+      addProductDto.name = lastSearchedName
+      addProductDto.barcode = ''
+      addUnregisteredProduct(addProductDto)
+      setLastSearchedName('')
     }
     //TODO: SI CANCELA Y TIENE NOMBRE mando solo el nombre? 
 
@@ -60,7 +70,7 @@ export default function SearchProduct() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     setCameraPermission(status === 'granted');
   }
-  const goToAddProduct = async () => {
+  const goToAddUnregisteredProduct = async () => {
     navigation.navigate(Constants.Navigations.ProductStack.addUnregisteredProduct, {
       barcode: barcode,
       name: lastSearchedName
@@ -82,6 +92,8 @@ export default function SearchProduct() {
         .then(foundProduct => {
           setLoading(false);
           if (foundProduct && !isEmptyProduct(foundProduct)) {
+            console.log(` isemptyproduct: ${isEmptyProduct(foundProduct)}`);
+
             goToProductInfo(foundProduct);
             // setScanned(false);
           } else {
@@ -105,6 +117,7 @@ export default function SearchProduct() {
         setLoading(false);
         setBarcode('');
         if (foundProduct && !isEmptyProduct(foundProduct)) {
+          console.log(` isemptyproduct: ${isEmptyProduct(foundProduct)}`);
           searchBarRef.current.clear();
           setLastSearchedName('')
           goToProductInfo(foundProduct)

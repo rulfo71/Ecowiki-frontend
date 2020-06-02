@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { TouchableHighlight } from 'react-native'
+import { TouchableHighlight, Image, ActivityIndicator } from 'react-native'
 import {
   Text,
   View,
@@ -7,17 +7,20 @@ import {
   Alert,
 } from 'react-native'
 import Spinner from "react-native-loading-spinner-overlay";
-import { Icon, Image } from "react-native-elements";
+import { Icon } from "react-native-elements";
+import ImageView from 'react-native-image-view';
 
 import { getMaterialLogo, addVote, subtractVote } from '../../Repositories/ProductsRepository'
 import Product from '../../Models/ProductModel'
 import { Constants } from '../../Common/Constants/Constants'
+import { isEmpty } from 'lodash';
+import ConfirmModal from '../../components/ConfirmModal';
 
 const materials = {
   plastico: 'Plastico',
   papelCarton: 'Papel y carton',
   vidrio: 'Vidrio',
-  metal: 'Metal',
+  metalAluminio: 'Metal y Aluminio',
   organico: 'Orgánico',
   noSeRecicla: 'No se recicla'
 }
@@ -29,21 +32,24 @@ export default function ProductInfo({ route, navigation }) {
 
   const { productParam } = route.params
 
-  console.log(`productParam: ${JSON.stringify(productParam)} `);
+  // console.log(`productParam: ${JSON.stringify(productParam)} `);
   const product: Product = productParam;
   console.log(`product: ${JSON.stringify(product)} `);
 
   // let [product, setProduct] = useState(productParam);
-  const [uriImage, seturiImage] = useState('');
-  const [showNameInHeader, setShowNameInHeader] = useState(true)
+  const [uriImageLogo, seturiImageLogo] = useState('');
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [addProductModalResponse, setAddProductModalResponse] = useState(null)
+  // const [showNameInHeader, setShowNameInHeader] = useState(true)
   const [loadingImage, setLoadingImage] = useState(false)
+  const [imageViewVisible, setImageViewVisible] = useState(false)
   console.log('estoy en productInfo con product: ', product);
-  console.log('uriImageInicial: ', uriImage);
+  console.log('uriImageInicial: ', uriImageLogo);
   useEffect(() => {
     console.log('getMaterialLogo dentro de useEffect');
 
-    if (product.displayName.length <= 20) {
-      setShowNameInHeader(true)
+    // if (product.displayName.length <= 20) {
+      // setShowNameInHeader(true)
       navigation.setOptions({
         title: product.displayName,
         headerTitleAlign: 'center',
@@ -58,15 +64,35 @@ export default function ProductInfo({ route, navigation }) {
         },
         headerTransparent: false
       })
-    }
-    else {
-      setShowNameInHeader(false)
-    }
+    // }
+    // else {
+      // setShowNameInHeader(false)
+    // }
+    //TODO: VOLAR ESTO Y QUE LO SAQUE DE ASSETS
+    if (isEmpty(product.photoUrl))
+      getLogo();
 
-
-    // setProduct(navigation.getParam('product'));
-    getLogo();
-  }, []);
+    if (addProductModalResponse){
+      console.log('dijo que quiere modificarlo. vamos a addproduct');
+      //restamos un voto
+      //vamos a addproduct
+      navigation.navigate(
+        Constants.Navigations.ProductStack.addProduct,
+        {
+          name: product.displayName,
+          barcode: product.barcode
+        }
+      )
+      
+      setAddProductModalResponse(null)
+    }
+    else if (addProductModalResponse == false){
+      console.log('dijo que no uqiere agregarlo, vamos a home y le restamos un voto ');
+      subtractVote(product)
+      setAddProductModalResponse(null)
+      goBack()
+    }
+  }, [addProductModalResponse]);
 
   const getLogo = async () => {
     setLoadingImage(true);
@@ -74,32 +100,32 @@ export default function ProductInfo({ route, navigation }) {
       .then(uriImage => {
         setLoadingImage(false)
         console.log('uriImage: ', uriImage);
-        seturiImage(uriImage);
+        seturiImageLogo(uriImage);
         console.log('uriImageDsp: ', uriImage);
       })
       .catch(error => {
         setLoadingImage(false)
-        seturiImage('default')
+        seturiImageLogo('default')
         console.log('error obteniendo el logo:', error);
       });
   }
 
   const doesntAgree = () => {
-    Alert.alert('¿Querés modificarlo?', '', [
-      {
-        text: 'No',
-        onPress: () => {
-          subtractVote(product)
-          goBack()
-        }
-      },
-      {
-        text: 'Si',
-        onPress: async () => {
-          goToSetMaterial();
-        }
-      }
-    ])
+    // Alert.alert('¿Querés modificarlo?', '', [
+    //   {
+    //     text: 'No',
+    //     onPress: () => {
+    //       subtractVote(product)
+    //       goBack()
+    //     }
+    //   },
+    //   {
+    //     text: 'Si',
+    //     onPress: async () => {
+    //       goToSetMaterial();
+    //     }
+    //   }
+    // ])
   }
 
   const agree = () => {
@@ -120,34 +146,53 @@ export default function ProductInfo({ route, navigation }) {
 
   const Name = () => {
     console.log('component name');
-    if (!showNameInHeader) {
+    // if (!showNameInHeader) {
       return (
         <>
           <Text style={styles.title}>{"NOMBRE"} </Text>
           <Text style={styles.data}> {product.displayName} </Text>
         </>
       )
-    }
-    return null;
+    // }
+    // return null;
   }
 
-  const MaterialLogo = () => {
-    if (loadingImage)
-      return <Spinner visible={loadingImage} />
+  const Picture = () => {
+    console.log('entre en componente Picture');
+    console.log(`!isEmpty(product.photoUrl): ${!isEmpty(product.photoUrl)}`);
 
-    if (uriImage !== '') {
-      console.log('uriImage en el componente de image', uriImage);
-      return <Image
-        style={styles.image}
-        source={{ uri: uriImage }}
-      />
+    if (!isEmpty(product.photoUrl)){
+      console.log('tenemos que imprimir la foto', product.photoUrl);
+      return (
+        <TouchableHighlight onPress={() => { setImageViewVisible(true) }}>
+          <Image
+                source={{ uri: product.photoUrl }}
+                style={styles.image}
+                onProgress={()=>{<ActivityIndicator color='#fff' />}}
+                // onProgress={() => {<Spinner visible={loadingImage}/>}}
+          />
+        </TouchableHighlight>
+      )
     }
+    else{
+      if (loadingImage)
+        return <Spinner visible={loadingImage} />
+
+      if (!isEmpty(uriImageLogo)) {
+        console.log('uriImage en el componente de image', uriImageLogo);
+        return <Image
+          style={styles.image}
+          source={{ uri: uriImageLogo }}
+        />
+      }
+    }
+
     return null;
   }
 
   const Barcode = () => {
     console.log('component barcode', product.barcode);
-    if (product.barcode !== '') {
+    if (!isEmpty(product.barcode)) {
       return (
         <>
           <Text style={styles.title}>{"CÓDIGO DE BARRAS"} </Text>
@@ -176,24 +221,24 @@ export default function ProductInfo({ route, navigation }) {
     return null;
   }
 
-  const Description = () => {
-    if (product.description !== '') {
+  const Observations = () => {
+    if (!isEmpty(product.observations)) {
       return (
         <>
           <Text style={styles.title}>{"OBSERVACIONES"} </Text>
-          <Text style={styles.data}> {product.description} </Text>
+          <Text style={styles.data}> {product.observations} </Text>
         </>
       )
     }
     return null;
   }
-  //TODO: ADDED BY 
+  //TODO: ADDED BY
   const AddedBy = () => {
-    if (product.addedBy !== '') {
+    if (!isEmpty(product.addedBy)) {
       return (
         <>
-          <Text style={styles.title}>{"Agregado por "} </Text>
-          {/* <Text style={styles.data}> {product.description} </Text> */}
+          <Text style={styles.title}>{"AGREGADO POR "} </Text>
+          <Text style={styles.data}> {product.addedBy} </Text>
         </>
       )
     }
@@ -203,27 +248,48 @@ export default function ProductInfo({ route, navigation }) {
   return (
     <View style={styles.AllContainer} >
       <View style={styles.Container}>
-        <MaterialLogo />
+        <Picture />
         <Name />
         <Barcode />
         <BasketText />
-        <Description />
+        <Observations />
         <AddedBy />
       </View>
       <View style={styles.IconsAgreeContainer}>
-        <TouchableHighlight onPress={doesntAgree} >
-          <View>
+        <TouchableHighlight onPress={() => {setShowAddProductModal(true)}} style={styles.touchableIcon} >
+          <View style={styles.iconAgreeContainer}>
             <Icon name="thumbs-down" color={Constants.Colors.cancelColor} size={50} type="font-awesome" />
-            <Text style={styles.textThumbs}> No estoy de acuerdo </Text>
+            <Text style={styles.textThumbs}> No me gusta </Text>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={agree}>
-          <View >
+        <TouchableHighlight onPress={agree} style={styles.touchableIcon}>
+          <View style={styles.iconAgreeContainer} >
             <Icon name="thumbs-up" color={Constants.Colors.brandGreenColor} size={50} type="font-awesome" />
             <Text style={styles.textThumbs} > Gracias! </Text>
           </View>
         </TouchableHighlight>
+        <ImageView
+          images={[{
+              source: {
+                  uri: product.photoUrl,
+              },
+              title: '',
+              width: 806,
+              height: 720,
+          }]}
+        // imageIndex={0}
+        isVisible={imageViewVisible}
+        onClose={() => setImageViewVisible(false)}
+      />
       </View>
+      <ConfirmModal
+                showModal={showAddProductModal}
+                setShowModal={setShowAddProductModal}
+                questionText={' ¿ Querés modificarlo ?'}
+                confirmText={'Si'}
+                cancelText={'No'}
+                setResponse={setAddProductModalResponse}
+            />
     </View>
   )
 }
@@ -246,6 +312,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     alignContent: 'space-between',
+  },
+  iconAgreeContainer: {
+    alignContent: 'center'
   },
   title: {
     paddingTop: 15,
@@ -283,9 +352,18 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
+    borderRadius: 100,
+    borderWidth: 3,
   },
   textThumbs: {
     fontSize: 15,
+    alignSelf: 'center',
     fontWeight: "bold",
+  },
+  touchableIcon: {
+      marginTop: 20,
+      // padding: 10,
+      alignContent: 'center',
+      width: 100,
   }
 })
