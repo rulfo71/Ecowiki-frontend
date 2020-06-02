@@ -19,9 +19,15 @@ export default function Home() {
     firebase.auth().onAuthStateChanged((user) => {
       !user ? setIsLogged(false) : setIsLogged(true);
     });
-
+    const user = firebase.auth().currentUser
+    if (user){
+      setIsLogged(true)
+    }
+    else{
+      setIsLogged(false)
+    }
     if (loggedModalResponse) {
-      navigation.navigate(Constants.Navigations.ProductStack.addProduct)
+      navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
       setLoggedModalResponse(false)
     }
   }, [loggedModalResponse])
@@ -34,11 +40,7 @@ export default function Home() {
       console.log('esta loggeado');
 
       navigation.navigate(
-        Constants.Navigations.ProductStack.addProduct,
-        {
-          nameParam: '',
-          barcodeParam: ''
-        }
+        Constants.Navigations.ProductStack.addProductHome
       )
     }
     else {
@@ -49,56 +51,57 @@ export default function Home() {
 
   return (
     <View style={styles.viewBody}>
-      <TouchableHighlight
-        onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
-        style={styles.touchable}
-      >
-        <View>
-          <Icon
-            type='material'
-            name='search'
-            reverse={true}
-            color={Constants.Colors.brandGreenColor}
-            raised={true}
-            containerStyle={styles.containerIcon}
-          />
-          <Text style={styles.title}> Buscar productos </Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={goToAddProduct}
-        style={styles.touchable}
-      >
-        <View>
-          <Icon
-            type='material'
-            name='add'
-            color={Constants.Colors.brandGreenColor}
-            reverse={true}
-            raised={true}
-            style={styles.icon}
-            containerStyle={styles.containerIcon}
-          />
-          <Text style={styles.title}> Agregar productos </Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => navigation.navigate(Constants.Navigations.AccountStack.account)}
-        style={styles.touchable}
-      >
-        <View>
-          <Icon
-            type='material-community'
-            name='account'
-            color={Constants.Colors.brandGreenColor}
-            reverse={true}
-            raised={true}
-            containerStyle={styles.containerIcon}
-          />
-          <Text style={styles.title}> Mi Cuenta </Text>
-        </View>
-      </TouchableHighlight>
-
+      <View style={styles.buttonsTop}>
+        <TouchableHighlight
+          onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
+          style={styles.touchable}
+        >
+          <View>
+            <Icon
+              type='material'
+              name='search'
+              reverse={true}
+              color={Constants.Colors.brandGreenColor}
+              raised={true}
+              containerStyle={styles.containerIcon}
+            />
+            <Text style={styles.title}> Buscar productos </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={goToAddProduct}
+          style={styles.touchable}
+        >
+          <View>
+            <Icon
+              type='material'
+              name='add'
+              color={Constants.Colors.brandGreenColor}
+              reverse={true}
+              raised={true}
+              style={styles.icon}
+              containerStyle={styles.containerIcon}
+            />
+            <Text style={styles.title}> Agregar productos </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => navigation.navigate(Constants.Navigations.AccountStack.account)}
+          style={styles.touchable}
+        >
+          <View>
+            <Icon
+              type='material-community'
+              name='account'
+              color={Constants.Colors.brandGreenColor}
+              reverse={true}
+              raised={true}
+              containerStyle={styles.containerIcon}
+            />
+            <Text style={styles.title}> Mi Cuenta </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
       <ConfirmModal
         showModal={showLoggedModal}
         setShowModal={setShowLoggedModal}
@@ -148,6 +151,9 @@ const styles = StyleSheet.create({
     width: 100,
   },
   icon: {
+  },
+  buttonsTop: {
+    flexDirection: 'row'
   }
 
 });
