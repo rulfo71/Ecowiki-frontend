@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, View } from 'react-native'; 
-import { Input, Icon, Button } from 'react-native-elements'
+import { StyleSheet, View, Switch } from 'react-native'; 
+import { Input, Icon, Button, Text } from 'react-native-elements'
 import { Constants } from '../../Common/Constants/Constants';
 import { validateEmail } from '../../utils/validations'
 import {size, isEmpty} from 'lodash'
@@ -18,6 +18,7 @@ export default function RegisterForm (props) {
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
     const [formData, setFormData] = useState(defaultFormValue());
     const [loading, setLoading] = useState(false);
+    const [isEnabledSwitch, setIsEnabledSwitch] = useState(true);
 
     const navigation = useNavigation();
 
@@ -43,6 +44,7 @@ export default function RegisterForm (props) {
             .createUserWithEmailAndPassword(formData.email,formData.password)
             .then (response => {
                 firebase.auth().currentUser.updateProfile({displayName: formData.nickname}).then(()=> {                     
+                    
                     setLoading(false); 
                     navigation.navigate(Constants.Navigations.AccountStack.account);
                 })
@@ -59,6 +61,8 @@ export default function RegisterForm (props) {
     const onChange = (e, type) => {
         setFormData({ ...formData,  [type]: e.nativeEvent.text  })
     }
+
+    const toggleSwitch = () => setIsEnabledSwitch(previousState => !previousState);
 
     return (
         <View style={styles.formContainer} >
@@ -115,6 +119,17 @@ export default function RegisterForm (props) {
                     />
                 }
             />
+            <View style={styles.viewSwitch}>
+                <Text style={styles.switchText}>Quiero que mis contribuciónes sean públicas</Text>
+
+                <Switch
+                    trackColor={{ false: "#767577", true: "#91cc93" }}
+                    thumbColor={isEnabledSwitch ? Constants.Colors.brandGreenColor : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabledSwitch}
+                />
+            </View>
             <Button
                 title='Unirse'
                 containerStyle={styles.btnContainerRegister}
@@ -174,5 +189,22 @@ const styles = StyleSheet.create({
     },
     iconRight: {
         color: '#c1c1c1'
-    }
+    },
+    viewSwitch: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        // margin: 20,
+        width: '80%',   
+        height: 'auto'
+    },
+    switchText: {
+        // margin: 22,
+        // width: '80%',
+        fontSize: 15,
+        marginRight: 20
+        // lineHeight: 1.2
+        // letterSpacing: 1.2,
+    }    
 })
