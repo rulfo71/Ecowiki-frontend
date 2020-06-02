@@ -1,7 +1,7 @@
 import Product from '../Models/ProductModel'
-import AddModelDto from '../Models/AddVoteDto'
-import AddProductDto from '../Models/AddProductDto';
-import AddProductResponse from '../Models/AddProductResponse';
+import AddModelDto from '../Dtos/Products/AddVoteDto'
+import AddProductDto from '../Dtos/Products/AddProductDto';
+import AddProductResponse from '../Dtos/Products/AddProductResponse';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
