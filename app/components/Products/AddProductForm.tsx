@@ -4,8 +4,9 @@ import { Picker } from '@react-native-community/picker';
 import { Icon, Avatar, Image, Input, Button } from 'react-native-elements'
 import { isEmpty } from 'lodash';
 import * as firebase from 'firebase'
-import AddProductDto from '../../Models/AddProductDto'
-import { addProduct as addProductRepository, addUnregisteredProduct } from '../../Repositories/ProductsRepository'
+import AddProductDto from '../../Dtos/Products/AddProductDto'
+import { addProduct, addUnregisteredProduct } from '../../Repositories/ProductsRepository'
+import uuid from 'random-uuid-v4'
 
 import { Constants } from '../../Common/Constants/Constants';
 import Modal from '../Modal';
@@ -23,26 +24,28 @@ export default function AddProductForm(props) {
     const [other, setOther] = useState('')
     const [imageUri, setImageUri] = useState('')
 
-    console.log(`AddProductForm. name: ${name} barcode: ${barcode}`);
+    const uploadImageStorage = async () => {
 
-
-    //el back va a subir el producto. si todo salio ok me va a devolver el id
-    const uploadImageStorage = async (productId) => {
-        //con ese id lo voy a meter en products    
-        const response = await fetch(imageUri);
-        const blob = await response.blob();
-        const ref = await firebase.storage().ref().child(`products/${productId}`)
-        await ref.put(blob);
+        try {
+            const response = await fetch(imageUri)
+        
+            const blob = await response.blob()
+            console.log(`blob: ${blob}`);        
+            const ref = firebase.storage().ref('products').child(uuid())
+            console.log(`ref: ${ref}`);
+            const result = await ref.put(blob)
+            console.log(`result: ${result}`);
+            const photoUrl = await firebase
+                                        .storage()
+                                        .ref(`products/${result.metadata.name}`)
+                                        .getDownloadURL()
+            return photoUrl
+        } catch (error) {
+            console.log(`hubo un error subiendo las imagenes: ${error}`);                        
+        }
     }
 
-    const addProduct = async () => {
-
-        console.log(`imageUri: ${imageUri}`);
-        console.log(`name: ${name}`);
-        console.log(`material: ${material}`);
-        console.log(`observations: ${observations}`);
-        console.log(`other: ${other}`);
-
+    const onSubmit = async () => {
         if (isEmpty(name)) {
             toastRef.current.show('Tenés que completar el nombre')
         }
@@ -57,12 +60,11 @@ export default function AddProductForm(props) {
             addProductDto.barcode = barcode
             addProductDto.name = name
             addProductDto.observations = observations
-            addProductDto.hasImage = !isEmpty(imageUri) ? true : false
+            // addProductDto.hasImage = !isEmpty(imageUri) ? true : false
             if (!isUnRegistered)
                 addProductDto.material = (material !== 'otro') ? material : other
-
             const user = firebase.auth().currentUser
-            console.log(`user: ${user}`);
+            // console.log(`user: ${user}`);
             if (!user && !isUnRegistered) {
                 toastRef.current.show('Tenés que estar logueado para poder registrar productos')
                 return
@@ -72,36 +74,26 @@ export default function AddProductForm(props) {
             try {
                 setIsLoading(true)
 
+                if (!isEmpty(imageUri))
+                    addProductDto.photoUrl = await uploadImageStorage()                    
+
                 let response
                 if (!isUnRegistered) {
-                    response = await addProductRepository(addProductDto)
+                    response = await addProduct(addProductDto)
                 }
                 else {
                     response = await addUnregisteredProduct(addProductDto)
                 }
-                if (addProductDto.hasImage) {
-                    if (response.detailsId) {
-                        await uploadImageStorage(response.detailsId);
-                        setIsLoading(false)
-                        toastRef.current.show('Gracias! Ya agregamos el producto', 500, () => {
-                            navigation.navigate(Constants.Navigations.home);
-                        });
-                    }
-                    else {
-                        setIsLoading(false)
-                        toastRef.current.show('Ups.. hubo un problema. Intentá de nuevo mas tarde')
-                    }
-                }
-                else {
-                    setIsLoading(false)
-                    toastRef.current.show('Gracias! Ya agregamos el producto', 500, () => {
-                        navigation.navigate(Constants.Navigations.home);
-                    });
-                }
-                // console.log(`AddProductForm - response : ${JSON.stringify(response)}`);            
 
+                setIsLoading(false)
+                
+                toastRef.current.show('Gracias! Ya agregamos el producto', 500, () => {
+                    navigation.navigate(Constants.Navigations.home);
+                });
+                console.log(`AddProductForm - response : ${JSON.stringify(response)}`);            
             } catch (error) {
                 toastRef.current.show('Upss.. hubo un problema. Intentá de nuevo mas tarde')
+                console.log(`error: ${error}`)
                 setIsLoading(false)
             }
         }
@@ -124,7 +116,7 @@ export default function AddProductForm(props) {
             />
             <Button
                 title='Guardar'
-                onPress={addProduct}
+                onPress={onSubmit}
                 buttonStyle={styles.buttonAccept}
                 containerStyle={styles.buttonAcceptContainer}
             />
@@ -144,12 +136,14 @@ function FormAdd(props) {
         navigation,
         other,
         setOther,
-        isUnregistered
+        isUnRegistered
     } = props
 
+    // console.log('estoy en formadd');
+    // console.log();
 
-    console.log(`name: ${name}`);
 
+    // console.log(`isUnRegistered: ${isUnRegistered}`);
 
     const [showOther, setShowOther] = useState(false)
 
@@ -166,7 +160,7 @@ function FormAdd(props) {
 
     return (
         <ScrollView style={styles.viewForm}>
-            {barcode && <Input
+            {!isEmpty(barcode) && <Input
                 label='CÓDIGO DE BARRAS'
                 labelStyle={styles.title}
                 value={barcode}
@@ -183,7 +177,7 @@ function FormAdd(props) {
                 containerStyle={styles.input}
                 onChange={e => onChangeName(e.nativeEvent.text)}
             />
-            {isUnregistered &&
+            {!isUnRegistered &&
                 <>
                     <Text style={styles.title}>{"CONTENEDOR"} </Text>
                     <Picker
