@@ -7,11 +7,13 @@ import * as firebase from 'firebase'
 import Login from '../Account/Login';
 import { Constants } from '../../Common/Constants/Constants';
 
-export default function AddProduct(props) {
-    const { navigation } = props
+export default function AddProduct({ route, navigation }) {
+    const { name, barcode } = route.params
     const [isLoading, setIsLoading] = useState(false)
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
+
+    // console.log(`estoy en addProduct con parametro: barcode: ${barcode} y name: ${name} `);
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
@@ -37,6 +39,8 @@ export default function AddProduct(props) {
                     toastRef={toastRef}
                     setIsLoading={setIsLoading}
                     navigation={navigation}
+                    barcodeParam={barcode}
+                    nameParam={name}
                     isUnRegistered={false}
                 />
                 <Toast ref={toastRef} position='center' opacity={0.8}></Toast>
