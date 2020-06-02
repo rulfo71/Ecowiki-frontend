@@ -20,6 +20,9 @@ export const Constants = {
             productInfo: 'productInfo',
             addProduct: 'addProduct',
             addUnregisteredProduct: 'addUnRegisteredProduct',
+            addProductHome: 'addProductHome',
+            addNewProduct: 'addNewProduct',
+
         },
         home: 'home',
         modalBottom: 'modalBottom'
