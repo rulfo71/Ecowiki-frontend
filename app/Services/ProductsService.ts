@@ -1,5 +1,6 @@
 import Product from '../Models/ProductModel'
+import { isEmpty } from 'lodash'
 
 export const isEmptyProduct = (product: Product): boolean => {
-    return (product.barcode === '' && product.description === '' && product.displayName === '' && product.material === '')
+    return (isEmpty(product.barcode) && isEmpty(product.observations) && isEmpty(product.displayName) && isEmpty(product.material))
 }
