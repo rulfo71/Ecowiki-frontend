@@ -8,6 +8,9 @@ import * as firebase from 'firebase'
 import { useNavigation } from '@react-navigation/native'    
 
 import Spinner from "react-native-loading-spinner-overlay";
+import AddUserDto from '../../Dtos/Users/AddUserDto';
+import { addUser } from '../../Repositories/UsersRepository';
+import AddUserResponse from '../../Dtos/Users/AddUserResponse';
 
 
 
@@ -22,7 +25,7 @@ export default function RegisterForm (props) {
 
     const navigation = useNavigation();
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (
             isEmpty(formData.email) || 
             isEmpty(formData.password) || 
@@ -38,23 +41,62 @@ export default function RegisterForm (props) {
             toastRef.current.show('Las contraseñas no coinciden')
         }
         else{
+
+            //TODO: EMPROLIJAR ESTO. lo deberia hacer todo el back
             setLoading(true);
-            firebase
-            .auth()
-            .createUserWithEmailAndPassword(formData.email,formData.password)
-            .then (response => {
-                firebase.auth().currentUser.updateProfile({displayName: formData.nickname}).then(()=> {                     
-                    
+            let addUserDto = new AddUserDto()
+            addUserDto.nickname = formData.nickname
+            addUserDto.email = formData.email
+            addUserDto.password = formData.password
+            addUserDto.showContributions = isEnabledSwitch            
+            
+            try {
+                const response: AddUserResponse = await addUser(addUserDto)
+
+                console.log(`response de addUser: ${JSON.stringify(response)}`);
+                
+                if (!isEmpty(response.uid)){
+                    await firebase.auth().signInWithEmailAndPassword(formData.email,formData.password)
                     setLoading(false); 
                     navigation.navigate(Constants.Navigations.AccountStack.account);
-                })
-            })
-            .catch((error) => {
+                }
+                else if (!isEmpty(response.error.code))
+                {                    
+                    setLoading(false);
+                    const errorMessage = getErrorMessage(response.error)
+                    toastRef.current.show(errorMessage)
+                }
+                else{
+                    setLoading(false);
+                    toastRef.current.show('Ups.. Hubo un error, intentá de nuevo')
+                }
+                
+            } catch (error) {
                 setLoading(false);
                 console.log(error);                
-                const errorMessage = getErrorMessage(error)
-                toastRef.current.show(errorMessage)
-            });
+                toastRef.current.show('Ups.. Hubo un error, intentá de nuevo')
+            }
+
+            // firebase
+            // .auth()
+            // .createUserWithEmailAndPassword(formData.email,formData.password)
+            // .then (response => {
+            //     firebase.auth().currentUser.updateProfile({displayName: formData.nickname}).then(()=> {                     
+            //         let addUserDto = new AddUserDto()
+            //         addUserDto.showContributions = isEnabledSwitch
+            //         addUserDto.userId = firebase.auth().currentUser.uid
+            //         addUser(addUserDto).then(() => {
+            //             setLoading(false); 
+            //             navigation.navigate(Constants.Navigations.AccountStack.account);
+            //         })
+            //     })
+            // })
+            // .catch((error) => {
+            //     setLoading(false);
+            //     console.log(error);                
+            //     const errorMessage = getErrorMessage(error)
+            //     toastRef.current.show(errorMessage)
+            // });
         }
     }  
 
@@ -131,7 +173,7 @@ export default function RegisterForm (props) {
                 />
             </View>
             <Button
-                title='Unirse'
+                title='Unirme'
                 containerStyle={styles.btnContainerRegister}
                 buttonStyle={styles.btnRegister}
                 onPress={onSubmit}
@@ -143,18 +185,21 @@ export default function RegisterForm (props) {
 
 
 function getErrorMessage (error) {
-
+    console.log(`entre a getEerrormessage con ${JSON.stringify(error)}`);
     let response = '';    
 
     switch (error.code) {
         case 'auth/email-already-in-use':
-            response = 'Ups. Ya tenemos un usuario registrado con ese mail!'
-            break;
+        case 'auth/email-already-exists':
+            console.log('email already in useee');            
+            response = 'Ups.. Ya tenemos un usuario registrado con ese mail!'
+            break;        
         case 'auth/weak-password':
+        case 'auth/invalid-password':
             response = 'La contraseña tiene que tener al menos 6 caracteres'
             break;
         default:
-            response = 'Ups.. Hubo un error, intentá de nuevo'
+            response = 'Upssss.. Hubo un error, intentá de nuevo'
             break;
     }
     return response

@@ -1,7 +1,7 @@
 import Product from '../Models/ProductModel'
-import AddModelDto from '../Dtos/Products/AddVoteDto'
-import AddProductDto from '../Dtos/Products/AddProductDto';
 import AddProductResponse from '../Dtos/Products/AddProductResponse';
+import AddProductDto from '../Dtos/Products/AddProductDto';
+import AddVoteDto from '../Dtos/Products/AddVoteDto';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
@@ -71,7 +71,7 @@ export const addVote = (product: Product) => {
   var uriAddVote = server + 'addVote'
   // console.log(uriAddVote);
 
-  let addModelDto: AddModelDto = new AddModelDto()
+  let addModelDto: AddVoteDto = new AddVoteDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   const data = JSON.stringify(addModelDto)
