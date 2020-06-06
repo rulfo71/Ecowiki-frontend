@@ -55,7 +55,7 @@ export default function RegisterForm (props) {
 
                 console.log(`response de addUser: ${JSON.stringify(response)}`);
                 
-                if (!isEmpty(response.uid)){
+                if (!isEmpty(response.userId)){
                     await firebase.auth().signInWithEmailAndPassword(formData.email,formData.password)
                     setLoading(false); 
                     navigation.navigate(Constants.Navigations.AccountStack.account);
@@ -76,27 +76,6 @@ export default function RegisterForm (props) {
                 console.log(error);                
                 toastRef.current.show('Ups.. Hubo un error, intentá de nuevo')
             }
-
-            // firebase
-            // .auth()
-            // .createUserWithEmailAndPassword(formData.email,formData.password)
-            // .then (response => {
-            //     firebase.auth().currentUser.updateProfile({displayName: formData.nickname}).then(()=> {                     
-            //         let addUserDto = new AddUserDto()
-            //         addUserDto.showContributions = isEnabledSwitch
-            //         addUserDto.userId = firebase.auth().currentUser.uid
-            //         addUser(addUserDto).then(() => {
-            //             setLoading(false); 
-            //             navigation.navigate(Constants.Navigations.AccountStack.account);
-            //         })
-            //     })
-            // })
-            // .catch((error) => {
-            //     setLoading(false);
-            //     console.log(error);                
-            //     const errorMessage = getErrorMessage(error)
-            //     toastRef.current.show(errorMessage)
-            // });
         }
     }  
 
@@ -245,11 +224,7 @@ const styles = StyleSheet.create({
         height: 'auto'
     },
     switchText: {
-        // margin: 22,
-        // width: '80%',
         fontSize: 15,
         marginRight: 20
-        // lineHeight: 1.2
-        // letterSpacing: 1.2,
     }    
 })

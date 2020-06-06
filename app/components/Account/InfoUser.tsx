@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import * as firebase from 'firebase'
@@ -6,44 +6,67 @@ import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 
 import { Constants } from '../../Common/Constants/Constants';
+import UploadImage from '../UploadImage'
+import { isEmpty } from 'lodash'
+import UpdateUserDto from '../../Dtos/Users/UpdateUserDto'
+import { updateUser } from '../../Repositories/UsersRepository'
 
 export default function InfoUser(props) {
     const {
-        userInfo: { uid, photoURL, displayName, email },
+        userInfo: { userId, photoUrl, displayName, email },
         toastRef,
         setLoading
     } = props;
 
-    const changeAvatar = async () => {
-        const resultPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        const resultPermissionCamera = resultPermission.permissions.cameraRoll.status;
+    console.log(`InfoUser: photoURL: ${photoUrl} `);
 
-        if (resultPermissionCamera === 'denied') {
-            toastRef.current.show('No tenemos permisos. Podes cambiarlos desde la configuracion del telefono')
-        }
-        else {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [4, 3]
+
+    const [imageUri, setImageUri] = useState(photoUrl)
+    const [imageChanged, setImageChanged] = useState(false)
+
+    useEffect(() => {
+        if (imageChanged) {
+            uploadImage(imageUri).then(async () => {
+                await updatePhotoUrl()
+                setImageChanged(false)
+            }).catch(() => {
+                toastRef.current.show('Error al subir la imagen')
             })
-            if (result.cancelled) {
-                //cerró la selección de imagenes
-            }
-            else {
-                uploadImage(result.uri).then(() => {
-                    updatePhotoUrl()
-                }).catch(() => {
-                    toastRef.current.show('Error al subir la imagen')
-                })
-            }
         }
-    }
+
+    }, [imageChanged])
+
+    // const changeAvatar = async () => {
+    //     const resultPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    //     const resultPermissionCamera = resultPermission.permissions.cameraRoll.status;
+
+    //     if (resultPermissionCamera === 'denied') {
+    //         toastRef.current.show('No tenemos permisos. Podes cambiarlos desde la configuracion del telefono')
+    //     }
+    //     else {
+    //         const result = await ImagePicker.launchImageLibraryAsync({
+    //             allowsEditing: true,
+    //             aspect: [4, 3]
+    //         })
+    //         if (result.cancelled) {
+    //             //cerró la selección de imagenes
+    //         }
+    //         else {
+    //             uploadImage(result.uri).then(() => {
+    //                 updatePhotoUrl()
+    //             }).catch(() => {
+    //                 toastRef.current.show('Error al subir la imagen')
+    //             })
+    //         }
+    //     }
+    // }
     const uploadImage = async (uri) => {
 
         setLoading(true)
         const response = await fetch(uri);
         const blob = await response.blob();
-        const ref = firebase.storage().ref().child(`avatar/${uid}`)
+        // var uid = firebase.auth().currentUser.uid
+        const ref = firebase.storage().ref().child(`avatar/${userId}`)
         return ref.put(blob);
     }
 
@@ -51,14 +74,15 @@ export default function InfoUser(props) {
 
         firebase
             .storage()
-            .ref(`avatar/${uid}`)
+            .ref(`avatar/${userId}`)
             .getDownloadURL()
-            .then(async (response) => {
-                console.log('fotoUrl: ', response);
-                const update = {
-                    photoURL: response
-                };
-                await firebase.auth().currentUser.updateProfile(update)
+            .then(async (photoUrl) => {
+                console.log('photoUrl: ', photoUrl);
+                var updateUserDto = new UpdateUserDto()
+                updateUserDto.userId = userId
+                updateUserDto.fieldToUpdate = Constants.User.fields.photoUrl
+                updateUserDto.newValue = photoUrl
+                await updateUser(updateUserDto)
                 setLoading(false);
             })
             .catch(() => {
@@ -69,33 +93,13 @@ export default function InfoUser(props) {
 
     return (
         <View style={styles.viewUserInfo}>
-            <Avatar
-                rounded
-                size='large'
-                showEditButton
-                editButton={{
-                    name: 'mode-edit',
-                    type: 'material',
-                    size: 13,
-                    color: Constants.Colors.brandGreenColor,
-                    reverseColor: 'white',
-                    reverse: true
-                }}
-                containerStyle={styles.userInfoAvatar}
-                onEditPress={changeAvatar}
-                onPress={changeAvatar}
-                source={
-                    photoURL
-                        ? { uri: photoURL }
-                        : require('../../../assets/img/avatar-default.jpg')
-                }
-            />
+            <UploadImage toastRef={toastRef} imageUri={imageUri} setImageUri={setImageUri} setImageChanged={setImageChanged} />
             <View>
                 <Text style={styles.displayName}>
                     {displayName ? displayName : ''}
                 </Text>
                 <Text>
-                    {email ? email : 'Social Login'}
+                    {email ? email : ''}
                 </Text>
             </View>
         </View>

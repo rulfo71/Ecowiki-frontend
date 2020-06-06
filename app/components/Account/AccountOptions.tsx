@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Switch } from 'react-native'
+import { Text } from 'react-native-elements'
 import { ListItem } from 'react-native-elements'
 import { map } from 'lodash';
+import * as Linking from 'expo-linking';
 
 import Modal from '../Modal'
 import ChangeDisplayNameForm from './ChangeDisplayNameForm';
@@ -11,32 +13,28 @@ import { Constants } from '../../Common/Constants/Constants'
 import * as firebase from 'firebase';
 import Logout from './Logout';
 import CameraOrGallery from '../CameraOrGallery';
+import UpdateUserDto from '../../Dtos/Users/UpdateUserDto';
+import { getWhatsappLink, updateUser } from '../../Repositories/UsersRepository';
 
 export default function AccountOptions(props) {
 
-    const { userInfo, toastRef, setReloadUserInfo } = props
+    const { userInfo, toastRef, setReloadUserInfo, userDb, setLoading } = props
     const [showModal, setShowModal] = useState(true);
-
+    const [isEnabledSwitch, setIsEnabledSwitch] = useState(false)
     const [renderComponent, setRenderComponent] = useState(null)
 
+    useEffect(() => {
+        if (userInfo) {
+            setIsEnabledSwitch(userInfo.showContributions)
+        }
+    }, [userInfo])
 
-    const selectedComponent = (key) => {
+    const selectedComponent = async (key) => {
         switch (key) {
             case 'displayName':
                 setRenderComponent(
                     <ChangeDisplayNameForm
                         displayName={userInfo.displayName}
-                        setShowModal={setShowModal}
-                        toastRef={toastRef}
-                        setReloadUserInfo={setReloadUserInfo}
-                    />
-                )
-                setShowModal(true)
-                break;
-            case 'email':
-                setRenderComponent(
-                    <ChangeEmailForm
-                        email={userInfo.email}
                         setShowModal={setShowModal}
                         toastRef={toastRef}
                         setReloadUserInfo={setReloadUserInfo}
@@ -53,6 +51,13 @@ export default function AccountOptions(props) {
                 )
                 setShowModal(true)
                 break;
+            case 'whatsapp':
+                setLoading(true)
+                var whatsappLinkResponse = await getWhatsappLink();
+                setLoading(false)
+                var response = await Linking.openURL(whatsappLinkResponse.url);
+                console.log(`response: ${response}`);
+                break;
             case 'logout':
                 setRenderComponent(
                     <Logout
@@ -67,10 +72,32 @@ export default function AccountOptions(props) {
                 setShowModal(false)
                 break;
         }
-
     }
 
     const menuOptions = generateOptions(selectedComponent);
+    const toggleSwitch = async () => {
+        //por alguna extraña razon el isEnabledSwitch funciona al reves. yafu
+        setIsEnabledSwitch(previousState => !previousState);
+        const user = firebase.auth().currentUser
+        if (user) {
+            let updateUserDto = new UpdateUserDto();
+            updateUserDto.userId = firebase.auth().currentUser.uid
+            updateUserDto.fieldToUpdate = Constants.User.fields.showContributions
+            updateUserDto.newValue = !isEnabledSwitch
+            setLoading(true)
+            try {
+                await updateUser(updateUserDto);
+                setLoading(false)
+                setReloadUserInfo(true)
+
+            } catch (error) {
+                toastRef.current.show('No pudimos actualizar tu perfil. Intentá de nuevo')
+                setIsEnabledSwitch(previousState => !previousState)
+                setLoading(false)
+            }
+        }
+    }
+
 
     return (
         <View>
@@ -93,6 +120,16 @@ export default function AccountOptions(props) {
                     onLongPress={menu.onPress}
                 />
             ))}
+            <View style={styles.viewSwitch}>
+                <Text style={styles.switchText}>Quiero que mis contribuciónes sean públicas</Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#91cc93" }}
+                    thumbColor={isEnabledSwitch ? Constants.Colors.brandGreenColor : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabledSwitch}
+                />
+            </View>
             {renderComponent && (
                 <Modal isVisible={showModal} setIsVisible={setShowModal}>
                     {renderComponent}
@@ -113,15 +150,6 @@ export default function AccountOptions(props) {
                 onPress: () => selectedComponent('displayName')
             },
             {
-                title: 'Cambiar correo electrónico',
-                iconType: 'material-community',
-                iconNameLeft: 'at',
-                iconColor: Constants.Colors.brandGreenColor,
-                iconNameRight: 'chevron-right',
-                iconColorRight: Constants.Colors.brandGreenColor,
-                onPress: () => selectedComponent('email')
-            },
-            {
                 title: 'Cambiar contraseña',
                 iconType: 'material-community',
                 iconNameLeft: 'lock-reset',
@@ -129,6 +157,16 @@ export default function AccountOptions(props) {
                 iconNameRight: 'chevron-right',
                 iconColorRight: Constants.Colors.brandGreenColor,
                 onPress: () => selectedComponent('password')
+            },
+            {
+                title: 'Contactanos por whatsapp',
+                iconType: 'material-community',
+                iconNameLeft: 'whatsapp',
+                iconColor: Constants.Colors.brandGreenColor,
+                iconNameRight: 'chevron-right',
+                iconColorRight: Constants.Colors.brandGreenColor,
+                onPress: () => selectedComponent('whatsapp')
+
             },
             {
                 title: 'Cerrar sesión',
@@ -153,5 +191,18 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '90%',
         alignSelf: 'center'
+    },
+    viewSwitch: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 20,
+        // width: '80%',
+        height: 'auto'
+    },
+    switchText: {
+        fontSize: 15,
+        width: '80%'
+        // marginRight: 20
     }
 })

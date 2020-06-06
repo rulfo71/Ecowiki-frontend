@@ -6,6 +6,8 @@ import * as firebase from 'firebase'
 import { Constants } from '../../Common/Constants/Constants'
 import { validateEmail } from '../../utils/validations'
 import { reauthenticate } from '../../utils/api'
+import { updateUser } from '../../Repositories/UsersRepository'
+import UpdateUserDto from '../../Dtos/Users/UpdateUserDto'
 
 
 export default function ChangeEmailForm(props) {
@@ -39,18 +41,27 @@ export default function ChangeEmailForm(props) {
             setIsLoading(true);
             reauthenticate(formData.password)
                 .then(response => {
-                    firebase.auth()
-                        .currentUser.updateEmail(formData.email)
-                        .then(() => {
-                            setIsLoading(false)
-                            setReloadUserInfo(true)
-                            toastRef.current.show('Email actualizado correctamente')
-                            setShowModal(false)
-                        })
-                        .catch(() => {
-                            setErrors({ email: 'Error al actualizar el email' })
-                            setIsLoading(false);
-                        })
+
+                    const user = firebase.auth().currentUser;
+                    const updateUserDto = new UpdateUserDto()
+                    updateUserDto.userId = user.uid
+                    updateUserDto.fieldToUpdate = Constants.User.fields.email
+                    updateUserDto.newValue = formData.email
+                    updateUser(updateUserDto)
+
+
+                    // firebase.auth()
+                    //     .currentUser.updateEmail(formData.email)
+                    //     .then(() => {
+                    //         setIsLoading(false)
+                    //         setReloadUserInfo(true)
+                    //         toastRef.current.show('Email actualizado correctamente')
+                    //         setShowModal(false)
+                    //     })
+                    //     .catch(() => {
+                    //         setErrors({ email: 'Error al actualizar el email' })
+                    //         setIsLoading(false);
+                    //     })
                 })
                 .catch((error) => {
                     setErrors({ password: 'La contraseña no es correcta' })

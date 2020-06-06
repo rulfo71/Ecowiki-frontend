@@ -14,22 +14,6 @@ export default function Login(props) {
     const toastRef = useRef();
     const navigation = useNavigation();
 
-
-    navigation.setOptions({
-        title: 'Iniciar sesión',
-        headerTitleAlign: 'center',
-        headerStyle: {
-            backgroundColor: Constants.Colors.brandGreenColor,
-            borderBottomStartRadius: 20,
-            borderBottomEndRadius: 20,
-        },
-        headerTitleStyle: {
-            fontSize: 20,
-            color: 'white'
-        },
-        headerTintColor: 'white',
-    })
-
     return (
         <ScrollView>
             <Image

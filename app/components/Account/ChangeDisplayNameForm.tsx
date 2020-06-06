@@ -4,6 +4,8 @@ import { Input, Button, Icon } from 'react-native-elements'
 import * as firebase from 'firebase'
 
 import { Constants } from '../../Common/Constants/Constants'
+import UpdateUserDto from '../../Dtos/Users/UpdateUserDto'
+import { updateUser } from '../../Repositories/UsersRepository'
 
 
 export default function ChangeDisplayNameForm(props) {
@@ -13,7 +15,7 @@ export default function ChangeDisplayNameForm(props) {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (!newDisplayName) {
             setError('El nombre no puede estar vacío')
         }
@@ -25,18 +27,35 @@ export default function ChangeDisplayNameForm(props) {
             const update = {
                 displayName: newDisplayName
             }
-            firebase
-                .auth()
-                .currentUser.updateProfile(update)
-                .then(() => {
-                    setIsLoading(false)
-                    setReloadUserInfo(true)
-                    setShowModal(false)
-                })
-                .catch((error) => {
-                    setError('Error al actualizar el nombre')
-                    setIsLoading(false)
-                })
+
+            const user = firebase.auth().currentUser;
+            const updateUserDto = new UpdateUserDto()
+            updateUserDto.userId = user.uid
+            updateUserDto.fieldToUpdate = Constants.User.fields.displayName
+            updateUserDto.newValue = newDisplayName
+            try {
+                await updateUser(updateUserDto)
+                setIsLoading(false)
+                setReloadUserInfo(true)
+                setShowModal(false)
+            } catch (error) {
+                setError('Error al actualizar el nombre')
+                setIsLoading(false)
+            }
+
+
+            // firebase
+            //     .auth()
+            //     .currentUser.updateProfile(update)
+            //     .then(() => {
+            //         setIsLoading(false)
+            //         setReloadUserInfo(true)
+            //         setShowModal(false)
+            //     })
+            //     .catch((error) => {
+            //         setError('Error al actualizar el nombre')
+            //         setIsLoading(false)
+            //     })
         }
     }
 

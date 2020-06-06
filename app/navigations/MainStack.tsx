@@ -39,7 +39,7 @@ export default function MainStack() {
                 name={Constants.Navigations.home}
                 component={Home}
                 options={{
-                    title: 'Hola! ',
+                    title: Constants.Navigations.titles.home,
                 }}
             />
 
@@ -61,21 +61,21 @@ export default function MainStack() {
                 name={Constants.Navigations.ProductStack.addProduct}
                 component={AddProduct}
                 options={{
-                    title: 'Agregar producto'
+                    title: Constants.Navigations.titles.ProductStack.addProduct
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.ProductStack.addProductHome}
                 component={AddProductHome}
                 options={{
-                    title: 'Agregar producto'
+                    title: Constants.Navigations.titles.ProductStack.addProductHome
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.ProductStack.addUnregisteredProduct}
                 component={AddUnRegisteredProduct}
                 options={{
-                    title: 'Agregar producto'
+                    title: Constants.Navigations.titles.ProductStack.addUnregisteredProduct, 
                 }}
             />
             <Stack.Screen
@@ -92,21 +92,21 @@ export default function MainStack() {
                 name={Constants.Navigations.AccountStack.account}
                 component={Account}
                 options={{
-                    title: 'Mi Cuenta'
+                    title: Constants.Navigations.titles.AccountStack.account,
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.register}
                 component={Register}
                 options={{
-                    title: 'Registrarme'
+                    title: Constants.Navigations.titles.AccountStack.register 
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.recoverPassword}
                 component={RecoverPassword}
                 options={{
-                    title: 'Recuperar Contraseña'
+                    title: Constants.Navigations.titles.AccountStack.recoverPassword 
                 }}
             />
         </Stack.Navigator>

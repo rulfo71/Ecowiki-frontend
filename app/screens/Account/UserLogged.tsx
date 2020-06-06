@@ -1,5 +1,5 @@
 import React, { Component, useRef, useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { Button } from 'react-native-elements'
 import Toast from 'react-native-easy-toast'
 import * as firebase from 'firebase'
@@ -8,6 +8,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { Constants } from "../../Common/Constants/Constants";
 import AccountOptions from '../../components/Account/AccountOptions';
 import InfoUser from '../../components/Account/InfoUser'
+import { getUserById } from "../../Repositories/UsersRepository";
 
 
 export default function UserLogged() {
@@ -15,27 +16,48 @@ export default function UserLogged() {
   const toastRef = useRef();
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState(null)
+  const [userDb, setUserDb] = useState(null)
   const [reloadUserInfo, setReloadUserInfo] = useState(false)
 
   useEffect(() => {
+    // if (reloadUserInfo) {
+    //   (async () => {
+    //     const user = await firebase.auth().currentUser;
+    //     // setUserInfo(user);
+    //   })()
+    //   setReloadUserInfo(false)
+    // }
+    // if (reloadUserInfo)
+    console.log('entrando al useEffect de userLogged');
+
     (async () => {
-      const user = await firebase.auth().currentUser;
+      // setLoading(true)
+      setUserInfo(null);
+      const userFirebase = await firebase.auth().currentUser;
+      console.log(`userFirebase: ${userFirebase}`);
+      const user = await getUserById(userFirebase.uid)
+      console.log(`response getUserById: ${user}`);
+
       setUserInfo(user);
     })()
-    setReloadUserInfo(false)
+
   }, [reloadUserInfo])
 
   return (
     <View style={styles.viewUserInfo}>
-      {userInfo && <InfoUser
-        userInfo={userInfo}
-        toastRef={toastRef}
-        setLoading={setLoading}
+      {userInfo == null ?
+        <ActivityIndicator animating={true} /> :
+        <InfoUser
+          userInfo={userInfo}
+          toastRef={toastRef}
+          setLoading={setLoading}
 
-      />}
+        />}
       <AccountOptions
         userInfo={userInfo}
+        userDb={userDb}
         toastRef={toastRef}
+        setLoading={setLoading}
         setReloadUserInfo={setReloadUserInfo}
       />
       {/* <Button

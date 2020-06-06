@@ -18,6 +18,21 @@ export default function LoginForm(props) {
 
     const navigation = useNavigation();
 
+    const getTitle = (redirection: string) => {
+        let title = ''
+        switch (redirection) {
+            case Constants.Navigations.AccountStack.account:
+                title = Constants.Navigations.titles.AccountStack.account                
+                break;
+            case Constants.Navigations.ProductStack.addProduct:
+                title = Constants.Navigations.titles.ProductStack.addProduct
+                break;
+            default:
+                break;
+        }
+        return title;
+    }
+
 
     const onSubmit = () => {
         if (
@@ -38,9 +53,17 @@ export default function LoginForm(props) {
                     console.log(`navigation: ${JSON.stringify(navigation)} ${navigation}`);
                     if (isEmpty(redirectTo)) {
                         navigation.navigate(Constants.Navigations.AccountStack.account)
+                        const title = getTitle(Constants.Navigations.AccountStack.account)
+                        navigation.setOptions({
+                            title: title
+                        })                        
                     }
                     else {
                         navigation.navigate(redirectTo)
+                        const title = getTitle(redirectTo)
+                        navigation.setOptions({
+                            title: title
+                        })                        
                     }
                     // navigation.goBack()
                     // navigation.goBack()
