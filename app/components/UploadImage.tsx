@@ -15,7 +15,7 @@ const widthScreen = Dimensions.get('window').width
 
 
 export default function UploadImage(props) {
-    const { toastRef, imageUri, setImageUri } = props
+    const { toastRef, imageUri, setImageUri, setImageChanged } = props
 
     const [showModalCameraOrGallery, setShowModalCameraOrGallery] = useState(false)
     const [photoSource, setPhotoSource] = useState('')
@@ -56,14 +56,15 @@ export default function UploadImage(props) {
         }
         else {
             const result = await ImagePicker.launchCameraAsync({
-                // allowsEditing: true,
-                // aspect: [4, 3]
+                allowsEditing: true,
+                aspect: [4, 3]
             })
             if (result.cancelled) {
                 toastRef.current.show('No sacaste ninguna foto', 2000)
             }
             else {
                 setImageUri(result.uri)
+                setImageChanged(true)
             }
         }
     }
@@ -74,12 +75,15 @@ export default function UploadImage(props) {
         }
         else {
             const result = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3]
             })
             if (result.cancelled) {
                 toastRef.current.show('No elegiste ninguna foto', 2000)
             }
             else {
                 setImageUri(result.uri)
+                setImageChanged(true)
             }
         }
     }
