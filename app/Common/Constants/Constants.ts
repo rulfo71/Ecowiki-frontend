@@ -22,12 +22,38 @@ export const Constants = {
             addUnregisteredProduct: 'addUnRegisteredProduct',
             addProductHome: 'addProductHome',
             addNewProduct: 'addNewProduct',
-
         },
         home: 'home',
+        titles: {
+            AccountStack: {
+                account: 'Mi Cuenta',
+                login: 'login',
+                register: 'Registrarme',
+                recoverPassword: 'Recuperar Contraseña',
+            },
+            ProductStack: {
+                searchProduct: 'searchProduct',
+                productInfo: 'productInfo',
+                addProduct: 'Agregar producto',
+                addUnregisteredProduct: 'Agregar producto',
+                addProductHome: 'Agregar producto',
+                addNewProduct: 'addNewProduct',
+            },
+            home: 'Hola!'
+        },
         modalBottom: 'modalBottom'
     },
     Account: {
         minimumCharactersPassword: 6
-    }
+    },
+    User: {
+        fields: {
+            displayName: 'displayName',
+            email: 'email',
+            photoUrl: 'photoUrl',
+            showContributions: 'showContributions',
+            userId: 'userId'
+        }
+
+    },
 } 
