@@ -15,6 +15,8 @@ import Product from '../../Models/ProductModel'
 import { Constants } from '../../Common/Constants/Constants'
 import { isEmpty } from 'lodash';
 import ConfirmModal from '../../components/ConfirmModal';
+import { getUserById } from '../../Repositories/UsersRepository';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const materials = {
   plastico: 'Plastico',
@@ -24,6 +26,16 @@ const materials = {
   organico: 'Orgánico',
   noSeRecicla: 'No se recicla'
 }
+const defaultPicturesMap =
+{
+  'plastico': require('../../../assets/img/materials/plastico.png'),
+  'papelCarton': require('../../../assets/img/materials/papelCarton.png'),
+  'vidrio': require('../../../assets/img/materials/vidrio.png'),
+  'metalAluminio': require('../../../assets/img/materials/metalAluminio.png'),
+  'organico': require('../../../assets/img/materials/organico.png'),
+  'noSeRecicla': require('../../../assets/img/materials/noSeRecicla.png'),
+}
+
 
 export default function ProductInfo({ route, navigation }) {
   console.log('*************');
@@ -43,36 +55,45 @@ export default function ProductInfo({ route, navigation }) {
   // const [showNameInHeader, setShowNameInHeader] = useState(true)
   const [loadingImage, setLoadingImage] = useState(false)
   const [imageViewVisible, setImageViewVisible] = useState(false)
+  const [addedBy, setAddedBy] = useState(null)
+
   console.log('estoy en productInfo con product: ', product);
   console.log('uriImageInicial: ', uriImageLogo);
   useEffect(() => {
     console.log('getMaterialLogo dentro de useEffect');
 
+    getUserAddedBy()
+
     // if (product.displayName.length <= 20) {
-      // setShowNameInHeader(true)
-      navigation.setOptions({
-        title: product.displayName,
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: Constants.Colors.brandGreenColor,
-          borderBottomStartRadius: 20,
-          borderBottomEndRadius: 20,
-        },
-        headerTitleStyle: {
-          fontSize: 30,
-          color: 'white'
-        },
-        headerTransparent: false
-      })
+    // setShowNameInHeader(true)
+    navigation.setOptions({
+      title: product.displayName,
+      headerTitleAlign: 'center',
+      headerStyle: {
+        backgroundColor: Constants.Colors.brandGreenColor,
+        borderBottomStartRadius: 20,
+        borderBottomEndRadius: 20,
+      },
+      headerTitleStyle: {
+        fontSize: 30,
+        color: 'white'
+      },
+      headerTransparent: false
+    })
     // }
     // else {
-      // setShowNameInHeader(false)
+    // setShowNameInHeader(false)
     // }
     //TODO: VOLAR ESTO Y QUE LO SAQUE DE ASSETS
-    if (isEmpty(product.photoUrl))
-      getLogo();
+    if (isEmpty(product.photoUrl)) {
+      console.log(product.material);
+      seturiImageLogo('')
+      // getLogo();
 
-    if (addProductModalResponse){
+
+    }
+
+    if (addProductModalResponse) {
       console.log('dijo que quiere modificarlo. vamos a addproduct');
       //restamos un voto
       //vamos a addproduct
@@ -83,10 +104,10 @@ export default function ProductInfo({ route, navigation }) {
           barcode: product.barcode
         }
       )
-      
+
       setAddProductModalResponse(null)
     }
-    else if (addProductModalResponse == false){
+    else if (addProductModalResponse == false) {
       console.log('dijo que no uqiere agregarlo, vamos a home y le restamos un voto ');
       subtractVote(product)
       setAddProductModalResponse(null)
@@ -94,20 +115,29 @@ export default function ProductInfo({ route, navigation }) {
     }
   }, [addProductModalResponse]);
 
+  const getUserAddedBy = async () => {
+    if (addedBy == null) {
+      const user = await getUserById(product.addedBy)
+      setAddedBy(user)
+    }
+  }
+
+
   const getLogo = async () => {
     setLoadingImage(true);
-    await getMaterialLogo(product.material)
-      .then(uriImage => {
-        setLoadingImage(false)
-        console.log('uriImage: ', uriImage);
-        seturiImageLogo(uriImage);
-        console.log('uriImageDsp: ', uriImage);
-      })
-      .catch(error => {
-        setLoadingImage(false)
-        seturiImageLogo('default')
-        console.log('error obteniendo el logo:', error);
-      });
+    // seturiImageLogo()
+    // await getMaterialLogo(product.material)
+    //   .then(uriImage => {
+    //     setLoadingImage(false)
+    //     console.log('uriImage: ', uriImage);
+    //     seturiImageLogo(uriImage);
+    //     console.log('uriImageDsp: ', uriImage);
+    //   })
+    //   .catch(error => {
+    //     setLoadingImage(false)
+    //     seturiImageLogo('default')
+    //     console.log('error obteniendo el logo:', error);
+    //   });
   }
 
   const doesntAgree = () => {
@@ -133,65 +163,65 @@ export default function ProductInfo({ route, navigation }) {
     goBack()
   }
 
-  const goToSetMaterial = () => {
-    navigation.navigate('SetMaterial', {
-      barCode: product.barcode,
-      name: product.displayName
-    });
-  }
-
   const goBack = () => {
     navigation.goBack();
   }
 
   const Name = () => {
-    console.log('component name');
     // if (!showNameInHeader) {
-      return (
-        <>
-          <Text style={styles.title}>{"NOMBRE"} </Text>
-          <Text style={styles.data}> {product.displayName} </Text>
-        </>
-      )
+    return (
+      <>
+        <Text style={styles.title}>{"NOMBRE"} </Text>
+        <Text style={styles.data}> {product.displayName} </Text>
+      </>
+    )
     // }
     // return null;
   }
 
   const Picture = () => {
     console.log('entre en componente Picture');
-    console.log(`!isEmpty(product.photoUrl): ${!isEmpty(product.photoUrl)}`);
+    console.log(`isEmpty(product.photoUrl): ${isEmpty(product.photoUrl)}`);
 
-    if (!isEmpty(product.photoUrl)){
+    if (!isEmpty(product.photoUrl)) {
       console.log('tenemos que imprimir la foto', product.photoUrl);
       return (
         <TouchableHighlight onPress={() => { setImageViewVisible(true) }}>
           <Image
-                source={{ uri: product.photoUrl }}
-                style={styles.image}
-                onProgress={()=>{<ActivityIndicator color='#fff' />}}
-                // onProgress={() => {<Spinner visible={loadingImage}/>}}
+            source={{ uri: product.photoUrl }}
+            style={styles.image}
+            onProgress={() => { <ActivityIndicator color='#fff' /> }}
+          //  onProgress={() => {<Spinner visible={loadingImage}/>}}
           />
         </TouchableHighlight>
       )
     }
-    else{
-      if (loadingImage)
-        return <Spinner visible={loadingImage} />
+    else {
+      // if (loadingImage)
+      //   return <Spinner visible={loadingImage} />
 
-      if (!isEmpty(uriImageLogo)) {
-        console.log('uriImage en el componente de image', uriImageLogo);
-        return <Image
-          style={styles.image}
-          source={{ uri: uriImageLogo }}
-        />
-      }
+      // if (!isEmpty(uriImageLogo)) {
+      console.log(`imageUri = ${product.material}`);
+
+      var imageUri = '../../../assets/img/materials/'
+      imageUri = imageUri + product.material
+      imageUri = imageUri + '.png'
+
+      // console.log(` require : ../../../assets/img/materials/${product.material}.png`);
+      // var imageUri = '../../../assets/img/materials/' + product.material + '.png'
+
+      return <Image
+        style={styles.image}
+        source={defaultPicturesMap[product.material]}
+      // source={require(`../../../assets/img/materials/${product.material}.png`)}
+      />
+      // }
     }
 
     return null;
   }
 
   const Barcode = () => {
-    console.log('component barcode', product.barcode);
     if (!isEmpty(product.barcode)) {
       return (
         <>
@@ -215,7 +245,7 @@ export default function ProductInfo({ route, navigation }) {
         )
       }
       else {
-        return <Text style={styles.material}>{"Este producto no se recicla "}</Text>
+        return <Text style={styles.material}>{"Ups... este producto no se recicla. Tratemos de evitarlo! "}</Text>
       }
     }
     return null;
@@ -232,31 +262,32 @@ export default function ProductInfo({ route, navigation }) {
     }
     return null;
   }
-  //TODO: ADDED BY
   const AddedBy = () => {
-    if (!isEmpty(product.addedBy)) {
+    if (addedBy == null) {
+      return null;
+    }
+    else {
       return (
         <>
           <Text style={styles.title}>{"AGREGADO POR "} </Text>
-          <Text style={styles.data}> {product.addedBy} </Text>
+          <Text style={styles.data}> {addedBy.displayName} </Text>
         </>
       )
     }
-    return null;
   }
 
   return (
-    <View style={styles.AllContainer} >
+    <ScrollView style={styles.AllContainer} >
       <View style={styles.Container}>
         <Picture />
+        <BasketText />
         <Name />
         <Barcode />
-        <BasketText />
         <Observations />
         <AddedBy />
       </View>
       <View style={styles.IconsAgreeContainer}>
-        <TouchableHighlight onPress={() => {setShowAddProductModal(true)}} style={styles.touchableIcon} >
+        <TouchableHighlight onPress={() => { setShowAddProductModal(true) }} style={styles.touchableIcon} >
           <View style={styles.iconAgreeContainer}>
             <Icon name="thumbs-down" color={Constants.Colors.cancelColor} size={50} type="font-awesome" />
             <Text style={styles.textThumbs}> No me gusta </Text>
@@ -270,27 +301,27 @@ export default function ProductInfo({ route, navigation }) {
         </TouchableHighlight>
         <ImageView
           images={[{
-              source: {
-                  uri: product.photoUrl,
-              },
-              title: '',
-              width: 806,
-              height: 720,
+            source: {
+              uri: product.photoUrl,
+            },
+            title: '',
+            width: 806,
+            height: 720,
           }]}
-        // imageIndex={0}
-        isVisible={imageViewVisible}
-        onClose={() => setImageViewVisible(false)}
-      />
+          // imageIndex={0}
+          isVisible={imageViewVisible}
+          onClose={() => setImageViewVisible(false)}
+        />
       </View>
       <ConfirmModal
-                showModal={showAddProductModal}
-                setShowModal={setShowAddProductModal}
-                questionText={' ¿ Querés modificarlo ?'}
-                confirmText={'Si'}
-                cancelText={'No'}
-                setResponse={setAddProductModalResponse}
-            />
-    </View>
+        showModal={showAddProductModal}
+        setShowModal={setShowAddProductModal}
+        questionText={' ¿ Querés modificarlo ?'}
+        confirmText={'Si'}
+        cancelText={'No'}
+        setResponse={setAddProductModalResponse}
+      />
+    </ScrollView>
   )
 }
 
@@ -299,7 +330,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
     backgroundColor: Constants.Colors.backgroundGrey,
     padding: 20,
   },
@@ -337,7 +368,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   material: {
-    fontSize: 30,
+    fontSize: 20,
     paddingTop: 30,
     fontWeight: 'bold',
     alignItems: 'center'
@@ -346,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     alignItems: 'center',
+    alignSelf: 'center',
     paddingTop: 10,
     paddingBottom: 10
   },
@@ -361,9 +393,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   touchableIcon: {
-      marginTop: 20,
-      // padding: 10,
-      alignContent: 'center',
-      width: 100,
+    marginTop: 20,
+    // padding: 10,
+    alignContent: 'center',
+    width: 100,
   }
 })
