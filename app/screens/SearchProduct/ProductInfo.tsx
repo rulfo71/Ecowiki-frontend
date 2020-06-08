@@ -63,9 +63,6 @@ export default function ProductInfo({ route, navigation }) {
     console.log('getMaterialLogo dentro de useEffect');
 
     getUserAddedBy()
-
-    // if (product.displayName.length <= 20) {
-    // setShowNameInHeader(true)
     navigation.setOptions({
       title: product.displayName,
       headerTitleAlign: 'center',
@@ -80,17 +77,9 @@ export default function ProductInfo({ route, navigation }) {
       },
       headerTransparent: false
     })
-    // }
-    // else {
-    // setShowNameInHeader(false)
-    // }
-    //TODO: VOLAR ESTO Y QUE LO SAQUE DE ASSETS
     if (isEmpty(product.photoUrl)) {
       console.log(product.material);
       seturiImageLogo('')
-      // getLogo();
-
-
     }
 
     if (addProductModalResponse) {
@@ -122,42 +111,6 @@ export default function ProductInfo({ route, navigation }) {
     }
   }
 
-
-  const getLogo = async () => {
-    setLoadingImage(true);
-    // seturiImageLogo()
-    // await getMaterialLogo(product.material)
-    //   .then(uriImage => {
-    //     setLoadingImage(false)
-    //     console.log('uriImage: ', uriImage);
-    //     seturiImageLogo(uriImage);
-    //     console.log('uriImageDsp: ', uriImage);
-    //   })
-    //   .catch(error => {
-    //     setLoadingImage(false)
-    //     seturiImageLogo('default')
-    //     console.log('error obteniendo el logo:', error);
-    //   });
-  }
-
-  const doesntAgree = () => {
-    // Alert.alert('¿Querés modificarlo?', '', [
-    //   {
-    //     text: 'No',
-    //     onPress: () => {
-    //       subtractVote(product)
-    //       goBack()
-    //     }
-    //   },
-    //   {
-    //     text: 'Si',
-    //     onPress: async () => {
-    //       goToSetMaterial();
-    //     }
-    //   }
-    // ])
-  }
-
   const agree = () => {
     addVote(product);
     goBack()
@@ -168,15 +121,12 @@ export default function ProductInfo({ route, navigation }) {
   }
 
   const Name = () => {
-    // if (!showNameInHeader) {
     return (
       <>
         <Text style={styles.title}>{"NOMBRE"} </Text>
         <Text style={styles.data}> {product.displayName} </Text>
       </>
     )
-    // }
-    // return null;
   }
 
   const Picture = () => {
@@ -191,31 +141,20 @@ export default function ProductInfo({ route, navigation }) {
             source={{ uri: product.photoUrl }}
             style={styles.image}
             onProgress={() => { <ActivityIndicator color='#fff' /> }}
-          //  onProgress={() => {<Spinner visible={loadingImage}/>}}
           />
         </TouchableHighlight>
       )
     }
     else {
-      // if (loadingImage)
-      //   return <Spinner visible={loadingImage} />
-
-      // if (!isEmpty(uriImageLogo)) {
       console.log(`imageUri = ${product.material}`);
 
       var imageUri = '../../../assets/img/materials/'
       imageUri = imageUri + product.material
       imageUri = imageUri + '.png'
-
-      // console.log(` require : ../../../assets/img/materials/${product.material}.png`);
-      // var imageUri = '../../../assets/img/materials/' + product.material + '.png'
-
       return <Image
         style={styles.image}
         source={defaultPicturesMap[product.material]}
-      // source={require(`../../../assets/img/materials/${product.material}.png`)}
       />
-      // }
     }
 
     return null;
@@ -330,7 +269,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    // justifyContent: 'space-around',
     backgroundColor: Constants.Colors.backgroundGrey,
     padding: 20,
   },
@@ -394,7 +332,6 @@ const styles = StyleSheet.create({
   },
   touchableIcon: {
     marginTop: 20,
-    // padding: 10,
     alignContent: 'center',
     width: 100,
   }

@@ -20,16 +20,6 @@ export default function UserLogged() {
   const [reloadUserInfo, setReloadUserInfo] = useState(false)
 
   useEffect(() => {
-    // if (reloadUserInfo) {
-    //   (async () => {
-    //     const user = await firebase.auth().currentUser;
-    //     // setUserInfo(user);
-    //   })()
-    //   setReloadUserInfo(false)
-    // }
-    // if (reloadUserInfo)
-    console.log('entrando al useEffect de userLogged');
-
     (async () => {
       // setLoading(true)
       setUserInfo(null);

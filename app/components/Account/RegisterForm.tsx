@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import { StyleSheet, View, Switch } from 'react-native'; 
+import React, { useState } from 'react';
+import { StyleSheet, View, Switch } from 'react-native';
 import { Input, Icon, Button, Text } from 'react-native-elements'
 import { Constants } from '../../Common/Constants/Constants';
 import { validateEmail } from '../../utils/validations'
-import {size, isEmpty} from 'lodash'
-import * as firebase from 'firebase'  
-import { useNavigation } from '@react-navigation/native'    
+import { size, isEmpty } from 'lodash'
+import * as firebase from 'firebase'
+import { useNavigation } from '@react-navigation/native'
 
 import Spinner from "react-native-loading-spinner-overlay";
 import AddUserDto from '../../Dtos/Users/AddUserDto';
@@ -14,8 +14,8 @@ import AddUserResponse from '../../Dtos/Users/AddUserResponse';
 
 
 
-export default function RegisterForm (props) {
-    const {toastRef} = props
+export default function RegisterForm(props) {
+    const { toastRef } = props
 
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
@@ -27,20 +27,19 @@ export default function RegisterForm (props) {
 
     const onSubmit = async () => {
         if (
-            isEmpty(formData.email) || 
-            isEmpty(formData.password) || 
+            isEmpty(formData.email) ||
+            isEmpty(formData.password) ||
             isEmpty(formData.repeatPassword) ||
-            isEmpty(formData.nickname))
-            {
-                toastRef.current.show('Todos los campos son obligatorios')
-            }
+            isEmpty(formData.nickname)) {
+            toastRef.current.show('Todos los campos son obligatorios')
+        }
         else if (!validateEmail(formData.email)) {
             toastRef.current.show('El email no es valido')
-        } 
-        else if (formData.password !== formData.repeatPassword){
+        }
+        else if (formData.password !== formData.repeatPassword) {
             toastRef.current.show('Las contraseñas no coinciden')
         }
-        else{
+        else {
 
             //TODO: EMPROLIJAR ESTO. lo deberia hacer todo el back
             setLoading(true);
@@ -48,39 +47,38 @@ export default function RegisterForm (props) {
             addUserDto.nickname = formData.nickname
             addUserDto.email = formData.email
             addUserDto.password = formData.password
-            addUserDto.showContributions = isEnabledSwitch            
-            
+            addUserDto.showContributions = isEnabledSwitch
+
             try {
                 const response: AddUserResponse = await addUser(addUserDto)
 
                 console.log(`response de addUser: ${JSON.stringify(response)}`);
-                
-                if (!isEmpty(response.userId)){
-                    await firebase.auth().signInWithEmailAndPassword(formData.email,formData.password)
-                    setLoading(false); 
+
+                if (!isEmpty(response.userId)) {
+                    await firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
+                    setLoading(false);
                     navigation.navigate(Constants.Navigations.AccountStack.account);
                 }
-                else if (!isEmpty(response.error.code))
-                {                    
+                else if (!isEmpty(response.error.code)) {
                     setLoading(false);
                     const errorMessage = getErrorMessage(response.error)
                     toastRef.current.show(errorMessage)
                 }
-                else{
+                else {
                     setLoading(false);
                     toastRef.current.show('Ups.. Hubo un error, intentá de nuevo')
                 }
-                
+
             } catch (error) {
                 setLoading(false);
-                console.log(error);                
+                console.log(error);
                 toastRef.current.show('Ups.. Hubo un error, intentá de nuevo')
             }
         }
-    }  
+    }
 
     const onChange = (e, type) => {
-        setFormData({ ...formData,  [type]: e.nativeEvent.text  })
+        setFormData({ ...formData, [type]: e.nativeEvent.text })
     }
 
     const toggleSwitch = () => setIsEnabledSwitch(previousState => !previousState);
@@ -90,24 +88,24 @@ export default function RegisterForm (props) {
             <Input
                 placeholder='¿Cómo te gusta que te digan?'
                 containerStyle={styles.inputForm}
-                onChange={e => onChange(e,'nickname')}
+                onChange={e => onChange(e, 'nickname')}
                 rightIcon={
                     <Icon
                         type='material-community'
                         name='account'
-                        color= {Constants.Colors.brandGreenColor}
+                        color={Constants.Colors.brandGreenColor}
                     />
                 }
             />
             <Input
                 placeholder='Correo Electrónico'
                 containerStyle={styles.inputForm}
-                onChange={e => onChange(e,'email')}
+                onChange={e => onChange(e, 'email')}
                 rightIcon={
                     <Icon
                         type='material-community'
                         name='at'
-                        color= {Constants.Colors.brandGreenColor}
+                        color={Constants.Colors.brandGreenColor}
                     />
                 }
             />
@@ -115,13 +113,13 @@ export default function RegisterForm (props) {
                 placeholder='Contraseña'
                 containerStyle={styles.inputForm}
                 secureTextEntry={!showPassword}
-                onChange={e => onChange(e,'password')}
+                onChange={e => onChange(e, 'password')}
                 rightIcon={
                     <Icon
                         type='material-community'
-                        name= {showPassword ? 'eye-off-outline' : 'eye-outline' }  
-                        color= {Constants.Colors.brandGreenColor}
-                        onPress={()=> setShowPassword(!showPassword)}
+                        name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                        color={Constants.Colors.brandGreenColor}
+                        onPress={() => setShowPassword(!showPassword)}
                     />
                 }
             />
@@ -129,13 +127,13 @@ export default function RegisterForm (props) {
                 placeholder='Repetir contraseña'
                 containerStyle={styles.inputForm}
                 secureTextEntry={!showRepeatPassword}
-                onChange={e => onChange(e,'repeatPassword')}
+                onChange={e => onChange(e, 'repeatPassword')}
                 rightIcon={
                     <Icon
                         type='material-community'
-                        name= {showRepeatPassword ? 'eye-off-outline' : 'eye-outline' }  
-                        color= {Constants.Colors.brandGreenColor}
-                        onPress={()=> setShowRepeatPassword(!showRepeatPassword)}
+                        name={showRepeatPassword ? 'eye-off-outline' : 'eye-outline'}
+                        color={Constants.Colors.brandGreenColor}
+                        onPress={() => setShowRepeatPassword(!showRepeatPassword)}
 
                     />
                 }
@@ -156,23 +154,23 @@ export default function RegisterForm (props) {
                 containerStyle={styles.btnContainerRegister}
                 buttonStyle={styles.btnRegister}
                 onPress={onSubmit}
-            />    
+            />
             <Spinner visible={loading} />
         </View>
     )
 }
 
 
-function getErrorMessage (error) {
+function getErrorMessage(error) {
     console.log(`entre a getEerrormessage con ${JSON.stringify(error)}`);
-    let response = '';    
+    let response = '';
 
     switch (error.code) {
         case 'auth/email-already-in-use':
         case 'auth/email-already-exists':
-            console.log('email already in useee');            
+            console.log('email already in useee');
             response = 'Ups.. Ya tenemos un usuario registrado con ese mail!'
-            break;        
+            break;
         case 'auth/weak-password':
         case 'auth/invalid-password':
             response = 'La contraseña tiene que tener al menos 6 caracteres'
@@ -184,21 +182,21 @@ function getErrorMessage (error) {
     return response
 }
 
-function defaultFormValue(){
+function defaultFormValue() {
     return {
         nickname: '',
         email: '',
         password: '',
         repeatPassword: ''
     }
-} 
+}
 
 const styles = StyleSheet.create({
     formContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 30,        
+        marginTop: 30,
     },
     inputForm: {
         width: '100%',
@@ -220,11 +218,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 20,
         // margin: 20,
-        width: '80%',   
+        width: '80%',
         height: 'auto'
     },
     switchText: {
         fontSize: 15,
         marginRight: 20
-    }    
+    }
 })

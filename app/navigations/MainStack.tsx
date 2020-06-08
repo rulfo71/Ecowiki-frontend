@@ -14,6 +14,7 @@ import AddProduct from '../screens/SearchProduct/AddProduct'
 import AddUnRegisteredProduct from '../screens/SearchProduct/AddUnRegisteredProduct';
 import AddProductHome from '../screens/SearchProduct/AddProductHome';
 import AddNewProduct from '../screens/SearchProduct/AddNewProduct';
+import VoteProducts from '../screens/SearchProduct/VoteProducts';
 
 const Stack = createStackNavigator();
 
@@ -75,12 +76,21 @@ export default function MainStack() {
                 name={Constants.Navigations.ProductStack.addUnregisteredProduct}
                 component={AddUnRegisteredProduct}
                 options={{
-                    title: Constants.Navigations.titles.ProductStack.addUnregisteredProduct, 
+                    title: Constants.Navigations.titles.ProductStack.addUnregisteredProduct,
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.ProductStack.addNewProduct}
                 component={AddNewProduct}
+                options={{
+                    headerTransparent: true,
+                    title: '',
+                    headerTintColor: Constants.Colors.brandGreenColor
+                }}
+            />
+            <Stack.Screen
+                name={Constants.Navigations.ProductStack.voteProducts}
+                component={VoteProducts}
                 options={{
                     headerTransparent: true,
                     title: '',
@@ -99,14 +109,14 @@ export default function MainStack() {
                 name={Constants.Navigations.AccountStack.register}
                 component={Register}
                 options={{
-                    title: Constants.Navigations.titles.AccountStack.register 
+                    title: Constants.Navigations.titles.AccountStack.register
                 }}
             />
             <Stack.Screen
                 name={Constants.Navigations.AccountStack.recoverPassword}
                 component={RecoverPassword}
                 options={{
-                    title: Constants.Navigations.titles.AccountStack.recoverPassword 
+                    title: Constants.Navigations.titles.AccountStack.recoverPassword
                 }}
             />
         </Stack.Navigator>

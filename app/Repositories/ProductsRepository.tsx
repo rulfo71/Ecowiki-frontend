@@ -1,7 +1,9 @@
+import * as firebase from 'firebase'
 import Product from '../Models/ProductModel'
 import AddProductResponse from '../Dtos/Products/AddProductResponse';
 import AddProductDto from '../Dtos/Products/AddProductDto';
 import AddVoteDto from '../Dtos/Products/AddVoteDto';
+import GetProductsToVoteDto from '../Dtos/Products/GetProductsToVoteDto';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 const server = 'http://192.168.0.6:3000/products/'
@@ -74,6 +76,14 @@ export const addVote = (product: Product) => {
   let addModelDto: AddVoteDto = new AddVoteDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
+  var user = firebase.auth().currentUser
+  if (user) {
+    addModelDto.userId = user.uid
+  }
+  else {
+    addModelDto.userId = ''
+  }
+
   const data = JSON.stringify(addModelDto)
 
   // console.log('body: ');
@@ -103,7 +113,7 @@ export const subtractVote = product => {
   var uriSubtractVote = server + 'subtractVote'
   console.log(uriSubtractVote);
 
-  let addModelDto: AddModelDto = new AddModelDto()
+  let addModelDto: AddVoteDto = new AddVoteDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   const data = JSON.stringify(addModelDto)
@@ -169,6 +179,31 @@ export const getProductByName = async name => {
       console.log('Request failed', error);
     });
 }
+
+export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteDto) => {
+  console.log('****************************************');
+  console.log(`ProductsRepository -- getProductsToVote `);
+  console.log('****************************************');
+
+  var uriGetProductsToVote = `${server}getProductsToVote/${getProductsToVoteDto.limitProducts}/${getProductsToVoteDto.userId}`
+  console.log('uriGetProduct: ' + uriGetProductsToVote)
+
+  return await fetch(uriGetProductsToVote, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function (data) {
+      return data;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+    });
+}
+
 export const getMaterialLogo = async material => {
   var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
   console.log('uriGetMaterialLogo: ', uriGetMaterialLogo);

@@ -28,20 +28,20 @@ export default function AddProductForm(props) {
 
         try {
             const response = await fetch(imageUri)
-        
+
             const blob = await response.blob()
-            console.log(`blob: ${blob}`);        
+            console.log(`blob: ${blob}`);
             const ref = firebase.storage().ref('products').child(uuid())
             console.log(`ref: ${ref}`);
             const result = await ref.put(blob)
             console.log(`result: ${result}`);
             const photoUrl = await firebase
-                                        .storage()
-                                        .ref(`products/${result.metadata.name}`)
-                                        .getDownloadURL()
+                .storage()
+                .ref(`products/${result.metadata.name}`)
+                .getDownloadURL()
             return photoUrl
         } catch (error) {
-            console.log(`hubo un error subiendo las imagenes: ${error}`);                        
+            console.log(`hubo un error subiendo las imagenes: ${error}`);
         }
     }
 
@@ -75,7 +75,7 @@ export default function AddProductForm(props) {
                 setIsLoading(true)
 
                 if (!isEmpty(imageUri))
-                    addProductDto.photoUrl = await uploadImageStorage()                    
+                    addProductDto.photoUrl = await uploadImageStorage()
 
                 let response
                 if (!isUnRegistered) {
@@ -86,11 +86,11 @@ export default function AddProductForm(props) {
                 }
 
                 setIsLoading(false)
-                
-                toastRef.current.show('Gracias! Ya agregamos el producto', 500, () => {
+
+                toastRef.current.show('Gracias! Ya agregamos el producto', 400, () => {
                     navigation.navigate(Constants.Navigations.home);
                 });
-                console.log(`AddProductForm - response : ${JSON.stringify(response)}`);            
+                console.log(`AddProductForm - response : ${JSON.stringify(response)}`);
             } catch (error) {
                 toastRef.current.show('Upss.. hubo un problema. Intentá de nuevo mas tarde')
                 console.log(`error: ${error}`)

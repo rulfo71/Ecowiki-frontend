@@ -20,10 +20,10 @@ export default function Home() {
       !user ? setIsLogged(false) : setIsLogged(true);
     });
     const user = firebase.auth().currentUser
-    if (user){
+    if (user) {
       setIsLogged(true)
     }
-    else{
+    else {
       setIsLogged(false)
     }
     if (loggedModalResponse) {
@@ -33,18 +33,12 @@ export default function Home() {
   }, [loggedModalResponse])
 
   const goToAddProduct = () => {
-
-    // const user = firebase.auth().currentUser
-    // console.log(`user: ${user}`);
     if (isLogged) {
-      console.log('esta loggeado');
-
       navigation.navigate(
         Constants.Navigations.ProductStack.addProductHome
       )
     }
     else {
-      console.log('no esta loggeado');
       setShowLoggedModal(true)
     }
   }
@@ -118,8 +112,6 @@ const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
     flexDirection: 'row',
-    // alignItems: "center",
-    // justifyContent:,
     backgroundColor: Constants.Colors.backgroundGrey
   },
   subView: {
@@ -131,16 +123,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   containerIcon: {
-    // padding: 5,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // marginRight: 10,
-    // height: 50,
-    // width: 50,
-    // backgroundColor: Constants.Colors.brandGreenColor,
-    // borderRadius: 20,
     alignSelf: 'center',
-    // width: 20
   },
   title: {
     textAlign: 'center'

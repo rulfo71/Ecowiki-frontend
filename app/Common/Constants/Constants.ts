@@ -22,6 +22,7 @@ export const Constants = {
             addUnregisteredProduct: 'addUnRegisteredProduct',
             addProductHome: 'addProductHome',
             addNewProduct: 'addNewProduct',
+            voteProducts: 'voteProducts'
         },
         home: 'home',
         titles: {
@@ -33,11 +34,12 @@ export const Constants = {
             },
             ProductStack: {
                 searchProduct: 'searchProduct',
-                productInfo: 'productInfo',
+                productInfo: ' ',
                 addProduct: 'Agregar producto',
                 addUnregisteredProduct: 'Agregar producto',
                 addProductHome: 'Agregar producto',
                 addNewProduct: 'addNewProduct',
+                voteProducts: 'Votar Productos'
             },
             home: 'Hola!'
         },
