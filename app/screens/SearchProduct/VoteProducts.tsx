@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState, useRef } from 'react'
-import { View, StyleSheet, Alert, Text, FlatList, ScrollView, Platform } from 'react-native'
-import { Button } from 'react-native-elements'
+import { View, StyleSheet, Alert, Text, FlatList, ScrollView, Platform, TouchableHighlight } from 'react-native'
+import { Button, Icon } from 'react-native-elements'
 import Spinner from "react-native-loading-spinner-overlay";
 import Swiper from 'react-native-deck-swiper'
 import * as firebase from 'firebase'
@@ -13,65 +13,117 @@ import Product from '../../components/Products/Product'
 import { Constants } from '../../Common/Constants/Constants';
 
 export default function VoteProducts({ route, navigation }) {
+  let toastRef = useRef();
+
+  // const { toastRef } = route.params
+
   const [products, setProducts] = useState([])
-  const [totalProducts, setTotalProducts] = useState(0)
-  const [limitProducts, setLimitProducts] = useState(10)
-  const [startProducts, setStartProducts] = useState(null)
+  const [startProductName, setStartProductName] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
-  const toastRef = useRef();
-
   useEffect(() => {
-
-    var getProductsToVoteDto = new GetProductsToVoteDto()
-    getProductsToVoteDto.limitProducts = limitProducts;
-    getProductsToVoteDto.userId = firebase.auth().currentUser.uid
+    // console.log(`toastRef: ${JSON.stringify(toastRef)}`);
+    
+    var getProductsToVoteDto = new GetProductsToVoteDto() 
+    const user = firebase.auth().currentUser
+    if (user){
+      getProductsToVoteDto.userId = firebase.auth().currentUser.uid
+    }
+    else {
+      getProductsToVoteDto.userId = ''
+    }
+    getProductsToVoteDto.startProductName = startProductName 
     setIsLoading(true);
     (async () => {
       try {
         var response = await getProductsToVote(getProductsToVoteDto)
         setProducts(response)
+        if ( response.length == 0 ){
+          toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
+            navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+          });
+        }
+        var startProductName = response[response.length -1 ].displayName.toLowerCase()
+        console.log(`startProductName: ${startProductName}`);        
+        setStartProductName( startProductName)
         setIsLoading(false)
       } catch (error) {
-
         //poner toast
+        console.log(`error: ${error} `);        
         setIsLoading(false)
-
       }
-
-
-      // response.forEach(product => {
-
-      //   console.log(JSON.stringify(product));
-
-
-      // });
     })()
   }, [])
+
+  const getProducts = async () => {
+    try {
+        console.log('getProducts');      
+        var getProductsToVoteDto = new GetProductsToVoteDto()
+        getProductsToVoteDto.userId = firebase.auth().currentUser.uid
+        getProductsToVoteDto.startProductName = startProductName
+        setIsLoading(true);
+        var response = await getProductsToVote(getProductsToVoteDto)
+        console.log(`response.length: ${response.length}`);        
+        if (response.length == 0){
+          console.log('response.length es 0 ');     
+          setProducts([])
+          setIsLoading(false)   
+          // console.log(`toastRef: ${JSON.stringify(toastRef) }`);
+          // console.log(`toastRef.current: ${JSON.stringify(toastRef.current)}`);
+          
+            
+          toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
+            navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+          });
+          return
+        }
+        if(response.length > 0){
+          console.log('response.length es mayor que 0');          
+          var startProductNameResponse = response[response.length-1].displayName.toLowerCase()
+          console.log(`startProductNameResponse: ${startProductNameResponse}`);          
+          setStartProductName(startProductNameResponse)
+          setProducts(response)
+          setIsLoading(false)
+        }
+      } catch (error) {
+        setIsLoading(false)
+        console.log(`hubo un error: ${error} `);
+        
+        // this.toast.show('Huboooo un problema buscando los productos. Intentá de nuevo mas tarde.', 3000, () => {
+          // navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+        // });
+      }      
+  }
 
   const onTapCard = (index) => {
     navigation.navigate(Constants.Navigations.ProductStack.productInfo, {
       productParam: products[index]
     });
   }
-  const onSwipedAll = () => {
-    console.log('swipedAll');
-
-    toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
-      navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
-    });
+  const onSwipedAll = async () => {
+    await getProducts()    
   }
 
-  if (isLoading) return <Spinner visible={isLoading} />
-
-  if (!isLoading && !products) {
-    toastRef.current.show('Hubo un error buscando los productos. Intentá de nuevo mas tarde', 400, () => {
-      navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
-    });
-  }
+  if (isLoading) return (
+    <View style={styles.container}>
+      <Spinner visible={isLoading} />
+    </View>
+  ) 
+  
+  // if (products.length == 0){
+  //   return (
+  //     <View style={styles.container}>
+  //     </View>
+  //     )
+  // }
 
   return (
     <View style={styles.container}>
+      { products.length == 0 ? ( 
+        <View style={styles.container}>
+      </View>
+
+      ) : ( 
       <Swiper
         ref={swiper => {
           this.swiper = swiper
@@ -85,16 +137,30 @@ export default function VoteProducts({ route, navigation }) {
               <View style={styles.cardButtons}>
                 <Button
                   title='-1'
-                  // containerStyle={styles.btnContainer}
                   buttonStyle={styles.btnDisagree}
                   onPress={() => {
                     this.swiper.swipeLeft()
                     console.log('-1');
                   }}
                 />
+                {/* <View> */}
+                <TouchableHighlight
+                  onPress={() => this.swiper.swipeBottom()}
+                >
+                          <Icon
+                            type='material-community'
+                            name='cancel'
+                            reverse={true}
+                            color='#b9b9b9'
+                            raised={true}
+                            containerStyle={styles.containerIcon}
+                            // iconStyle={styles.containerIcon}
+                          />
+                </TouchableHighlight>
+                  {/* <Text style={styles.title}> Buscar productos </Text> */}
+              {/* </View> */}
                 <Button
                   title='+1'
-                  // containerStyle={styles.btnContainer}
                   buttonStyle={styles.btnAgree}
                   onPress={() => {
                     this.swiper.swipeRight()
@@ -152,7 +218,7 @@ export default function VoteProducts({ route, navigation }) {
             }
           },
           top: {
-            title: 'Ver más',
+            title: 'Ver mas',
             style: {
               label: {
                 backgroundColor: Constants.Colors.brandGreenColor,
@@ -197,9 +263,8 @@ export default function VoteProducts({ route, navigation }) {
           title="Press me">
           You can press me
             </Button> */}
-      </Swiper>
+      </Swiper> )}
       <Toast ref={toastRef} position='center' opacity={0.9} />
-
     </View>
   )
   // <ScrollView style={styles.view}>
@@ -265,5 +330,15 @@ const styles = StyleSheet.create({
     backgroundColor: Constants.Colors.backgroundGrey,
     flexDirection: 'row',
     justifyContent: 'space-around',
-  }
+  },
+  containerIcon: {
+    // width: 80,
+    // height: 80,
+    alignSelf: 'center',
+  },
+  // touchable: {
+  //   // padding: 10,
+  //   alignContent: 'center',
+  //   // width: 100,
+  // },
 });

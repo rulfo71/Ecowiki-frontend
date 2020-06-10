@@ -84,16 +84,16 @@ export default function AccountOptions(props) {
             updateUserDto.userId = firebase.auth().currentUser.uid
             updateUserDto.fieldToUpdate = Constants.User.fields.showContributions
             updateUserDto.newValue = !isEnabledSwitch
-            setLoading(true)
+            // setLoading(true)
             try {
                 await updateUser(updateUserDto);
-                setLoading(false)
+                // setLoading(false)
                 setReloadUserInfo(true)
 
             } catch (error) {
                 toastRef.current.show('No pudimos actualizar tu perfil. Intentá de nuevo')
                 setIsEnabledSwitch(previousState => !previousState)
-                setLoading(false)
+                // setLoading(false)
             }
         }
     }

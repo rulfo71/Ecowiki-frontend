@@ -20,7 +20,7 @@ import { isEmpty } from 'lodash'
 
 export default function AddNewProduct({ route, navigation }) {
   let searchBarRef = useRef(null);
-  const toastRef = useRef(null);
+  // const toastRef = useRef(null);
 
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [loading, setLoading] = useState(false);

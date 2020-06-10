@@ -72,42 +72,22 @@ export default function Product(props) {
     }
 
     const Picture = () => {
-        // console.log('entre en componente Picture');
-        // console.log(`isEmpty(product.photoUrl): ${isEmpty(product.photoUrl)}`);
-
         if (!isEmpty(product.photoUrl)) {
-            // console.log('tenemos que imprimir la foto', product.photoUrl);
             return (
                 <TouchableHighlight onPress={() => { setImageViewVisible(true) }}>
                     <Image
                         source={{ uri: product.photoUrl }}
                         style={styles.image}
                         onProgress={() => { <ActivityIndicator color='#fff' /> }}
-                    //  onProgress={() => {<Spinner visible={loadingImage}/>}}
                     />
                 </TouchableHighlight>
             )
         }
         else {
-            // if (loadingImage)
-            //   return <Spinner visible={loadingImage} />
-
-            // if (!isEmpty(uriImageLogo)) {
-            // console.log(`imageUri = ${product.material}`);
-
-            var imageUri = '../../../assets/img/materials/'
-            imageUri = imageUri + product.material
-            imageUri = imageUri + '.png'
-
-            // console.log(` require : ../../../assets/img/materials/${product.material}.png`);
-            // var imageUri = '../../../assets/img/materials/' + product.material + '.png'
-
             return <Image
                 style={styles.image}
                 source={defaultPicturesMap[product.material]}
-            // source={require(`../../../assets/img/materials/${product.material}.png`)}
             />
-            // }
         }
 
         return null;

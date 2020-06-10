@@ -146,11 +146,6 @@ export default function ProductInfo({ route, navigation }) {
       )
     }
     else {
-      console.log(`imageUri = ${product.material}`);
-
-      var imageUri = '../../../assets/img/materials/'
-      imageUri = imageUri + product.material
-      imageUri = imageUri + '.png'
       return <Image
         style={styles.image}
         source={defaultPicturesMap[product.material]}

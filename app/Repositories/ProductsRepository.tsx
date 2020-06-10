@@ -180,13 +180,14 @@ export const getProductByName = async name => {
     });
 }
 
-export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteDto) => {
+export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteDto): Promise<Product[]> => {
   console.log('****************************************');
   console.log(`ProductsRepository -- getProductsToVote `);
   console.log('****************************************');
+  const {userId, startProductName } = getProductsToVoteDto
 
-  var uriGetProductsToVote = `${server}getProductsToVote/${getProductsToVoteDto.limitProducts}/${getProductsToVoteDto.userId}`
-  console.log('uriGetProduct: ' + uriGetProductsToVote)
+  var uriGetProductsToVote = `${server}getProductsToVote/${userId}/${startProductName}`
+  console.log('uriGetProduct: ' + uriGetProductsToVote) 
 
   return await fetch(uriGetProductsToVote, {
     method: 'GET',
@@ -198,6 +199,7 @@ export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteD
     .then(status)
     .then(json)
     .then(function (data) {
+      console.log('response getProductsToVote', data      );      
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
