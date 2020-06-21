@@ -8,7 +8,9 @@ import Login from '../Account/Login';
 import { Constants } from '../../Common/Constants/Constants';
 
 export default function AddProduct({ route, navigation }) {
-    const { name, barcode } = route.params
+    const { name, barcode, photoUrl, observations } = route.params
+    console.log(`recibi por params el product: name: ${name}, barcode: ${barcode}, photoUrl: ${photoUrl}, observations: ${observations}`);
+
     const [isLoading, setIsLoading] = useState(false)
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
@@ -41,6 +43,8 @@ export default function AddProduct({ route, navigation }) {
                 navigation={navigation}
                 barcodeParam={barcode}
                 nameParam={name}
+                photoUrlParam={photoUrl}
+                observationsParam={observations}
                 isUnRegistered={false}
             />
             <Toast ref={toastRef} position='center' opacity={0.8}></Toast>

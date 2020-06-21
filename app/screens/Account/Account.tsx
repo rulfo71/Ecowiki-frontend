@@ -20,7 +20,11 @@ export default function Account({ route, navigation }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log('entrando a account');    
+
     firebase.auth().onAuthStateChanged((user) => {
+      console.log(`user: ${user}`);
+
       !user ? setLogin(false) : setLogin(true);
     });
   }, [])

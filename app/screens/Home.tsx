@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, View, Text, Animated, TouchableHighlight } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as firebase from 'firebase'
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { Constants } from "../Common/Constants/Constants";
 import { Button, Icon } from "react-native-elements";
@@ -14,6 +15,7 @@ export default function Home() {
   const [showLoggedModal, setShowLoggedModal] = useState(false)
   const [loggedModalResponse, setLoggedModalResponse] = useState(false)
   const [isLogged, setIsLogged] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -59,7 +61,7 @@ export default function Home() {
               raised={true}
               containerStyle={styles.containerIcon}
             />
-            <Text style={styles.title}> Buscar productos </Text>
+            <Text style={styles.title}> Buscar </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -76,7 +78,7 @@ export default function Home() {
               style={styles.icon}
               containerStyle={styles.containerIcon}
             />
-            <Text style={styles.title}> Agregar productos </Text>
+            <Text style={styles.title}> Colaborar </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -104,6 +106,7 @@ export default function Home() {
         cancelText={'Cancelar'}
         setResponse={setLoggedModalResponse}
       />
+      <Spinner visible={isLoading} />
     </View>
   )
 }

@@ -14,39 +14,17 @@ import { addVote, subtractVote } from '../../Repositories/ProductsRepository'
 import ProductModel from '../../Models/ProductModel'
 import { Constants } from '../../Common/Constants/Constants'
 import { isEmpty } from 'lodash';
-import ConfirmModal from '../../components/ConfirmModal';
+import ConfirmModal from '../ConfirmModal';
 import { getUserById } from '../../Repositories/UsersRepository';
 import { ScrollView } from 'react-native-gesture-handler';
+import UnregisteredProductModel from '../../Models/UnregisteredProductModel';
 
-const materials = {
-    plastico: 'Plastico',
-    papelCarton: 'Papel y carton',
-    vidrio: 'Vidrio',
-    metalAluminio: 'Metal y Aluminio',
-    organico: 'Orgánico',
-    noSeRecicla: 'No se recicla'
-}
-const defaultPicturesMap =
-{
-    'plastico': require('../../../assets/img/materials/plastico.png'),
-    'papelCarton': require('../../../assets/img/materials/papelCarton.png'),
-    'vidrio': require('../../../assets/img/materials/vidrio.png'),
-    'metalAluminio': require('../../../assets/img/materials/metalAluminio.png'),
-    'organico': require('../../../assets/img/materials/organico.png'),
-    'noSeRecicla': require('../../../assets/img/materials/noSeRecicla.png'),
-}
+export default function UnregisteredProduct(props) {
+    const { productParam, navigation } = props
+    console.log(`entre a UnregisteredProduct con ${JSON.stringify(productParam)}`);
 
+    const product: UnregisteredProductModel = productParam;
 
-export default function Product(props) {
-    const { productParam } = props
-    console.log(`entre a Product con ${productParam}`);
-
-    const product: ProductModel = productParam;
-
-    // console.log(`productParam: ${JSON.stringify(productParam)} `);
-    // console.log(`product: ${JSON.stringify(product)} `);
-
-    // let [product, setProduct] = useState(productParam);
     const [uriImageLogo, seturiImageLogo] = useState('');
     const [showAddProductModal, setShowAddProductModal] = useState(false);
     const [addProductModalResponse, setAddProductModalResponse] = useState(null)
@@ -55,16 +33,12 @@ export default function Product(props) {
     const [imageViewVisible, setImageViewVisible] = useState(false)
     const [addedBy, setAddedBy] = useState(null)
 
-    // console.log('estoy en productInfo con product: ', product);
-    // console.log('uriImageInicial: ', uriImageLogo);
-
-
     const Name = () => {
         // if (!showNameInHeader) {
         return (
             <>
                 <Text style={styles.title}>{"NOMBRE"} </Text>
-                <Text style={styles.data}> {product.displayName} </Text>
+                <Text style={styles.data}> {product.name} </Text>
             </>
         )
         // }
@@ -83,13 +57,6 @@ export default function Product(props) {
                 </TouchableHighlight>
             )
         }
-        else {
-            return <Image
-                style={styles.image}
-                source={defaultPicturesMap[product.material]}
-            />
-        }
-
         return null;
     }
 
@@ -106,23 +73,6 @@ export default function Product(props) {
             return null;
     }
 
-    const BasketText = () => {
-        if (materials[product.material]) {
-            if (product.material !== 'noSeRecicla') {
-                return (
-                    <>
-                        <Text style={styles.title}>{"CONTENEDOR"} </Text>
-                        <Text style={styles.data}>{materials[product.material]}</Text>
-                    </>
-                )
-            }
-            else {
-                return <Text style={styles.material}>{"Ups... este producto no se recicla. Tratemos de evitarlo! "}</Text>
-            }
-        }
-        return null;
-    }
-
     const Observations = () => {
         if (!isEmpty(product.observations)) {
             return (
@@ -134,78 +84,40 @@ export default function Product(props) {
         }
         return null;
     }
-    const AddedBy = () => {
-        if (addedBy == null) {
-            return null;
-        }
-        else {
-            return (
-                <>
-                    <Text style={styles.title}>{"AGREGADO POR "} </Text>
-                    <Text style={styles.data}> {addedBy.displayName} </Text>
-                </>
-            )
-        }
+
+    const onPress = () => {
+        console.log(`me voy a ir para addProduct con la data: ${JSON.stringify(product)} `);
+        navigation.navigate(
+            Constants.Navigations.ProductStack.addProduct, product
+        )
     }
 
     return (
         // <Text> product: {product.displayName}</Text>
-        <View style={styles.AllContainer} >
-            <View style={styles.Container}>
-                <Picture />
-                <BasketText />
-                <Name />
-                <Barcode />
-                <Observations />
-                <AddedBy />
+        <TouchableHighlight onPress={onPress}>
+            <View style={styles.AllContainer} >
+                <View style={styles.Container}>
+                    <Picture />
+                    <Name />
+                    <Barcode />
+                    <Observations />
+                    {/* <AddedBy /> */}
+                </View>
             </View>
-            {/* <View style={styles.IconsAgreeContainer}>
-                <TouchableHighlight onPress={() => { setShowAddProductModal(true) }} style={styles.touchableIcon} >
-                    <View style={styles.iconAgreeContainer}>
-                        <Icon name="thumbs-down" color={Constants.Colors.cancelColor} size={50} type="font-awesome" />
-                        <Text style={styles.textThumbs}> No me gusta </Text>
-                    </View>
-                </TouchableHighlight>
-                <TouchableHighlight onPress={agree} style={styles.touchableIcon}>
-                    <View style={styles.iconAgreeContainer} >
-                        <Icon name="thumbs-up" color={Constants.Colors.brandGreenColor} size={50} type="font-awesome" />
-                        <Text style={styles.textThumbs} > Gracias! </Text>
-                    </View>
-                </TouchableHighlight>
-                <ImageView
-                    images={[{
-                        source: {
-                            uri: product.photoUrl,
-                        },
-                        title: '',
-                        width: 806,
-                        height: 720,
-                    }]}
-                    // imageIndex={0}
-                    isVisible={imageViewVisible}
-                    onClose={() => setImageViewVisible(false)}
-                />
-            </View> */}
-            {/* <ConfirmModal
-            showModal={showAddProductModal}
-            setShowModal={setShowAddProductModal}
-            questionText={' ¿ Querés modificarlo ?'}
-            confirmText={'Si'}
-            cancelText={'No'}
-            setResponse={setAddProductModalResponse}
-          /> */}
-        </View>
+        </TouchableHighlight>
     )
 }
 
 const styles = StyleSheet.create({
     AllContainer: {
         flex: 1,
-        width: '100%',
-        height: '100%',
+        // width: '100%',
+        // height: '100%',
         // justifyContent: 'space-around',
         backgroundColor: Constants.Colors.backgroundGrey,
+        margin: 20,
         padding: 20,
+        borderRadius: 20
         // borderWidth: 2,
         // borderRadius: 20,
     },

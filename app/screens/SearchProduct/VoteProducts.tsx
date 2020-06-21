@@ -23,33 +23,33 @@ export default function VoteProducts({ route, navigation }) {
 
   useEffect(() => {
     // console.log(`toastRef: ${JSON.stringify(toastRef)}`);
-    
-    var getProductsToVoteDto = new GetProductsToVoteDto() 
+
+    var getProductsToVoteDto = new GetProductsToVoteDto()
     const user = firebase.auth().currentUser
-    if (user){
+    if (user) {
       getProductsToVoteDto.userId = firebase.auth().currentUser.uid
     }
     else {
       getProductsToVoteDto.userId = ''
     }
-    getProductsToVoteDto.startProductName = startProductName 
+    getProductsToVoteDto.startProductName = startProductName
     setIsLoading(true);
     (async () => {
       try {
         var response = await getProductsToVote(getProductsToVoteDto)
         setProducts(response)
-        if ( response.length == 0 ){
+        if (response.length == 0) {
           toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
             navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
           });
         }
-        var startProductName = response[response.length -1 ].displayName.toLowerCase()
-        console.log(`startProductName: ${startProductName}`);        
-        setStartProductName( startProductName)
+        var startProductName = response[response.length - 1].displayName.toLowerCase()
+        console.log(`startProductName: ${startProductName}`);
+        setStartProductName(startProductName)
         setIsLoading(false)
       } catch (error) {
-        //poner toast
-        console.log(`error: ${error} `);        
+        toastRef.current.show('Upss! Hubo un error buscando los productos. Intentá de nuevo mas tarde')
+        console.log(`error: ${error} `);
         setIsLoading(false)
       }
     })()
@@ -57,42 +57,42 @@ export default function VoteProducts({ route, navigation }) {
 
   const getProducts = async () => {
     try {
-        console.log('getProducts');      
-        var getProductsToVoteDto = new GetProductsToVoteDto()
-        getProductsToVoteDto.userId = firebase.auth().currentUser.uid
-        getProductsToVoteDto.startProductName = startProductName
-        setIsLoading(true);
-        var response = await getProductsToVote(getProductsToVoteDto)
-        console.log(`response.length: ${response.length}`);        
-        if (response.length == 0){
-          console.log('response.length es 0 ');     
-          setProducts([])
-          setIsLoading(false)   
-          // console.log(`toastRef: ${JSON.stringify(toastRef) }`);
-          // console.log(`toastRef.current: ${JSON.stringify(toastRef.current)}`);
-          
-            
-          toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
-            navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
-          });
-          return
-        }
-        if(response.length > 0){
-          console.log('response.length es mayor que 0');          
-          var startProductNameResponse = response[response.length-1].displayName.toLowerCase()
-          console.log(`startProductNameResponse: ${startProductNameResponse}`);          
-          setStartProductName(startProductNameResponse)
-          setProducts(response)
-          setIsLoading(false)
-        }
-      } catch (error) {
+      console.log('getProducts');
+      var getProductsToVoteDto = new GetProductsToVoteDto()
+      getProductsToVoteDto.userId = firebase.auth().currentUser.uid
+      getProductsToVoteDto.startProductName = startProductName
+      setIsLoading(true);
+      var response = await getProductsToVote(getProductsToVoteDto)
+      console.log(`response.length: ${response.length}`);
+      if (response.length == 0) {
+        console.log('response.length es 0 ');
+        setProducts([])
         setIsLoading(false)
-        console.log(`hubo un error: ${error} `);
-        
-        // this.toast.show('Huboooo un problema buscando los productos. Intentá de nuevo mas tarde.', 3000, () => {
-          // navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
-        // });
-      }      
+        // console.log(`toastRef: ${JSON.stringify(toastRef) }`);
+        // console.log(`toastRef.current: ${JSON.stringify(toastRef.current)}`);
+
+
+        toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
+          navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+        });
+        return
+      }
+      if (response.length > 0) {
+        console.log('response.length es mayor que 0');
+        var startProductNameResponse = response[response.length - 1].displayName.toLowerCase()
+        console.log(`startProductNameResponse: ${startProductNameResponse}`);
+        setStartProductName(startProductNameResponse)
+        setProducts(response)
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      console.log(`hubo un error: ${error} `);
+
+      // this.toast.show('Huboooo un problema buscando los productos. Intentá de nuevo mas tarde.', 3000, () => {
+      // navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+      // });
+    }
   }
 
   const onTapCard = (index) => {
@@ -101,15 +101,15 @@ export default function VoteProducts({ route, navigation }) {
     });
   }
   const onSwipedAll = async () => {
-    await getProducts()    
+    await getProducts()
   }
 
   if (isLoading) return (
     <View style={styles.container}>
       <Spinner visible={isLoading} />
     </View>
-  ) 
-  
+  )
+
   // if (products.length == 0){
   //   return (
   //     <View style={styles.container}>
@@ -119,151 +119,151 @@ export default function VoteProducts({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      { products.length == 0 ? ( 
+      {products.length == 0 ? (
         <View style={styles.container}>
-      </View>
+        </View>
 
-      ) : ( 
-      <Swiper
-        ref={swiper => {
-          this.swiper = swiper
-        }}
-        useViewOverflow={Platform.OS === 'ios'}
-        cards={products}
-        renderCard={(product) => {
-          return (
-            <View style={styles.card}>
-              <Product productParam={product} />
-              <View style={styles.cardButtons}>
-                <Button
-                  title='-1'
-                  buttonStyle={styles.btnDisagree}
-                  onPress={() => {
-                    this.swiper.swipeLeft()
-                    console.log('-1');
-                  }}
-                />
-                {/* <View> */}
-                <TouchableHighlight
-                  onPress={() => this.swiper.swipeBottom()}
-                >
-                          <Icon
-                            type='material-community'
-                            name='cancel'
-                            reverse={true}
-                            color='#b9b9b9'
-                            raised={true}
-                            containerStyle={styles.containerIcon}
-                            // iconStyle={styles.containerIcon}
-                          />
-                </TouchableHighlight>
-                  {/* <Text style={styles.title}> Buscar productos </Text> */}
-              {/* </View> */}
-                <Button
-                  title='+1'
-                  buttonStyle={styles.btnAgree}
-                  onPress={() => {
-                    this.swiper.swipeRight()
-                    console.log(`+1`);
-                  }}
-                />
-              </View>
-            </View>
-          )
-        }}
-        onSwiped={(cardIndex) => { console.log(cardIndex) }}
-        onSwipedRight={(cardIndex) => { addVote(products[cardIndex]) }}
-        onSwipedLeft={(cardIndex) => { subtractVote(products[cardIndex]) }}
-        onSwipedTop={(cardIndex) => { onTapCard(cardIndex) }}
-        onSwipedAll={onSwipedAll}
-        cardIndex={0}
-        onTapCard={(cardIndex) => { onTapCard(cardIndex) }}
-        backgroundColor={'#b0b0b0'}
-        stackSize={3}
-        overlayLabels={{
-          left: {
-            title: 'NO...',
-            style: {
-              label: {
-                backgroundColor: Constants.Colors.cancelColor,
-                borderColor: 'black',
-                color: 'white',
-                borderWidth: 1
+      ) : (
+          <Swiper
+            ref={swiper => {
+              this.swiper = swiper
+            }}
+            useViewOverflow={Platform.OS === 'ios'}
+            cards={products}
+            renderCard={(product) => {
+              return (
+                <View style={styles.card}>
+                  <Product productParam={product} />
+                  <View style={styles.cardButtons}>
+                    <Button
+                      title='-1'
+                      buttonStyle={styles.btnDisagree}
+                      onPress={() => {
+                        this.swiper.swipeLeft()
+                        console.log('-1');
+                      }}
+                    />
+                    {/* <View> */}
+                    <TouchableHighlight
+                      onPress={() => this.swiper.swipeBottom()}
+                    >
+                      <Icon
+                        type='material-community'
+                        name='cancel'
+                        reverse={true}
+                        color='#b9b9b9'
+                        raised={true}
+                        containerStyle={styles.containerIcon}
+                      // iconStyle={styles.containerIcon}
+                      />
+                    </TouchableHighlight>
+                    {/* <Text style={styles.title}> Buscar productos </Text> */}
+                    {/* </View> */}
+                    <Button
+                      title='+1'
+                      buttonStyle={styles.btnAgree}
+                      onPress={() => {
+                        this.swiper.swipeRight()
+                        console.log(`+1`);
+                      }}
+                    />
+                  </View>
+                </View>
+              )
+            }}
+            onSwiped={(cardIndex) => { console.log(cardIndex) }}
+            onSwipedRight={(cardIndex) => { addVote(products[cardIndex]) }}
+            onSwipedLeft={(cardIndex) => { subtractVote(products[cardIndex]) }}
+            onSwipedTop={(cardIndex) => { onTapCard(cardIndex) }}
+            onSwipedAll={onSwipedAll}
+            cardIndex={0}
+            onTapCard={(cardIndex) => { onTapCard(cardIndex) }}
+            backgroundColor={'#b0b0b0'}
+            stackSize={3}
+            overlayLabels={{
+              left: {
+                title: 'NO...',
+                style: {
+                  label: {
+                    backgroundColor: Constants.Colors.cancelColor,
+                    borderColor: 'black',
+                    color: 'white',
+                    borderWidth: 1
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-start',
+                    marginTop: 30,
+                    marginLeft: -30
+                  }
+                }
               },
-              wrapper: {
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                justifyContent: 'flex-start',
-                marginTop: 30,
-                marginLeft: -30
-              }
-            }
-          },
-          right: {
-            title: 'SI!',
-            style: {
-              label: {
-                backgroundColor: Constants.Colors.brandGreenColor,
-                borderColor: 'black',
-                color: 'white',
-                borderWidth: 1
+              right: {
+                title: 'SI!',
+                style: {
+                  label: {
+                    backgroundColor: Constants.Colors.brandGreenColor,
+                    borderColor: 'black',
+                    color: 'white',
+                    borderWidth: 1
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    marginTop: 30,
+                    marginLeft: 30
+                  }
+                }
               },
-              wrapper: {
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                marginTop: 30,
-                marginLeft: 30
-              }
-            }
-          },
-          top: {
-            title: 'Ver mas',
-            style: {
-              label: {
-                backgroundColor: Constants.Colors.brandGreenColor,
-                borderColor: 'black',
-                color: 'white',
-                borderWidth: 1
+              top: {
+                title: 'Ver mas',
+                style: {
+                  label: {
+                    backgroundColor: Constants.Colors.brandGreenColor,
+                    borderColor: 'black',
+                    color: 'white',
+                    borderWidth: 1
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    marginTop: 30,
+                    marginLeft: 30
+                  }
+                }
               },
-              wrapper: {
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                marginTop: 30,
-                marginLeft: 30
+              bottom: {
+                title: 'Paso',
+                style: {
+                  label: {
+                    backgroundColor: '#b9b9b9',
+                    borderColor: 'black',
+                    color: 'white',
+                    borderWidth: 1
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    marginTop: 30,
+                    marginLeft: 30
+                  }
+                }
               }
-            }
-          },
-          bottom: {
-            title: 'Paso',
-            style: {
-              label: {
-                backgroundColor: '#b9b9b9',
-                borderColor: 'black',
-                color: 'white',
-                borderWidth: 1
-              },
-              wrapper: {
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                marginTop: 30,
-                marginLeft: 30
-              }
-            }
-          }
-        }}
-        animateOverlayLabelsOpacity
-        animateCardOpacity
-        swipeBackCard
-      >
-        {/* <Button
+            }}
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            swipeBackCard
+          >
+            {/* <Button
           onPress={() => { console.log('oulala') }}
           title="Press me">
           You can press me
             </Button> */}
-      </Swiper> )}
+          </Swiper>)}
       <Toast ref={toastRef} position='center' opacity={0.9} />
     </View>
   )

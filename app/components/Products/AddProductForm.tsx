@@ -15,14 +15,17 @@ import UploadImage from '../UploadImage';
 
 export default function AddProductForm(props) {
 
-    const { toastRef, setIsLoading, navigation, isUnRegistered, nameParam, barcodeParam } = props
+    const { toastRef, setIsLoading, navigation, isUnRegistered, nameParam, barcodeParam, photoUrlParam, observationsParam } = props
+
+    console.log(`llegue a AddproductForm con observationsParam: ${observationsParam} `);
+
 
     const [barcode, setBarcode] = useState(barcodeParam)
     const [material, setMaterial] = useState('')
     const [name, setName] = useState(nameParam)
-    const [observations, setObservations] = useState('')
+    const [observations, setObservations] = useState(observationsParam)
     const [other, setOther] = useState('')
-    const [imageUri, setImageUri] = useState('')
+    const [imageUri, setImageUri] = useState(photoUrlParam)
 
     const uploadImageStorage = async () => {
 
@@ -109,6 +112,7 @@ export default function AddProductForm(props) {
                 name={name}
                 setName={setName}
                 setObservations={setObservations}
+                observations={observations}
                 other={other}
                 setOther={setOther}
                 navigation={navigation}
@@ -132,6 +136,7 @@ function FormAdd(props) {
         setMaterial,
         setName,
         name,
+        observations,
         setObservations,
         navigation,
         other,
@@ -209,6 +214,7 @@ function FormAdd(props) {
             <Input
                 label='ACLARACIONES'
                 labelStyle={styles.title}
+                value={observations}
                 placeholder='¿Alguna aclaración para agregar?'
                 containerStyle={styles.input}
                 multiline={true}

@@ -1,13 +1,14 @@
 import * as firebase from 'firebase'
 import Product from '../Models/ProductModel'
+import UnregisteredProduct from '../Models/UnregisteredProductModel'
 import AddProductResponse from '../Dtos/Products/AddProductResponse';
 import AddProductDto from '../Dtos/Products/AddProductDto';
 import AddVoteDto from '../Dtos/Products/AddVoteDto';
 import GetProductsToVoteDto from '../Dtos/Products/GetProductsToVoteDto';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
-const server = 'http://192.168.0.6:3000/products/'
-// const server = 'http://192.168.1.140:3000/products/'
+// const server = 'http://192.168.0.6:3000/products/'
+const server = 'http://192.168.1.122:3000/products/'
 
 export const addProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
   console.log('ProductsRepository - addProduct');
@@ -184,10 +185,10 @@ export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteD
   console.log('****************************************');
   console.log(`ProductsRepository -- getProductsToVote `);
   console.log('****************************************');
-  const {userId, startProductName } = getProductsToVoteDto
+  const { userId, startProductName } = getProductsToVoteDto
 
   var uriGetProductsToVote = `${server}getProductsToVote/${userId}/${startProductName}`
-  console.log('uriGetProduct: ' + uriGetProductsToVote) 
+  console.log('uriGetProduct: ' + uriGetProductsToVote)
 
   return await fetch(uriGetProductsToVote, {
     method: 'GET',
@@ -199,17 +200,23 @@ export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteD
     .then(status)
     .then(json)
     .then(function (data) {
-      console.log('response getProductsToVote', data      );      
+      console.log('response getProductsToVote', data);
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
     });
 }
 
-export const getMaterialLogo = async material => {
-  var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
-  console.log('uriGetMaterialLogo: ', uriGetMaterialLogo);
-  return fetch(uriGetMaterialLogo, {
+export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetProductsToVoteDto): Promise<UnregisteredProduct[]> => {
+  console.log('****************************************');
+  console.log(`ProductsRepository -- getunregisteredProducts `);
+  console.log('****************************************');
+  const { userId, startProductName } = getUnregisteredProductsDto
+
+  var uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}/${startProductName}`
+  console.log('getUnregisteredProducts: ' + uriGetUnregisteredProducts)
+
+  return await fetch(uriGetUnregisteredProducts, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -218,13 +225,32 @@ export const getMaterialLogo = async material => {
   })
     .then(status)
     .then(json)
-    .then(function (uriLogo) {
-      console.log('Request succeeded with JSON response', uriLogo);
-      return uriLogo.url;
+    .then(function (data) {
+      return data;
     }).catch(function (error) {
       console.log('Request failed', error);
     });
 }
+
+// export const getMaterialLogo = async material => {
+//   var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
+//   console.log('uriGetMaterialLogo: ', uriGetMaterialLogo);
+//   return fetch(uriGetMaterialLogo, {
+//     method: 'GET',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-type': 'application/json; charset=UTF-8'
+//     }
+//   })
+//     .then(status)
+//     .then(json)
+//     .then(function (uriLogo) {
+//       console.log('Request succeeded with JSON response', uriLogo);
+//       return uriLogo.url;
+//     }).catch(function (error) {
+//       console.log('Request failed', error);
+//     });
+// }
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
