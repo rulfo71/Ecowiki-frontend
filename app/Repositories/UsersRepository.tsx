@@ -5,10 +5,11 @@ import GetUserByIdResponse from '../Dtos/Users/GetUserByIdResponse';
 import UserModel from '../Models/UserModel';
 import UpdateUserDto from '../Dtos/Users/UpdateUserDto';
 import WhatsappUrlResponse from '../Dtos/Users/WhatsappUrlResponse';
+import { Constants } from '../Common/Constants/Constants';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 // const server = 'http://192.168.0.6:3000/users/'
-const server = 'http://192.168.1.122:3000/users/'
+const server = `${Constants.Backend.url}/users/`
 
 export const addUser = async (user: AddUserDto): Promise<AddUserResponse> => {
   console.log(`UsersRepository - addUser: ${JSON.stringify(user)} `);
@@ -55,6 +56,7 @@ export const updateUser = async (user: UpdateUserDto) => {
 
 export const getUserById = async (userId: string): Promise<UserModel> => {
   var uriGetUserById = server + 'getUserById/' + userId
+  console.log(`UsersRepository - uriGetUserById: ${JSON.stringify(uriGetUserById)} `);
   return await fetch(uriGetUserById, {
     method: 'GET',
     headers: {

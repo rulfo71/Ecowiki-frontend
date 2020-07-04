@@ -23,7 +23,7 @@ export default function Account({ route, navigation }) {
     console.log('entrando a account');    
 
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(`user: ${user}`);
+      console.log(`user: ${JSON.stringify(user)}`);
 
       !user ? setLogin(false) : setLogin(true);
     });

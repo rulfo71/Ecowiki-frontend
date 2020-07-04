@@ -24,7 +24,7 @@ export default function UserLogged() {
       // setLoading(true)
       setUserInfo(null);
       const userFirebase = await firebase.auth().currentUser;
-      console.log(`userFirebase: ${userFirebase}`);
+      console.log(`userFirebase: ${JSON.stringify(userFirebase)}`);
       const user = await getUserById(userFirebase.uid)
       console.log(`response getUserById: ${user}`);
 

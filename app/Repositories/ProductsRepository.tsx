@@ -5,10 +5,11 @@ import AddProductResponse from '../Dtos/Products/AddProductResponse';
 import AddProductDto from '../Dtos/Products/AddProductDto';
 import AddVoteDto from '../Dtos/Products/AddVoteDto';
 import GetProductsToVoteDto from '../Dtos/Products/GetProductsToVoteDto';
+import { Constants } from '../Common/Constants/Constants';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
 // const server = 'http://192.168.0.6:3000/products/'
-const server = 'http://192.168.1.122:3000/products/'
+const server = `${Constants.Backend.url}/products/`
 
 export const addProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
   console.log('ProductsRepository - addProduct');
@@ -212,8 +213,12 @@ export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetPro
   console.log(`ProductsRepository -- getunregisteredProducts `);
   console.log('****************************************');
   const { userId, startProductName } = getUnregisteredProductsDto
+  var uriGetUnregisteredProducts : string
 
-  var uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}/${startProductName}`
+  if (startProductName)
+    uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}/${startProductName}`
+  else 
+    uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}`
   console.log('getUnregisteredProducts: ' + uriGetUnregisteredProducts)
 
   return await fetch(uriGetUnregisteredProducts, {
