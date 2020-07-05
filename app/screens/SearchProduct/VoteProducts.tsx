@@ -40,7 +40,7 @@ export default function VoteProducts({ route, navigation }) {
         setProducts(response)
         if (response.length == 0) {
           toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
-            navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+            navigation.navigate(Constants.Navigations.ProductStack.collaborate)
           });
         }
         var startProductName = response[response.length - 1].displayName.toLowerCase()
@@ -73,7 +73,7 @@ export default function VoteProducts({ route, navigation }) {
 
 
         toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
-          navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+          navigation.navigate(Constants.Navigations.ProductStack.collaborate)
         });
         return
       }

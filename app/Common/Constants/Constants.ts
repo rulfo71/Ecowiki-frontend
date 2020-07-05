@@ -20,7 +20,7 @@ export const Constants = {
             productInfo: 'productInfo',
             addProduct: 'addProduct',
             addUnregisteredProduct: 'addUnRegisteredProduct',
-            addProductHome: 'addProductHome',
+            collaborate: 'collaborate',
             addNewProduct: 'addNewProduct',
             voteProducts: 'voteProducts'
         },
@@ -37,7 +37,7 @@ export const Constants = {
                 productInfo: ' ',
                 addProduct: 'Agregar producto',
                 addUnregisteredProduct: 'Agregar producto',
-                addProductHome: 'Agregar producto',
+                collaborate: 'Agregar producto',
                 addNewProduct: 'addNewProduct',
                 voteProducts: 'Votar Productos'
             },

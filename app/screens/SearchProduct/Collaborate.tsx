@@ -14,7 +14,7 @@ import { getUnregisteredProducts, getProductByBarCode } from '../../Repositories
 import UnregisteredProduct from '../../components/Products/UnregisteredProduct';
 import { isEmpty } from 'lodash';
 
-export default function AddProductHome({ route, navigation }) {
+export default function Collaborate({ route, navigation }) {
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
@@ -124,7 +124,7 @@ export default function AddProductHome({ route, navigation }) {
     if (isLogged === null) return <Spinner visible={isLogged === null} />
 
     return (
-        !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.addProductHome} /> :
+        !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.collaborate} /> :
             <View style={styles.view}>
                 <UnregisteredProductsList
                     products={unRegisteredProducts}

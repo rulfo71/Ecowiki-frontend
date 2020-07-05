@@ -12,7 +12,7 @@ import RecoverPassword from '../screens/Account/RecoverPassword';
 // import AddProduct from '../screens/SearchProduct/AddProductViejo';
 import AddProduct from '../screens/SearchProduct/AddProduct'
 import AddUnRegisteredProduct from '../screens/SearchProduct/AddUnRegisteredProduct';
-import AddProductHome from '../screens/SearchProduct/AddProductHome';
+import Collaborate from '../screens/SearchProduct/Collaborate';
 import AddNewProduct from '../screens/SearchProduct/AddNewProduct';
 import VoteProducts from '../screens/SearchProduct/VoteProducts';
 
@@ -66,10 +66,10 @@ export default function MainStack() {
                 }}
             />
             <Stack.Screen
-                name={Constants.Navigations.ProductStack.addProductHome}
-                component={AddProductHome}
+                name={Constants.Navigations.ProductStack.collaborate}
+                component={Collaborate}
                 options={{
-                    title: Constants.Navigations.titles.ProductStack.addProductHome
+                    title: Constants.Navigations.titles.ProductStack.collaborate
                 }}
             />
             <Stack.Screen

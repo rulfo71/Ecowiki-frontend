@@ -29,7 +29,7 @@ export default function Home() {
       setIsLogged(false)
     }
     if (loggedModalResponse) {
-      navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
+      navigation.navigate(Constants.Navigations.ProductStack.collaborate)
       setLoggedModalResponse(false)
     }
   }, [loggedModalResponse])
@@ -37,7 +37,7 @@ export default function Home() {
   const goToAddProduct = () => {
     if (isLogged) {
       navigation.navigate(
-        Constants.Navigations.ProductStack.addProductHome
+        Constants.Navigations.ProductStack.collaborate
       )
     }
     else {
