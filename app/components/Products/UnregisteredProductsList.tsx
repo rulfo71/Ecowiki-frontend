@@ -22,7 +22,7 @@ export default function UnregisteredProductsList(props) {
                         data={products}
                         renderItem={(product) => <UnregisteredProduct productParam={product.item} navigation={navigation} />}
                         keyExtractor={(item, index) => index.toString()}
-                        onEndReachedThreshold={0.5}
+                        onEndReachedThreshold={0.2}
                         onEndReached={handleLoadMore}
                         ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
                     />
@@ -43,7 +43,7 @@ function FooterList(props) {
     else {
         return (
             <View style={styles.notFoundProducts}>
-                <Text>No quedan mas productos!</Text>
+                <Text>Gracias! No quedan mas productos</Text>
             </View>)
     }
 }

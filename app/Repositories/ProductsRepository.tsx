@@ -212,7 +212,11 @@ export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetPro
   console.log('****************************************');
   console.log(`ProductsRepository -- getunregisteredProducts `);
   console.log('****************************************');
+  
   const { userId, startProductName } = getUnregisteredProductsDto
+  console.log(`userId: ${userId}`);
+  console.log(`startProductName: ${startProductName}`);
+  
   var uriGetUnregisteredProducts : string
 
   if (startProductName)

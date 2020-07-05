@@ -21,6 +21,7 @@ export default function AddProductHome({ route, navigation }) {
     const [isLoadingMore, setIsLoadingMore] = useState(false)
     const [startProductName, setStartProductName] = useState('')
     const [unRegisteredProducts, setUnRegisteredProducts] = useState([])
+    const [noMoreProducts, setNoMoreProducts] = useState(false)
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
@@ -34,11 +35,11 @@ export default function AddProductHome({ route, navigation }) {
 
         navigation.setOptions({
             title: 'Colaborar',
-            // headerStyle: {
-            //     backgroundColor: 'black',
-            //     borderBottomStartRadius: 20,
-            //     borderBottomEndRadius: 20,
-            // }
+            headerStyle: {
+                backgroundColor: Constants.Colors.brandGreenColor,
+                borderBottomStartRadius: 0,
+                borderBottomEndRadius: 0,  
+            },
         })
     })
 
@@ -50,6 +51,8 @@ export default function AddProductHome({ route, navigation }) {
 
     const getProducts = async () => {
         try {
+            if (noMoreProducts) return
+
             var getUnregisteredProductsDto = new GetProductsToVoteDto()
             const user = firebase.auth().currentUser
             if (user) {
@@ -61,16 +64,14 @@ export default function AddProductHome({ route, navigation }) {
             getUnregisteredProductsDto.startProductName = startProductName
             isEmpty(startProductName) ? setIsLoading(true) : setIsLoadingMore(true)
             var response = await getUnregisteredProducts(getUnregisteredProductsDto)
-
-            setUnRegisteredProducts(response)
+            setUnRegisteredProducts(unRegisteredProducts.concat(response))
             if (response.length == 0) {
-                //TODO: No encontró productoos
-                console.log('response.length es 0 ');
+                setNoMoreProducts(true)
                 isEmpty(startProductName) ? setIsLoading(false) : setIsLoadingMore(false)
             } else {
-                isEmpty(startProductName) ? setIsLoading(false) : setIsLoadingMore(false)
-                var startProductName = response[response.length - 1].name.toLowerCase()
-                setStartProductName(startProductName)
+                isEmpty(startProductName) ? setIsLoading(false) : setIsLoadingMore(false)                
+                var newStartProductName = response[response.length - 1].name.toLowerCase()
+                setStartProductName(newStartProductName)
             }
         } catch (error) {
             //poner toast
@@ -79,11 +80,6 @@ export default function AddProductHome({ route, navigation }) {
             setIsLoading(false)
         }
     }
-
-    // const handleLoadMore = async () => {
-    //     console.log(' handleLoadMore');        
-    //     await getProducts();
-    // }
 
     const onPressItem = (name) => {
         switch (name) {
@@ -140,7 +136,7 @@ export default function AddProductHome({ route, navigation }) {
                 />
                 <FloatingAction
                     actions={actions}
-                    color={Constants.Colors.brandGreenColor}
+                    color={Constants.Colors.brandBlueColor}
                     onPressItem={name => {
                         onPressItem(name)
                     }}

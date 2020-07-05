@@ -27,7 +27,7 @@ export default function MainStack() {
                 headerStyle: {
                     backgroundColor: Constants.Colors.brandGreenColor,
                     borderBottomStartRadius: 20,
-                    borderBottomEndRadius: 20,
+                    borderBottomEndRadius: 20,  
                 },
                 headerTitleStyle: {
                     fontSize: 20,
