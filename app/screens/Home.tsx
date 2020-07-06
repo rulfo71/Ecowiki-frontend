@@ -8,6 +8,7 @@ import { Constants } from "../Common/Constants/Constants";
 import { Button, Icon } from "react-native-elements";
 import ModalRN from "../components/ModalRN";
 import ConfirmModal from "../components/ConfirmModal";
+import EcotipsList from "../components/Ecotips/EcotipsList";
 
 export default function Home() {
 
@@ -98,6 +99,7 @@ export default function Home() {
           </View>
         </TouchableHighlight>
       </View>
+      <EcotipsList/>
       <ConfirmModal
         showModal={showLoggedModal}
         setShowModal={setShowLoggedModal}
@@ -114,7 +116,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: Constants.Colors.backgroundGrey
   },
   subView: {

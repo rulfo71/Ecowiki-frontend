@@ -15,7 +15,7 @@ export default function UnregisteredProductsList(props) {
         <View style={styles.container}>
             {products.length == 0 && isLoading !== false ? (
                 <View>
-                    <Text>No tengo productos</Text>
+                    <Text>No hay productos para agregar</Text>
                 </View>
             ) : (
                     <FlatList
