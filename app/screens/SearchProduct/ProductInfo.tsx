@@ -61,8 +61,10 @@ export default function ProductInfo({ route, navigation }) {
   console.log('uriImageInicial: ', uriImageLogo);
   useEffect(() => {
     console.log('getMaterialLogo dentro de useEffect');
-
-    getUserAddedBy()
+    (async () => {
+      await getUserAddedBy()
+    })()
+    
     navigation.setOptions({
       title: product.displayName,
       headerTitleAlign: 'center',

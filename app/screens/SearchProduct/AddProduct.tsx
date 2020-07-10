@@ -15,27 +15,7 @@ export default function AddProduct({ route, navigation }) {
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
 
-    // console.log(`estoy en addProduct con parametro: barcode: ${barcode} y name: ${name} `);
-
-    // useEffect(() => {
-    //     firebase.auth().onAuthStateChanged((user) => {
-    //         if (!user) {
-    //             setIsLogged(false)
-    //             // navigation.navigate(Constants.Navigations.AccountStack.account)
-    //         }
-    //         else {
-    //             setIsLogged(true);
-    //         }
-    //     });
-    //     navigation.setOptions({
-    //         title: 'Agregar Producto',
-    //     })
-    // })
-
-    // if (isLogged === null) return <Spinner visible={isLogged === null} />
-
     return (
-        // !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.addProduct} /> :
         <View>
             <AddProductForm
                 toastRef={toastRef}

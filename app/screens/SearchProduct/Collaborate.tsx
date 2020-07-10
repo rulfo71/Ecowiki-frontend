@@ -151,5 +151,5 @@ const styles = StyleSheet.create({
     view: {
         flex: 1,
         backgroundColor: "#b9b9b9",
-    }
+    },
 })

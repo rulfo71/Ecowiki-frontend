@@ -18,21 +18,10 @@ export default function AddUnRegisteredProduct({ route, navigation }) {
     console.log(`AddUnregisteredProduct. name: ${name}, barcode: ${barcode}`);
 
     useEffect(() => {
-        // firebase.auth().onAuthStateChanged((user) => {
-        //     if (!user) {
-        //         setIsLogged(false)
-        //         // navigation.navigate(Constants.Navigations.AccountStack.account)
-        //     }
-        //     else {
-        //         setIsLogged(true);
-        //     }
-        // });
         navigation.setOptions({
             title: 'Agregar Producto',
         })
     })
-
-    // if (isLogged === null) return <Spinner visible={isLogged === null} />
 
     return (
         <View>

@@ -60,7 +60,7 @@ function CreateAccount(props) {
                 style={styles.btnRegister}
                 onPress={() => navigation.navigate(Constants.Navigations.AccountStack.register)}
             >
-                Registrarme
+                Registrate
             </Text>
         </Text>
     )
