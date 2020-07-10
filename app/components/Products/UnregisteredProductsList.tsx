@@ -13,11 +13,13 @@ export default function UnregisteredProductsList(props) {
 
     return (
         <View style={styles.container}>
-            {products.length == 0 && isLoading !== false ? (
+            {products.length == 0 && isLoading == false ? (
                 <View>
                     <Text>No hay productos para agregar</Text>
                 </View>
             ) : (
+                <ScrollView>
+                    <Text style={styles.text}> Acá podés ver los productos que la gente buscó y no encontró. </Text>
                     <FlatList
                         data={products}
                         renderItem={(product) => <UnregisteredProduct productParam={product.item} navigation={navigation} />}
@@ -26,6 +28,7 @@ export default function UnregisteredProductsList(props) {
                         onEndReached={handleLoadMore}
                         ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
                     />
+                    </ScrollView>
                 )}
         </View>
     )
@@ -61,6 +64,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
         alignItems: 'center',
-    }
+    },
+    text: {
+        fontSize: 20,
+        alignSelf: 'center',
+        padding: 20,
+        justifyContent: 'center',
+        color: 'white'
 
+    }
 })

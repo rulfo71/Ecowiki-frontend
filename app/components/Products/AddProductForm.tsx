@@ -67,12 +67,11 @@ export default function AddProductForm(props) {
             if (!isUnRegistered)
                 addProductDto.material = (material !== 'otro') ? material : other
             const user = firebase.auth().currentUser
-            // console.log(`user: ${user}`);
             if (!user && !isUnRegistered) {
                 toastRef.current.show('Tenés que estar logueado para poder registrar productos')
                 return
             } else {
-                addProductDto.addedBy = firebase.auth().currentUser.uid
+                addProductDto.addedBy = user.uid
             }
             try {
                 setIsLoading(true)
@@ -81,17 +80,17 @@ export default function AddProductForm(props) {
                     addProductDto.photoUrl = await uploadImageStorage()
 
                 let response
-                if (!isUnRegistered) {
-                    response = await addProduct(addProductDto)
+                if (isUnRegistered) {
+                    response = await addUnregisteredProduct(addProductDto)
                 }
                 else {
-                    response = await addUnregisteredProduct(addProductDto)
+                    response = await addProduct(addProductDto)
                 }
 
                 setIsLoading(false)
 
                 toastRef.current.show('Gracias! Ya agregamos el producto', 400, () => {
-                    navigation.navigate(Constants.Navigations.home);
+                    navigation.navigate(Constants.Navigations.ProductStack.collaborate);
                 });
                 console.log(`AddProductForm - response : ${JSON.stringify(response)}`);
             } catch (error) {

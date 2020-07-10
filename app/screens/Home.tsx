@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, View, Text, Animated, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Animated, TouchableHighlight, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as firebase from 'firebase'
 import Spinner from "react-native-loading-spinner-overlay";
@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   return (
-    <View style={styles.viewBody}>
+    <ScrollView style={styles.viewBody}>
       <View style={styles.buttonsTop}>
         <TouchableHighlight
           onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
@@ -62,7 +62,7 @@ export default function Home() {
               raised={true}
               containerStyle={styles.containerIcon}
             />
-            <Text style={styles.title}> Buscar </Text>
+            <Text style={styles.buttonsText}> Buscar </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -79,7 +79,7 @@ export default function Home() {
               style={styles.icon}
               containerStyle={styles.containerIcon}
             />
-            <Text style={styles.title}> Colaborar </Text>
+            <Text style={styles.buttonsText}> Colaborar </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -95,10 +95,11 @@ export default function Home() {
               raised={true}
               containerStyle={styles.containerIcon}
             />
-            <Text style={styles.title}> Mi Cuenta </Text>
+            <Text style={styles.buttonsText}> Mi Cuenta </Text>
           </View>
         </TouchableHighlight>
       </View>
+      <TresR/>
       <EcotipsList/>
       <ConfirmModal
         showModal={showLoggedModal}
@@ -109,7 +110,33 @@ export default function Home() {
         setResponse={setLoggedModalResponse}
       />
       <Spinner visible={isLoading} />
-    </View>
+    </ScrollView>
+  )
+}
+
+function TresR() {
+  return (
+    <Image
+    source={require('../../assets/img/3r.png')}
+    resizeMode='contain'
+    style={styles.tresR}
+/>
+    // <View>
+    //   <Text style = {styles.title}>
+    //       Acordate!
+    //     </Text>
+    //     <Text style = {styles.text}>
+    //     {`
+    //       1) Reducir
+
+    //       2) Reutilizar
+          
+    //       y recien ahí...
+          
+    //       3) Reciclar`
+    //     }
+    //     </Text>
+    //   </View>
   )
 }
 
@@ -131,6 +158,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
+    textAlign: 'center',
+    fontSize: 30,
+    alignSelf: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  text: {
+    fontSize: 20,
+  },
+  buttonsText: {
     textAlign: 'center'
   },
   touchable: {
@@ -142,6 +179,11 @@ const styles = StyleSheet.create({
   },
   buttonsTop: {
     flexDirection: 'row'
+  },
+  tresR: {
+    width: '100%',
+    height: 150,
+    marginTop: 20,
   }
 
 });

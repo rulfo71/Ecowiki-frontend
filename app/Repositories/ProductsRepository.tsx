@@ -12,17 +12,8 @@ import { Constants } from '../Common/Constants/Constants';
 const server = `${Constants.Backend.url}/products/`
 
 export const addProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
-  console.log('ProductsRepository - addProduct');
-
   var uriAddProduct = server + 'addProduct'
   console.log(`uriAddProduct: ${uriAddProduct}`);
-
-  // const data = JSON.stringify({
-  //   BarCode: product.barcode,
-  //   Description: product.observations,
-  //   Name: product.name,
-  //   Material: product.Material
-  // })
   console.log(`body: ${JSON.stringify(product)} `);
 
   return await fetch(uriAddProduct, {
@@ -43,11 +34,8 @@ export const addProduct = async (product: AddProductDto): Promise<AddProductResp
 }
 
 export const addUnregisteredProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
-  console.log('addUnregisteredProduct');
-
   var uriAddUnregisteredProduct = server + 'addUnregisteredProduct'
   console.log(uriAddUnregisteredProduct);
-
   console.log(`body: ${JSON.stringify(product)} `);
 
   return await fetch(uriAddUnregisteredProduct, {
@@ -68,36 +56,30 @@ export const addUnregisteredProduct = async (product: AddProductDto): Promise<Ad
 }
 
 export const addVote = (product: Product) => {
-  console.log('*******');
-  console.log(`addVote: ${JSON.stringify(product)}`);
-  console.log('*******');
-
   var uriAddVote = server + 'addVote'
-  // console.log(uriAddVote);
-
+  console.log(uriAddVote);
+  
   let addModelDto: AddVoteDto = new AddVoteDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   var user = firebase.auth().currentUser
+  console.log('addVote user: ', user.uid);
+  
   if (user) {
     addModelDto.userId = user.uid
   }
   else {
     addModelDto.userId = ''
   }
-
-  const data = JSON.stringify(addModelDto)
-
-  // console.log('body: ');
-
-  // console.log(addModelDto)
+  
+  console.log(`body: ${JSON.stringify(addModelDto)}`);
 
   return fetch(uriAddVote, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
     },
-    body: data
+    body: JSON.stringify(addModelDto)
   }).then(response => {
     console.log('entre al then')
     console.log(response);
@@ -110,7 +92,6 @@ export const addVote = (product: Product) => {
 }
 
 export const subtractVote = product => {
-  console.log('setProduct');
 
   var uriSubtractVote = server + 'subtractVote'
   console.log(uriSubtractVote);
@@ -118,14 +99,21 @@ export const subtractVote = product => {
   let addModelDto: AddVoteDto = new AddVoteDto()
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
-  const data = JSON.stringify(addModelDto)
-
+  var user = firebase.auth().currentUser
+  if (user) {
+    addModelDto.userId = user.uid
+  }
+  else {
+    addModelDto.userId = ''
+  }
+  console.log(`body: ${JSON.stringify(addModelDto)}`);
+  
   return fetch(uriSubtractVote, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
     },
-    body: data
+    body: JSON.stringify(addModelDto)
   }).then(response => {
     console.log('entre al then')
     console.log(response);
@@ -159,11 +147,8 @@ export const getProductByBarCode = async barCode => {
     });
 }
 export const getProductByName = async name => {
-  console.log('****************************************');
-  console.log(`ProductsRepository -- getProductByName(name: ${name} `);
-  console.log('****************************************');
   var uriGetProduct = server + 'getProductByName/' + name
-  console.log('uriGetProduct: ' + uriGetProduct)
+  console.log(`uriGetProduct: ${uriGetProduct}`)
 
   return await fetch(uriGetProduct, {
     method: 'GET',
@@ -183,13 +168,10 @@ export const getProductByName = async name => {
 }
 
 export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteDto): Promise<Product[]> => {
-  console.log('****************************************');
-  console.log(`ProductsRepository -- getProductsToVote `);
-  console.log('****************************************');
   const { userId, startProductName } = getProductsToVoteDto
 
   var uriGetProductsToVote = `${server}getProductsToVote/${userId}/${startProductName}`
-  console.log('uriGetProduct: ' + uriGetProductsToVote)
+  console.log(`uriGetProduct: ${uriGetProductsToVote}`)
 
   return await fetch(uriGetProductsToVote, {
     method: 'GET',
@@ -209,13 +191,7 @@ export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteD
 }
 
 export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetProductsToVoteDto): Promise<UnregisteredProduct[]> => {
-  console.log('****************************************');
-  console.log(`ProductsRepository -- getunregisteredProducts `);
-  console.log('****************************************');
-  
   const { userId, startProductName } = getUnregisteredProductsDto
-  console.log(`userId: ${userId}`);
-  console.log(`startProductName: ${startProductName}`);
   
   var uriGetUnregisteredProducts : string
 
@@ -223,7 +199,7 @@ export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetPro
     uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}/${startProductName}`
   else 
     uriGetUnregisteredProducts = `${server}getUnregisteredProducts/${userId}`
-  console.log('getUnregisteredProducts: ' + uriGetUnregisteredProducts)
+  console.log(uriGetUnregisteredProducts)
 
   return await fetch(uriGetUnregisteredProducts, {
     method: 'GET',
@@ -240,26 +216,6 @@ export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetPro
       console.log('Request failed', error);
     });
 }
-
-// export const getMaterialLogo = async material => {
-//   var uriGetMaterialLogo = server + 'getMaterialLogo/' + material
-//   console.log('uriGetMaterialLogo: ', uriGetMaterialLogo);
-//   return fetch(uriGetMaterialLogo, {
-//     method: 'GET',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-type': 'application/json; charset=UTF-8'
-//     }
-//   })
-//     .then(status)
-//     .then(json)
-//     .then(function (uriLogo) {
-//       console.log('Request succeeded with JSON response', uriLogo);
-//       return uriLogo.url;
-//     }).catch(function (error) {
-//       console.log('Request failed', error);
-//     });
-// }
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
