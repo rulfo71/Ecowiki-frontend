@@ -4,11 +4,11 @@ import GetEcotipsDto from '../../Dtos/Ecotips/GetEcotipsDto';
 import { getEcotips as getEcotipsRepository} from '../../Repositories/EcotipsRepository';
 import { isEmpty } from 'lodash';
 import Ecotip from './Ecotip';
-
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function EcotipsList() {
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(null)
     const [isLoadingMore, setIsLoadingMore] = useState(false)
     const [noMoreEcotips, setNoMoreEcotips] = useState(false)
     const [ecotips, setEcotips] = useState([])
@@ -49,19 +49,24 @@ export default function EcotipsList() {
 
     return (
         <View style={styles.container}>
-            {ecotips.length == 0 && isLoading !== false ? (
+            {ecotips.length == 0 && isLoading == false ? (
                 <View>
-                    <Text>No tengo ecotips</Text>
+                    {/* <Text>No tengo ecotips</Text> */}
                 </View>
             ) : (
-                    <FlatList
-                        data={ecotips}
-                        renderItem={(ecotip) => <Ecotip ecotipParam= {ecotip.item} />}
-                        keyExtractor={(item, index) => index.toString()}
-                        onEndReachedThreshold={0.2}
-                        onEndReached={getEcotips}
-                        ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
-                    />
+                    <ScrollView>
+                        <Text style={styles.title}>Ecotips</Text>
+                        <FlatList
+                            data={ecotips}
+                            renderItem={(ecotip) => <Ecotip ecotipParam= {ecotip.item} />}
+                            keyExtractor={(item, index) => index.toString()}
+                            onEndReachedThreshold={0.2}
+                            onEndReached={getEcotips}
+                            ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
+                        />
+                        <Spinner visible={isLoading} />
+
+                    </ScrollView>
                 )}
         </View>
     )
@@ -97,6 +102,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
         alignItems: 'center',
+    },
+    title: {
+        fontSize: 30,
+        alignSelf: 'center',
+        paddingTop: 20,
+        paddingBottom: 20,
     }
 
 })
