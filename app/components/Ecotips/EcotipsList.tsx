@@ -62,10 +62,8 @@ export default function EcotipsList() {
                             keyExtractor={(item, index) => index.toString()}
                             onEndReachedThreshold={0.2}
                             onEndReached={getEcotips}
-                            ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
+                            ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} isLoading={isLoading} />}
                         />
-                        <Spinner visible={isLoading} />
-
                     </ScrollView>
                 )}
         </View>
@@ -73,8 +71,8 @@ export default function EcotipsList() {
 }
 
 function FooterList(props) {
-    const { isLoadingMore } = props
-    if (isLoadingMore) {
+    const { isLoadingMore,isLoading } = props
+    if (isLoadingMore || isLoading) {
         return (
             <View style={styles.loaderProducts} >
                 <ActivityIndicator size='large' />
