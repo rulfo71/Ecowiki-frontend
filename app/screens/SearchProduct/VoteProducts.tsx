@@ -8,13 +8,20 @@ import Toast from 'react-native-easy-toast'
 
 import { getProductsToVote, addVote, subtractVote } from '../../Repositories/ProductsRepository'
 import GetProductsToVoteDto from '../../Dtos/Products/GetProductsToVoteDto'
-import { size } from 'lodash'
+import { size, isEmpty } from 'lodash'
 import Product from '../../components/Products/Product'
 import { Constants } from '../../Common/Constants/Constants';
 
 export default function VoteProducts({ route, navigation }) {
-  let toastRef = useRef();
+  const toastRef = useRef();
+  // const { toastRef } = route.params
 
+  // console.log(`route.params: ${route.params}`);  
+
+  // console.log(JSON.stringify(toastRef));
+  
+  // console.log(`route.params: ${JSON.stringify(route.params)}`);
+  
   // const { toastRef } = route.params
 
   const [products, setProducts] = useState([])
@@ -37,6 +44,7 @@ export default function VoteProducts({ route, navigation }) {
     (async () => {
       try {
         var response = await getProductsToVote(getProductsToVoteDto)
+        console.log('response de getProductsToVote: ',response);
         setProducts(response)
         if (response.length == 0) {
           toastRef.current.show('Muchas gracias!! Ya no quedan productos por votar. Probá mañana!', 3000, () => {
@@ -48,7 +56,13 @@ export default function VoteProducts({ route, navigation }) {
         setStartProductName(startProductName)
         setIsLoading(false)
       } catch (error) {
-        toastRef.current.show('Upss! Hubo un error buscando los productos. Intentá de nuevo mas tarde')
+        if (toastRef.current){
+          // console.log(`toastRef: ${JSON.stringify(toastRef)}`);          
+          toastRef.current.show('Upss! Hubo un error buscando los productos. Intentá de nuevo mas tarde', 3000, () => {
+          navigation.navigate(Constants.Navigations.home)
+        });
+
+        }
         console.log(`error: ${error} `);
         setIsLoading(false)
       }
@@ -63,6 +77,8 @@ export default function VoteProducts({ route, navigation }) {
       getProductsToVoteDto.startProductName = startProductName
       setIsLoading(true);
       var response = await getProductsToVote(getProductsToVoteDto)
+      console.log('response de getProductsToVote: ',response);
+      
       console.log(`response.length: ${response.length}`);
       if (response.length == 0) {
         console.log('response.length es 0 ');
@@ -86,8 +102,8 @@ export default function VoteProducts({ route, navigation }) {
         setIsLoading(false)
       }
     } catch (error) {
-      setIsLoading(false)
       console.log(`hubo un error: ${error} `);
+      setIsLoading(false)
 
       // this.toast.show('Huboooo un problema buscando los productos. Intentá de nuevo mas tarde.', 3000, () => {
       // navigation.navigate(Constants.Navigations.ProductStack.addProductHome)
@@ -107,22 +123,15 @@ export default function VoteProducts({ route, navigation }) {
   if (isLoading) return (
     <View style={styles.container}>
       <Spinner visible={isLoading} />
+      <Toast ref={toastRef} position='center' opacity={0.8} />
     </View>
   )
 
-  // if (products.length == 0){
-  //   return (
-  //     <View style={styles.container}>
-  //     </View>
-  //     )
-  // }
-
   return (
     <View style={styles.container}>
-      {products.length == 0 ? (
+      {(isEmpty(products) || products.length == 0) ? (
         <View style={styles.container}>
         </View>
-
       ) : (
           <Swiper
             ref={swiper => {

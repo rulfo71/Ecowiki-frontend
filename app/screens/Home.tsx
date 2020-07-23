@@ -1,14 +1,16 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import { StyleSheet, View, Text, Animated, TouchableHighlight, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as firebase from 'firebase'
 import Spinner from "react-native-loading-spinner-overlay";
+import { FloatingAction } from 'react-native-floating-action'
 
 import { Constants } from "../Common/Constants/Constants";
 import { Button, Icon } from "react-native-elements";
 import ModalRN from "../components/ModalRN";
 import ConfirmModal from "../components/ConfirmModal";
 import EcotipsList from "../components/Ecotips/EcotipsList";
+import Toast from "react-native-easy-toast";
 
 export default function Home() {
 
@@ -45,6 +47,48 @@ export default function Home() {
       setShowLoggedModal(true)
     }
   }
+
+  const actions = [
+    {
+        text: "Votar productos",
+        icon: <Icon
+            type='material'
+            name='done'
+            color='white'
+        />,
+        name: "vote_added_products",
+        position: 1,
+        color: Constants.Colors.brandGreenColor,
+        size: 50,
+    },
+    {
+        text: "Agregar un producto nuevo",
+        icon: <Icon
+            type='material-community'
+            name='barcode'
+            color='white'
+        />,
+        name: "add_new_product",
+        position: 2,
+        color: Constants.Colors.brandGreenColor,
+        size: 50,
+    },
+]
+
+const onPressItem = (name) => {
+  switch (name) {
+      case 'add_new_product':
+          navigation.navigate(Constants.Navigations.ProductStack.addNewProduct)
+          break;
+      case 'vote_added_products':
+          // console.log(`toastRef: ${toastRef}`);
+          navigation.navigate(Constants.Navigations.ProductStack.voteProducts)
+          break;
+      default:
+          break;
+  }
+}
+
 
   return (
     <ScrollView style={styles.viewBody}>
@@ -110,6 +154,13 @@ export default function Home() {
         setResponse={setLoggedModalResponse}
       />
       <Spinner visible={isLoading} />
+      <FloatingAction
+                    actions={actions}
+                    color={Constants.Colors.brandBlueColor}
+                    onPressItem={name => {
+                        onPressItem(name)
+                    }}
+                />
     </ScrollView>
   )
 }

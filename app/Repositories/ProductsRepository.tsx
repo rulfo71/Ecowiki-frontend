@@ -187,6 +187,7 @@ export const getProductsToVote = async (getProductsToVoteDto: GetProductsToVoteD
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 

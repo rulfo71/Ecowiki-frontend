@@ -6,10 +6,6 @@ import GetEcotipsDto from '../Dtos/Ecotips/GetEcotipsDto';
 const server = `${Constants.Backend.url}/ecotips/`
 
 export const getEcotips = async (getEcotipsDto: GetEcotipsDto): Promise<Ecotip[]> => {
-  console.log('****************************************');
-  console.log(`ProductsRepository -- getEcotips `);
-  console.log('****************************************');
-  
   const { startEcotipId } = getEcotipsDto
   console.log(`startEcotipId: ${startEcotipId}`);
   
@@ -19,7 +15,7 @@ export const getEcotips = async (getEcotipsDto: GetEcotipsDto): Promise<Ecotip[]
     uriGetEcotips = `${server}getEcotips/${startEcotipId}`
   else 
     uriGetEcotips = `${server}getEcotips`
-  console.log('uriGetEcotips: ' + uriGetEcotips)
+  // console.log('uriGetEcotips: ' + uriGetEcotips)
 
   return await fetch(uriGetEcotips, {
     method: 'GET',

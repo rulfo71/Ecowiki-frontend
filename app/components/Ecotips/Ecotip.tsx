@@ -18,7 +18,6 @@ import CardView from "react-native-cardview";
 
 export default function Ecotip(props) {
   const { ecotipParam, navigation } = props;
-  console.log(`entre a Ecotip con ${JSON.stringify(ecotipParam)}`);
 
   const ecotip: EcotipModel = ecotipParam;
 

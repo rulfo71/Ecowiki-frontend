@@ -11,7 +11,7 @@ error Invalid regular expression: /(.*\\__fixtures__\\.*|node_modules[\\\]react[
 
 Metro Bundler process exited with code 1
 
-Tenés que ir a [\node_modules\metro-config\src\defaults\blacklist.js]
+Tenés que ir a [aca](./node_modules/metro-config/src/defaults/blacklist.js)
 
 y reemplazar : 
 var sharedBlacklist = [
