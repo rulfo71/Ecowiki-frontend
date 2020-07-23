@@ -30,6 +30,7 @@ export const getEcotips = async (getEcotipsDto: GetEcotipsDto): Promise<Ecotip[]
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 

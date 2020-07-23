@@ -30,6 +30,7 @@ export const addProduct = async (product: AddProductDto): Promise<AddProductResp
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -52,6 +53,7 @@ export const addUnregisteredProduct = async (product: AddProductDto): Promise<Ad
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -87,7 +89,7 @@ export const addVote = (product: Product) => {
   })
     .catch(error => {
       console.log('error: ', error)
-      console.error(error)
+      throw new Error(error);
     })
 }
 
@@ -120,7 +122,7 @@ export const subtractVote = product => {
   })
     .catch(error => {
       console.log('error: ', error)
-      console.error(error)
+      throw new Error(error);
     })
 }
 
@@ -144,6 +146,7 @@ export const getProductByBarCode = async barCode => {
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 export const getProductByName = async name => {
@@ -164,6 +167,7 @@ export const getProductByName = async name => {
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -215,6 +219,7 @@ export const getUnregisteredProducts = async (getUnregisteredProductsDto: GetPro
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 

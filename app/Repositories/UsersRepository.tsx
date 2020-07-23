@@ -30,6 +30,7 @@ export const addUser = async (user: AddUserDto): Promise<AddUserResponse> => {
 
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -51,6 +52,7 @@ export const updateUser = async (user: UpdateUserDto) => {
       // return response
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -71,6 +73,7 @@ export const getUserById = async (userId: string): Promise<UserModel> => {
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
@@ -95,6 +98,7 @@ export const getWhatsappLink = async (): Promise<WhatsappUrlResponse> => {
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
+      throw new Error(error);
     });
 }
 
