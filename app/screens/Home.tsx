@@ -37,16 +37,15 @@ export default function Home() {
     }
   }, [loggedModalResponse])
 
-  const goToAddProduct = () => {
+  const goToIfLogged = (route : string) => {
     if (isLogged) {
-      navigation.navigate(
-        Constants.Navigations.ProductStack.collaborate
-      )
+      navigation.navigate(route)
     }
     else {
       setShowLoggedModal(true)
     }
   }
+
 
   const actions = [
     {
@@ -73,17 +72,32 @@ export default function Home() {
         color: Constants.Colors.brandGreenColor,
         size: 50,
     },
+    {
+      text: "Clasificar",
+      icon: <Icon
+          type='material-community'
+          name='barcode'
+          color='white'
+      />,
+      name: "clasify_products",
+      position: 2,
+      color: Constants.Colors.brandGreenColor,
+      size: 50,
+    },
 ]
 
 const onPressItem = (name) => {
   switch (name) {
       case 'add_new_product':
-          navigation.navigate(Constants.Navigations.ProductStack.addNewProduct)
+          goToIfLogged(Constants.Navigations.ProductStack.addNewProduct)
           break;
       case 'vote_added_products':
           // console.log(`toastRef: ${toastRef}`);
-          navigation.navigate(Constants.Navigations.ProductStack.voteProducts)
+          goToIfLogged(Constants.Navigations.ProductStack.voteProducts)
           break;
+      case 'clasify_products':
+        goToIfLogged(Constants.Navigations.ProductStack.collaborate)
+        break;
       default:
           break;
   }
@@ -91,77 +105,62 @@ const onPressItem = (name) => {
 
 
   return (
-    <ScrollView style={styles.viewBody}>
-      <View style={styles.buttonsTop}>
-        <TouchableHighlight
-          onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
-          style={styles.touchable}
-        >
-          <View>
-            <Icon
-              type='material'
-              name='search'
-              reverse={true}
-              color={Constants.Colors.brandGreenColor}
-              raised={true}
-              containerStyle={styles.containerIcon}
-            />
-            <Text style={styles.buttonsText}> Buscar </Text>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={goToAddProduct}
-          style={styles.touchable}
-        >
-          <View>
-            <Icon
-              type='material'
-              name='add'
-              color={Constants.Colors.brandGreenColor}
-              reverse={true}
-              raised={true}
-              style={styles.icon}
-              containerStyle={styles.containerIcon}
-            />
-            <Text style={styles.buttonsText}> Colaborar </Text>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => navigation.navigate(Constants.Navigations.AccountStack.account)}
-          style={styles.touchable}
-        >
-          <View>
-            <Icon
-              type='material-community'
-              name='account'
-              color={Constants.Colors.brandGreenColor}
-              reverse={true}
-              raised={true}
-              containerStyle={styles.containerIcon}
-            />
-            <Text style={styles.buttonsText}> Mi Cuenta </Text>
-          </View>
-        </TouchableHighlight>
-      </View>
-      <TresR/>
-      <EcotipsList/>
-      <ConfirmModal
-        showModal={showLoggedModal}
-        setShowModal={setShowLoggedModal}
-        questionText={' Para agregar productos tenés que estar logueado'}
-        confirmText={'Iniciar Sesión'}
-        cancelText={'Cancelar'}
-        setResponse={setLoggedModalResponse}
-      />
-      <Spinner visible={isLoading} />
+    <View style={styles.viewBody}>
+      <ScrollView>
+        <View style={styles.buttonsTop}>
+          <TouchableHighlight
+            onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
+            style={styles.touchable}
+          >
+            <View>
+              <Icon
+                type='material'
+                name='search'
+                reverse={true}
+                color={Constants.Colors.brandGreenColor}
+                raised={true}
+                containerStyle={styles.containerIcon}
+              />
+              <Text style={styles.buttonsText}> Buscar </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => navigation.navigate(Constants.Navigations.AccountStack.account)}
+            style={styles.touchable}
+          >
+            <View>
+              <Icon
+                type='material-community'
+                name='account'
+                color={Constants.Colors.brandGreenColor}
+                reverse={true}
+                raised={true}
+                containerStyle={styles.containerIcon}
+              />
+              <Text style={styles.buttonsText}> Mi Cuenta </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+        <TresR/>
+        <EcotipsList/>
+        <ConfirmModal
+          showModal={showLoggedModal}
+          setShowModal={setShowLoggedModal}
+          questionText={' Para agregar productos tenés que estar logueado'}
+          confirmText={'Iniciar Sesión'}
+          cancelText={'Cancelar'}
+          setResponse={setLoggedModalResponse}
+        />
+        <Spinner visible={isLoading} />
+      </ScrollView>
       <FloatingAction
                     actions={actions}
-                    color={Constants.Colors.brandBlueColor}
+                    color={Constants.Colors.brandGreenColor}
                     onPressItem={name => {
                         onPressItem(name)
                     }}
                 />
-    </ScrollView>
+    </View>
   )
 }
 

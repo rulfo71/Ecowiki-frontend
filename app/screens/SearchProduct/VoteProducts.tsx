@@ -11,6 +11,7 @@ import GetProductsToVoteDto from '../../Dtos/Products/GetProductsToVoteDto'
 import { size, isEmpty } from 'lodash'
 import Product from '../../components/Products/Product'
 import { Constants } from '../../Common/Constants/Constants';
+import Login from '../Account/Login';
 
 export default function VoteProducts({ route, navigation }) {
   const toastRef = useRef();
@@ -27,9 +28,19 @@ export default function VoteProducts({ route, navigation }) {
   const [products, setProducts] = useState([])
   const [startProductName, setStartProductName] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [isLogged, setIsLogged] = useState(null)
+
 
   useEffect(() => {
     // console.log(`toastRef: ${JSON.stringify(toastRef)}`);
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+          setIsLogged(false)
+      }
+      else {
+          setIsLogged(true);
+      }
+  });
 
     var getProductsToVoteDto = new GetProductsToVoteDto()
     const user = firebase.auth().currentUser
@@ -127,12 +138,15 @@ export default function VoteProducts({ route, navigation }) {
     </View>
   )
 
+  if (isLogged === null) return <Spinner visible={isLogged === null} />
+
   return (
     <View style={styles.container}>
       {(isEmpty(products) || products.length == 0) ? (
         <View style={styles.container}>
         </View>
       ) : (
+        !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.collaborate} /> :
           <Swiper
             ref={swiper => {
               this.swiper = swiper

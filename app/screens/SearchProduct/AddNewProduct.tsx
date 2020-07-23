@@ -9,6 +9,8 @@ import * as Permissions from 'expo-permissions'
 import { getProductByBarCode, getProductByName, addUnregisteredProduct } from '../../Repositories/ProductsRepository'
 import { Text as TextElem, Overlay, SearchBar, Button } from 'react-native-elements'
 import Spinner from "react-native-loading-spinner-overlay";
+import * as firebase from 'firebase';
+
 
 import CodeScanner from '../../utils/CodeScanner'
 import Product from '../../Models/ProductModel'
@@ -17,11 +19,12 @@ import { useNavigation } from '@react-navigation/native'
 import { Constants } from '../../Common/Constants/Constants'
 import ConfirmModal from '../../components/ConfirmModal'
 import { isEmpty } from 'lodash'
+import Login from '../Account/Login'
 
 export default function AddNewProduct({ route, navigation }) {
   let searchBarRef = useRef(null);
+  const [isLogged, setIsLogged] = useState(null)
   // const toastRef = useRef(null);
-
   let [hasCameraPermission, setCameraPermission] = useState(null);
   let [loading, setLoading] = useState(false);
   // let [searchBar, setSearchBar] = useState('');
@@ -36,6 +39,14 @@ export default function AddNewProduct({ route, navigation }) {
 
   useEffect(() => {
     getPermissionsAsync();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+          setIsLogged(false)
+      }
+      else {
+          setIsLogged(true);
+      }
+  });
 
     if (scanned && !alreadySearched) {
       onBarcodeScanned()
@@ -71,7 +82,11 @@ export default function AddNewProduct({ route, navigation }) {
     }
   }
 
+  if (isLogged === null) return <Spinner visible={isLogged === null} />
+
+
   return (
+    !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.collaborate} /> :
     <View style={styles.view}>
       <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanned={scanned} setScanned={setScanned} setAlreadySearched={setAlreadySearched}></CodeScanner>
       <Button
