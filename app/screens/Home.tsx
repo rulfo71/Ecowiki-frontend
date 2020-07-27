@@ -19,6 +19,7 @@ export default function Home() {
   const [loggedModalResponse, setLoggedModalResponse] = useState(false)
   const [isLogged, setIsLogged] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [goTo, setGoTo] = useState('')
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -32,16 +33,22 @@ export default function Home() {
       setIsLogged(false)
     }
     if (loggedModalResponse) {
-      navigation.navigate(Constants.Navigations.ProductStack.collaborate)
+      console.log('****************');
+      console.log(`goTo: ${goTo} `);
+      console.log('****************');
+      
+      navigation.navigate(goTo)
       setLoggedModalResponse(false)
     }
   }, [loggedModalResponse])
 
-  const goToIfLogged = (route : string) => {
+  const goToIfLogged = (url : string) => {
     if (isLogged) {
-      navigation.navigate(route)
+      setGoTo('')
+      navigation.navigate(url)
     }
     else {
+      setGoTo(url);
       setShowLoggedModal(true)
     }
   }
@@ -96,7 +103,7 @@ const onPressItem = (name) => {
           goToIfLogged(Constants.Navigations.ProductStack.voteProducts)
           break;
       case 'clasify_products':
-        goToIfLogged(Constants.Navigations.ProductStack.collaborate)
+        goToIfLogged(Constants.Navigations.ProductStack.clasify)
         break;
       default:
           break;

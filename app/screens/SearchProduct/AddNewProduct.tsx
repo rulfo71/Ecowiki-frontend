@@ -52,6 +52,11 @@ export default function AddNewProduct({ route, navigation }) {
       onBarcodeScanned()
       setAlreadySearched(true)
     }
+
+    // navigation.setOptions({
+    //   title: Constants.Navigations.titles.ProductStack.addNewProduct,
+    // })
+
   }, [scanned]);
 
   const getPermissionsAsync = async () => {
@@ -86,7 +91,7 @@ export default function AddNewProduct({ route, navigation }) {
 
 
   return (
-    !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.collaborate} /> :
+    !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.addNewProduct} /> :
     <View style={styles.view}>
       <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanned={scanned} setScanned={setScanned} setAlreadySearched={setAlreadySearched}></CodeScanner>
       <Button

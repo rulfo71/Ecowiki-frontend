@@ -12,7 +12,7 @@ import RecoverPassword from '../screens/Account/RecoverPassword';
 // import AddProduct from '../screens/SearchProduct/AddProductViejo';
 import AddProduct from '../screens/SearchProduct/AddProduct'
 import AddUnRegisteredProduct from '../screens/SearchProduct/AddUnRegisteredProduct';
-import Collaborate from '../screens/SearchProduct/Collaborate';
+import Clasify from '../screens/SearchProduct/Clasify';
 import AddNewProduct from '../screens/SearchProduct/AddNewProduct';
 import VoteProducts from '../screens/SearchProduct/VoteProducts';
 
@@ -66,10 +66,10 @@ export default function MainStack() {
                 }}
             />
             <Stack.Screen
-                name={Constants.Navigations.ProductStack.collaborate}
-                component={Collaborate}
+                name={Constants.Navigations.ProductStack.clasify}
+                component={Clasify}
                 options={{
-                    title: Constants.Navigations.titles.ProductStack.collaborate
+                    title: Constants.Navigations.titles.ProductStack.clasify
                 }}
             />
             <Stack.Screen
@@ -84,7 +84,7 @@ export default function MainStack() {
                 component={AddNewProduct}
                 options={{
                     headerTransparent: true,
-                    title: '',
+                    title: Constants.Navigations.titles.ProductStack.addNewProduct,
                     headerTintColor: Constants.Colors.brandGreenColor
                 }}
             />

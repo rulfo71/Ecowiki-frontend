@@ -16,16 +16,27 @@ export default function LoginForm(props) {
     const [formData, setFormData] = useState(defaultFormValue());
     const [loading, setLoading] = useState(false);
 
-    const navigation = useNavigation();
+    console.log('************************');
+    console.log(`redirectTo es: ${redirectTo}`);                        
+    console.log('************************');
+
+    const navigation = useNavigation();    
 
     const getTitle = (redirection: string) => {
         let title = ''
         switch (redirection) {
+            
             case Constants.Navigations.AccountStack.account:
                 title = Constants.Navigations.titles.AccountStack.account                
                 break;
-            case Constants.Navigations.ProductStack.addProduct:
-                title = Constants.Navigations.titles.ProductStack.addProduct
+            case Constants.Navigations.ProductStack.clasify:
+                title = Constants.Navigations.titles.ProductStack.clasify
+                break;
+            case Constants.Navigations.ProductStack.addNewProduct:
+                title = Constants.Navigations.titles.ProductStack.addNewProduct
+                break;
+            case Constants.Navigations.ProductStack.voteProducts:
+                title = Constants.Navigations.titles.ProductStack.voteProducts
                 break;
             default:
                 break;
@@ -58,7 +69,7 @@ export default function LoginForm(props) {
                             title: title
                         })                        
                     }
-                    else {
+                    else {                        
                         navigation.navigate(redirectTo)
                         const title = getTitle(redirectTo)
                         navigation.setOptions({

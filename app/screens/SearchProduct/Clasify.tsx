@@ -14,7 +14,7 @@ import { getUnregisteredProducts, getProductByBarCode } from '../../Repositories
 import UnregisteredProduct from '../../components/Products/UnregisteredProduct';
 import { isEmpty } from 'lodash';
 
-export default function Collaborate({ route, navigation }) {
+export default function Clasify({ route, navigation }) {
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
@@ -34,7 +34,7 @@ export default function Collaborate({ route, navigation }) {
         });
 
         navigation.setOptions({
-            title: 'Colaborar',
+            title: Constants.Navigations.titles.ProductStack.clasify,
             headerStyle: {
                 backgroundColor: Constants.Colors.brandGreenColor,
                 borderBottomStartRadius: 0,
@@ -124,7 +124,7 @@ export default function Collaborate({ route, navigation }) {
     if (isLogged === null) return <Spinner visible={isLogged === null} />
 
     return (
-        !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.collaborate} /> :
+        !isLogged ? <Login redirectTo={Constants.Navigations.ProductStack.clasify} /> :
             <View style={styles.view}>
                 <UnregisteredProductsList
                     products={unRegisteredProducts}

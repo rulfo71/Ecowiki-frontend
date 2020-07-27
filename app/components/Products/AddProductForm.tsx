@@ -90,7 +90,7 @@ export default function AddProductForm(props) {
                 setIsLoading(false)
 
                 toastRef.current.show('Gracias! Ya agregamos el producto', 400, () => {
-                    navigation.navigate(Constants.Navigations.ProductStack.collaborate);
+                    navigation.navigate(Constants.Navigations.ProductStack.clasify);
                 });
                 console.log(`AddProductForm - response : ${JSON.stringify(response)}`);
             } catch (error) {
