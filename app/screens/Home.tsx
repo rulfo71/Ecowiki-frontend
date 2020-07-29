@@ -7,10 +7,8 @@ import { FloatingAction } from 'react-native-floating-action'
 
 import { Constants } from "../Common/Constants/Constants";
 import { Button, Icon } from "react-native-elements";
-import ModalRN from "../components/ModalRN";
 import ConfirmModal from "../components/ConfirmModal";
 import EcotipsList from "../components/Ecotips/EcotipsList";
-import Toast from "react-native-easy-toast";
 
 export default function Home() {
 
@@ -114,41 +112,28 @@ const onPressItem = (name) => {
   return (
     <View style={styles.viewBody}>
       <ScrollView>
-        <View style={styles.buttonsTop}>
+        <TresR/>
+        <View>
           <TouchableHighlight
+            activeOpacity={0.5}
+            underlayColor= '#e5e5e5'
             onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
             style={styles.touchable}
           >
             <View>
               <Icon
+                size={50}
                 type='material'
                 name='search'
-                reverse={true}
+                // reverse={true}
                 color={Constants.Colors.brandGreenColor}
-                raised={true}
+                // raised={true}
                 containerStyle={styles.containerIcon}
               />
-              <Text style={styles.buttonsText}> Buscar </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => navigation.navigate(Constants.Navigations.AccountStack.account)}
-            style={styles.touchable}
-          >
-            <View>
-              <Icon
-                type='material-community'
-                name='account'
-                color={Constants.Colors.brandGreenColor}
-                reverse={true}
-                raised={true}
-                containerStyle={styles.containerIcon}
-              />
-              <Text style={styles.buttonsText}> Mi Cuenta </Text>
+              <Text style={styles.buttonsText}> ¿ En qué tacho va ? </Text>
             </View>
           </TouchableHighlight>
         </View>
-        <TresR/>
         <EcotipsList/>
         <ConfirmModal
           showModal={showLoggedModal}
@@ -225,18 +210,34 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   buttonsText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 15
   },
   touchable: {
-    padding: 10,
     alignContent: 'center',
-    width: 100,
+    alignSelf: 'center',
+    width: '90%',
+    margin: 10,
+    padding: 10,
+    borderRadius: 20,
+
+    //raised
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: '#fff',
+    elevation: 3, // Android
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+
   },
   icon: {
   },
-  buttonsTop: {
-    flexDirection: 'row'
-  },
+  // buttonsTop: {
+  //   flexDirection: 'row'
+  // },
   tresR: {
     width: '100%',
     height: 150,
