@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { FloatingAction } from 'react-native-floating-action'
+import { View, StyleSheet } from 'react-native';
 import Spinner from "react-native-loading-spinner-overlay";
 import Toast from 'react-native-easy-toast'
 
 import { Constants } from '../../Common/Constants/Constants';
-import { Icon } from 'react-native-elements';
 import Login from '../Account/Login';
 import * as firebase from 'firebase';
 import UnregisteredProductsList from '../../components/Products/UnregisteredProductsList';
 import GetProductsToVoteDto from '../../Dtos/Products/GetProductsToVoteDto';
 import { getUnregisteredProducts, getProductByBarCode } from '../../Repositories/ProductsRepository';
-import UnregisteredProduct from '../../components/Products/UnregisteredProduct';
 import { isEmpty } from 'lodash';
 
 export default function Clasify({ route, navigation }) {
@@ -81,46 +78,6 @@ export default function Clasify({ route, navigation }) {
         }
     }
 
-    const onPressItem = (name) => {
-        switch (name) {
-            case 'add_new_product':
-                navigation.navigate(Constants.Navigations.ProductStack.addNewProduct)
-                break;
-            case 'vote_added_products':
-                navigation.navigate(Constants.Navigations.ProductStack.voteProducts)
-                break;
-            default:
-                break;
-        }
-    }
-
-    const actions = [
-        {
-            text: "Votar productos",
-            icon: <Icon
-                type='material'
-                name='done'
-                color='white'
-            />,
-            name: "vote_added_products",
-            position: 1,
-            color: Constants.Colors.brandGreenColor,
-            size: 50,
-        },
-        {
-            text: "Agregar un producto nuevo",
-            icon: <Icon
-                type='material-community'
-                name='barcode'
-                color='white'
-            />,
-            name: "add_new_product",
-            position: 2,
-            color: Constants.Colors.brandGreenColor,
-            size: 50,
-        },
-    ]
-
     if (isLogged === null) return <Spinner visible={isLogged === null} />
 
     return (
@@ -133,13 +90,6 @@ export default function Clasify({ route, navigation }) {
                     navigation={navigation}
                     handleLoadMore={getProducts}
                     isLoadingMore={isLoadingMore}
-                />
-                <FloatingAction
-                    actions={actions}
-                    color={Constants.Colors.brandBlueColor}
-                    onPressItem={name => {
-                        onPressItem(name)
-                    }}
                 />
                 <Spinner visible={isLoading} />
                 <Toast ref={toastRef} position='center' opacity={0.9} />
