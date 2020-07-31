@@ -112,14 +112,13 @@ const onPressItem = (name) => {
   return (
     <View style={styles.viewBody}>
       <ScrollView>
-        <TresR/>
         <View>
           <TouchableHighlight
             activeOpacity={0.5}
             underlayColor= '#e5e5e5'
             onPress={() => navigation.navigate(Constants.Navigations.ProductStack.searchProduct)}
             style={styles.touchable}
-          >
+            >
             <View>
               <Icon
                 size={50}
@@ -129,11 +128,12 @@ const onPressItem = (name) => {
                 color={Constants.Colors.brandGreenColor}
                 // raised={true}
                 containerStyle={styles.containerIcon}
-              />
+                />
               <Text style={styles.buttonsText}> ¿ En qué tacho va ? </Text>
             </View>
           </TouchableHighlight>
         </View>
+        <TresR/>
         <EcotipsList/>
         <ConfirmModal
           showModal={showLoggedModal}

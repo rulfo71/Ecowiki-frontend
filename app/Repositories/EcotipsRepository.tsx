@@ -3,7 +3,7 @@ import { Constants } from '../Common/Constants/Constants';
 import GetEcotipsDto from '../Dtos/Ecotips/GetEcotipsDto';
 
 //const server = 'https://reciclarte-63ba5.appspot.com/'
-const server = `${Constants.Backend.url}/ecotips/`
+const server = `${Constants.Backend.url}/Ecotips/`
 
 export const getEcotips = async (getEcotipsDto: GetEcotipsDto): Promise<Ecotip[]> => {
   const { startEcotipId } = getEcotipsDto
@@ -15,7 +15,7 @@ export const getEcotips = async (getEcotipsDto: GetEcotipsDto): Promise<Ecotip[]
     uriGetEcotips = `${server}getEcotips/${startEcotipId}`
   else 
     uriGetEcotips = `${server}getEcotips`
-  // console.log('uriGetEcotips: ' + uriGetEcotips)
+  console.log('uriGetEcotips: ' + uriGetEcotips)
 
   return await fetch(uriGetEcotips, {
     method: 'GET',

@@ -7,8 +7,6 @@ import AddVoteDto from '../Dtos/Products/AddVoteDto';
 import GetProductsToVoteDto from '../Dtos/Products/GetProductsToVoteDto';
 import { Constants } from '../Common/Constants/Constants';
 
-//const server = 'https://reciclarte-63ba5.appspot.com/'
-// const server = 'http://192.168.0.6:3000/products/'
 const server = `${Constants.Backend.url}/products/`
 
 export const addProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
@@ -49,7 +47,7 @@ export const addUnregisteredProduct = async (product: AddProductDto): Promise<Ad
     .then(status)
     .then(json)
     .then(function (data) {
-      console.log('Respuesta addProduct: ', data);
+      console.log('Respuesta addUnregisteredProduct: ', data);
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
@@ -232,5 +230,6 @@ function status(response) {
 }
 
 function json(response) {
+  console.log(JSON.stringify(response));
   return response.json()
 }

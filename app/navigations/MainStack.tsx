@@ -150,9 +150,6 @@ export default function MainStack() {
 const styles = StyleSheet.create({
     buttonMyAccount: {
         alignSelf: 'center',
-        marginRight: 10,
         backgroundColor: 'transparent'
-
     }
-
 })

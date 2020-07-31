@@ -13,10 +13,6 @@ export default function AddUnRegisteredProduct({ route, navigation }) {
     const toastRef = useRef();
     const [isLogged, setIsLogged] = useState(null)
 
-    console.log(`route: ${JSON.stringify(route)}`);
-
-    console.log(`AddUnregisteredProduct. name: ${name}, barcode: ${barcode}`);
-
     useEffect(() => {
         navigation.setOptions({
             title: 'Agregar Producto',
@@ -32,6 +28,7 @@ export default function AddUnRegisteredProduct({ route, navigation }) {
                 isUnRegistered={true}
                 nameParam={name}
                 barcodeParam={barcode}
+                observationsParam={''}
             />
             <Toast ref={toastRef} position='center' opacity={0.8}></Toast>
             <Spinner visible={isLoading} />

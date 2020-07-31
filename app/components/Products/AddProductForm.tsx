@@ -17,9 +17,6 @@ export default function AddProductForm(props) {
 
     const { toastRef, setIsLoading, navigation, isUnRegistered, nameParam, barcodeParam, photoUrlParam, observationsParam } = props
 
-    console.log(`llegue a AddproductForm con observationsParam: ${observationsParam} `);
-
-
     const [barcode, setBarcode] = useState(barcodeParam)
     const [material, setMaterial] = useState('')
     const [name, setName] = useState(nameParam)
@@ -81,6 +78,9 @@ export default function AddProductForm(props) {
 
                 let response
                 if (isUnRegistered) {
+                    console.log('**************');                     
+                    console.log('Por llamar a addunregisteredProduct', JSON.stringify(addProductDto))
+                    console.log('**************');
                     response = await addUnregisteredProduct(addProductDto)
                 }
                 else {
