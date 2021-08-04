@@ -3,7 +3,6 @@
     "name": "Ecowiki",
     "slug": "ecowiki",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",

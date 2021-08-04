@@ -59,7 +59,7 @@ export const Constants = {
 
     },
     Backend: {
-        // url: 'https://reciclarte-63ba5.appspot.com'
-        url: 'http://192.168.0.5:3000'
+        url: 'https://reciclarte-63ba5.appspot.com'
+        // url: 'http://192.168.250.206:3000'
     }
 } 
