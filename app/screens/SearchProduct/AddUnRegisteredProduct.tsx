@@ -11,7 +11,6 @@ export default function AddUnRegisteredProduct({ route, navigation }) {
     const { name, barcode } = route.params
     const [isLoading, setIsLoading] = useState(false)
     const toastRef = useRef();
-    const [isLogged, setIsLogged] = useState(null)
 
     useEffect(() => {
         navigation.setOptions({
