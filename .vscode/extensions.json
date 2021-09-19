@@ -4,12 +4,9 @@
 
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
-		"coenraads.bracket-pair-colorizer",
 		"dsznajder.es7-react-js-snippets",
-		"dbaeumer.vscode-eslint",
 		"pkief.material-icon-theme",
 		"christian-kohler.path-intellisense",
-		"esbenp.prettier-vscode",
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
