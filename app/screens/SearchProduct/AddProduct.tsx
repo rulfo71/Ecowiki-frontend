@@ -3,9 +3,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import Toast from 'react-native-easy-toast';
 import Spinner from "react-native-loading-spinner-overlay";
 import AddProductForm from '../../components/Products/AddProductForm'
-import * as firebase from 'firebase'
-import Login from '../Account/Login';
-import { Constants } from '../../Common/Constants/Constants';
 
 export default function AddProduct({ route, navigation }) {
     const { name, barcode, photoUrl, observations } = route.params
@@ -13,7 +10,6 @@ export default function AddProduct({ route, navigation }) {
 
     const [isLoading, setIsLoading] = useState(false)
     const toastRef = useRef();
-    const [isLogged, setIsLogged] = useState(null)
 
     return (
         <View>

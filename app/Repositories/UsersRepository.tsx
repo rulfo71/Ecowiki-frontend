@@ -45,12 +45,8 @@ export const updateUser = async (user: UpdateUserDto) => {
     },
     body: JSON.stringify(user)
   })
-    .then(status)
-    .then(json)
-    .then(function (response) {
-      console.log('Respuesta addUser: ', JSON.stringify(response));
-      // return response
-    }).catch(function (error) {
+    .then()
+    .catch(function (error) {
       console.log('Request failed', error);
       throw new Error(error);
     });

@@ -2,7 +2,6 @@ import React, { Component, useEffect, useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
-  Alert,
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
 import * as Permissions from 'expo-permissions'
@@ -73,7 +72,8 @@ export default function SearchProduct() {
   const goToAddUnregisteredProduct = async () => {
     navigation.navigate(Constants.Navigations.ProductStack.addUnregisteredProduct, {
       barcode: barcode,
-      name: lastSearchedName
+      name: lastSearchedName,
+      observations: ''
     });
     setLastSearchedName('')
   }

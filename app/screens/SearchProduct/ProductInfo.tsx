@@ -6,7 +6,6 @@ import { Icon } from 'react-native-elements'
 import ImageView from 'react-native-image-view'
 
 import {
-	getMaterialLogo,
 	addVote,
 	subtractVote,
 } from '../../Repositories/ProductsRepository'
@@ -41,11 +40,9 @@ export default function ProductInfo({ route, navigation }) {
 
 	const { productParam } = route.params
 
-	// console.log(`productParam: ${JSON.stringify(productParam)} `);
 	const product: Product = productParam
 	console.log(`product: ${JSON.stringify(product)} `)
 
-	// let [product, setProduct] = useState(productParam);
 	const [uriImageLogo, seturiImageLogo] = useState('')
 	const [showAddProductModal, setShowAddProductModal] = useState(false)
 	const [addProductModalResponse, setAddProductModalResponse] = useState(null)
@@ -88,6 +85,7 @@ export default function ProductInfo({ route, navigation }) {
 			navigation.navigate(Constants.Navigations.ProductStack.addProduct, {
 				name: product.displayName,
 				barcode: product.barcode,
+				observations: ''
 			})
 
 			setAddProductModalResponse(null)

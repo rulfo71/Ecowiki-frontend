@@ -32,7 +32,7 @@ export const addProduct = async (product: AddProductDto): Promise<AddProductResp
     });
 }
 
-export const addUnregisteredProduct = async (product: AddProductDto): Promise<AddProductResponse> => {
+export const addUnregisteredProduct = async (product: AddProductDto): Promise<void> => {
   var uriAddUnregisteredProduct = server + 'addUnregisteredProduct'
   console.log(uriAddUnregisteredProduct);
   console.log(`body: ${JSON.stringify(product)} `);
@@ -43,16 +43,17 @@ export const addUnregisteredProduct = async (product: AddProductDto): Promise<Ad
       'Content-type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify(product)
-  })
-    .then(status)
-    .then(json)
-    .then(function (data) {
-      console.log('Respuesta addUnregisteredProduct: ', data);
-      return data;
-    }).catch(function (error) {
-      console.log('Request failed', error);
-      throw new Error(error);
-    });
+
+    }).then(response => {
+      console.log('entre al then')
+      console.log(response);
+      // return response;
+    })
+      .catch(error => {
+        console.log('error: ', error)
+        throw new Error(error);
+      })
+
 }
 
 export const addVote = (product: Product) => {
@@ -63,7 +64,6 @@ export const addVote = (product: Product) => {
   addModelDto.name = product.displayName
   addModelDto.detailsId = product.detailsId
   var user = firebase.auth().currentUser
-  console.log('addVote user: ', user.uid);
   
   if (user) {
     addModelDto.userId = user.uid
@@ -80,11 +80,7 @@ export const addVote = (product: Product) => {
       'Content-type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify(addModelDto)
-  }).then(response => {
-    console.log('entre al then')
-    console.log(response);
-    // return response;
-  })
+  }).then()
     .catch(error => {
       console.log('error: ', error)
       throw new Error(error);
@@ -114,10 +110,7 @@ export const subtractVote = product => {
       'Content-type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify(addModelDto)
-  }).then(response => {
-    console.log('entre al then')
-    console.log(response);
-  })
+  }).then()
     .catch(error => {
       console.log('error: ', error)
       throw new Error(error);

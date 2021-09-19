@@ -57,17 +57,18 @@ export default function AddProductForm(props) {
         }
         else {
             let addProductDto = new AddProductDto()
-            addProductDto.barcode = barcode
+            addProductDto.barcode = barcode? "" : barcode
             addProductDto.name = name
-            addProductDto.observations = observations
+            addProductDto.observations = observations? "" : observations
             // addProductDto.hasImage = !isEmpty(imageUri) ? true : false
             if (!isUnRegistered)
                 addProductDto.material = (material !== 'otro') ? material : other
             const user = firebase.auth().currentUser
             if (!user && !isUnRegistered) {
                 toastRef.current.show('Tenés que estar logueado para poder registrar productos')
+                navigation.navigate(Constants.Navigations.AccountStack.account);
                 return
-            } else {
+            } else if (user){                
                 addProductDto.addedBy = user.uid
             }
             try {
@@ -90,7 +91,12 @@ export default function AddProductForm(props) {
                 setIsLoading(false)
 
                 toastRef.current.show('Gracias! Ya agregamos el producto', 400, () => {
-                    navigation.navigate(Constants.Navigations.ProductStack.clasify);
+                    if (isUnRegistered){
+                        navigation.navigate(Constants.Navigations.home);
+                    }
+                    else{
+                        navigation.navigate(Constants.Navigations.ProductStack.clasify);
+                    }
                 });
                 console.log(`AddProductForm - response : ${JSON.stringify(response)}`);
             } catch (error) {
