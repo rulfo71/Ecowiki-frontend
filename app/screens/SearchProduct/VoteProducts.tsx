@@ -66,16 +66,22 @@ export default function VoteProducts({ route, navigation }) {
 			try {
 				var response = await getProductsToVote(getProductsToVoteDto)
 				console.log('response de getProductsToVote: ', response)
+				console.log(`response.length: ${response.length}`)
+
 				setProducts(response)
 				if (response.length == 0) {
+					setIsLoading(false)
+					console.log('entre acá porque repsonse length es 0')
 					toastRef.current.show(
 						'Muchas gracias!! Ya no quedan productos por votar. Probá mañana!',
 						3000,
 						() => {
-							navigation.navigate(Constants.Navigations.ProductStack.clasify)
-						}
-					)
+							navigation.navigate(Constants.Navigations.home)
+							}
+						)
+						return;
 				}
+				console.log('se ve que no entré....raaaaro')
 				var startProductName = response[
 					response.length - 1
 				].displayName.toLowerCase()

@@ -1,6 +1,5 @@
 import React, { Component, useRef, useState, useEffect } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Button } from 'react-native-elements'
 import Toast from 'react-native-easy-toast'
 import * as firebase from 'firebase'
 import Spinner from "react-native-loading-spinner-overlay";
@@ -21,7 +20,6 @@ export default function UserLogged() {
 
   useEffect(() => {
     (async () => {
-      // setLoading(true)
       setUserInfo(null);
       const userFirebase = await firebase.auth().currentUser;
       console.log(`userFirebase: ${JSON.stringify(userFirebase)}`);

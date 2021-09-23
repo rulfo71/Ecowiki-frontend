@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { StyleSheet, ScrollView, Image, View, Text } from 'react-native'
 import { Divider } from 'react-native-elements'
 import { Constants } from '../../Common/Constants/Constants'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useNavigation } from '@react-navigation/native'
 
 import LoginForm from '../../components/Account/LoginForm'

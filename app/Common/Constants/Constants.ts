@@ -11,7 +11,6 @@ export const Constants = {
     Navigations: {
         AccountStack: {
             account: 'account',
-            login: 'login',
             register: 'register',
             recoverPassword: 'recoverPassword'
         },
@@ -59,7 +58,7 @@ export const Constants = {
 
     },
     Backend: {
-        // url: 'https://reciclarte-63ba5.appspot.com'
-        url: 'http://192.168.1.31:3000'
+        url: 'https://reciclarte-63ba5.appspot.com'
+        // url: 'http://192.168.1.175:3000'
     }
 } 
