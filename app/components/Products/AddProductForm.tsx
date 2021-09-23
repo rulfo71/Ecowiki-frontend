@@ -57,9 +57,10 @@ export default function AddProductForm(props) {
         }
         else {
             let addProductDto = new AddProductDto()
-            addProductDto.barcode = barcode? "" : barcode
+            console.log(`*********barcode: ${barcode}, observations: ${observations}**********`)
+            addProductDto.barcode = barcode? barcode : ''
             addProductDto.name = name
-            addProductDto.observations = observations? "" : observations
+            addProductDto.observations = observations? observations : ''
             // addProductDto.hasImage = !isEmpty(imageUri) ? true : false
             if (!isUnRegistered)
                 addProductDto.material = (material !== 'otro') ? material : other

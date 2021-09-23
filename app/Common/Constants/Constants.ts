@@ -54,11 +54,10 @@ export const Constants = {
             photoUrl: 'photoUrl',
             showContributions: 'showContributions',
             userId: 'userId'
-        }
-
+    }
     },
     Backend: {
         url: 'https://reciclarte-63ba5.appspot.com'
-        // url: 'http://192.168.1.175:3000'
+        // url: 'http://192.168.1.39:3000'
     }
 } 

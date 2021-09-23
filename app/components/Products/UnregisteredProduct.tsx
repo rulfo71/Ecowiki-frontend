@@ -16,7 +16,6 @@ import UnregisteredProductModel from '../../Models/UnregisteredProductModel'
 
 export default function UnregisteredProduct(props) {
 	const { productParam, navigation } = props
-	console.log(`entre a UnregisteredProduct con ${JSON.stringify(productParam)}`)
 
 	const product: UnregisteredProductModel = productParam
 
