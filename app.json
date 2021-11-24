@@ -30,7 +30,9 @@
         "CAMERA_ROLL",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
-      ]
+      ],
+      "package": "ecowiki.com",
+      "versionCode": 1
     },
     "description": ""
   }

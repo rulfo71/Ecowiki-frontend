@@ -129,7 +129,7 @@ const onPressItem = (name) => {
                 // raised={true}
                 containerStyle={styles.containerIcon}
                 />
-              <Text style={styles.buttonsText}> ¿ En qué tacho va ? </Text>
+              <Text style={styles.buttonsText}> ¿ En qué contenedor va ? </Text>
             </View>
           </TouchableHighlight>
         </View>

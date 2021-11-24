@@ -157,7 +157,7 @@ export default function SearchProduct() {
         showModal={showAddProductModal}
         setShowModal={setShowAddProductModal}
         questionText={'Upss..No tenemos registrado este producto'}
-        secondaryQuestionText={'Si agregás mas informacion, alguien va a poder cargar a que tacho va!'}
+        secondaryQuestionText={'Si agregás mas informacion, alguien va a poder cargar a que contenedor va!'}
         confirmText={'Aceptar'}
         cancelText={'Cancelar'}
         setResponse={setAddProductModalResponse}

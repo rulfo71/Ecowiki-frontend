@@ -197,7 +197,7 @@ function FormAdd(props) {
                         style={styles.picker}
                         itemStyle={styles.pickerItems}
                         onValueChange={value => materialChange(value)}>
-                        <Picker.Item color='#c9c9c9' label='¿En qué tacho va?' value='' />
+                        <Picker.Item color='#c9c9c9' label='¿En qué contenedor va?' value='' />
                         <Picker.Item label='Plastico' value='plastico' />
                         <Picker.Item label='Papel y Carton' value='papelCarton' />
                         <Picker.Item label='Vidrio' value='vidrio' />

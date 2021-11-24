@@ -26,7 +26,7 @@ export const Constants = {
         home: 'home',
         titles: {
             AccountStack: {
-                account: 'Mi Cuenta',
+                account: 'Mi Perfil',
                 login: 'login',
                 register: 'Registrarme',
                 recoverPassword: 'Recuperar Contraseña',
@@ -58,6 +58,6 @@ export const Constants = {
     },
     Backend: {
         url: 'https://reciclarte-63ba5.appspot.com'
-        // url: 'http://192.168.1.39:3000'
+        // url: 'http://192.168.1.33:3000'
     }
 } 
