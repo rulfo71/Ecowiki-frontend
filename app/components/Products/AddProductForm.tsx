@@ -92,12 +92,12 @@ export default function AddProductForm(props) {
                 setIsLoading(false)
 
                 toastRef.current.show('Gracias! Ya agregamos el producto', 400, () => {
-                    if (isUnRegistered){
+                    // if (isUnRegistered){
                         navigation.navigate(Constants.Navigations.home);
-                    }
-                    else{
-                        navigation.navigate(Constants.Navigations.ProductStack.clasify);
-                    }
+                    // }
+                    // else{
+                    //     navigation.navigate(Constants.Navigations.ProductStack.clasify);
+                    // }
                 });
                 console.log(`AddProductForm - response : ${JSON.stringify(response)}`);
             } catch (error) {

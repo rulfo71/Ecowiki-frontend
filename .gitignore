@@ -63,3 +63,5 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.expo/packager-info.json
+.expo/packager-info.json

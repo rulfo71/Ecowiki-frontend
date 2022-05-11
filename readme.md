@@ -1,4 +1,9 @@
-Para correrlo: yarn start
+__Deploy en Google Play__
+Comando: yarn run build:android
+Si todo va bien devuelve un link de donde se puede descargar. eso hay que subirlo a google play en prueba interna por ahora
+
+__Correr__ 
+Comando: yarn start
 hacerlo en consola de git bash asi se autentica con mi usuario
 y entonces te aparece en la app como projects in development
 
