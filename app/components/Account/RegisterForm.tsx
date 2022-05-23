@@ -45,7 +45,7 @@ export default function RegisterForm(props) {
             setLoading(true);
             let addUserDto = new AddUserDto()
             addUserDto.nickname = formData.nickname
-            addUserDto.email = formData.email
+            addUserDto.email = formData.email.trim()
             addUserDto.password = formData.password
             addUserDto.showContributions = isEnabledSwitch
 
@@ -55,7 +55,7 @@ export default function RegisterForm(props) {
                 console.log(`response de addUser: ${JSON.stringify(response)}`);
 
                 if (!isEmpty(response.userId)) {
-                    await firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
+                    await firebase.auth().signInWithEmailAndPassword(formData.email.trim(), formData.password)
                     setLoading(false);
                     navigation.navigate(Constants.Navigations.AccountStack.account);
                 }
