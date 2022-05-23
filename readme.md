@@ -1,6 +1,12 @@
 __Deploy en Google Play__
+cambiar versionCode en app.json
 Comando: yarn run build:android
-Si todo va bien devuelve un link de donde se puede descargar. eso hay que subirlo a google play en prueba interna por ahora
+si no funciona la version de expo: expo upgrade 42
+app-bundle
+ir a la url que te devuelve, download
+(https://play.google.com/console/)
+prueba interna
+crear nueva version
 
 __Correr__ 
 Comando: yarn start
