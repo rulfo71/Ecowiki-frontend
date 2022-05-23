@@ -33,7 +33,7 @@ export default function RegisterForm(props) {
             isEmpty(formData.nickname)) {
             toastRef.current.show('Todos los campos son obligatorios')
         }
-        else if (!validateEmail(formData.email)) {
+        else if (!validateEmail(formData.email.trim())) {
             toastRef.current.show('El email no es valido')
         }
         else if (formData.password !== formData.repeatPassword) {
