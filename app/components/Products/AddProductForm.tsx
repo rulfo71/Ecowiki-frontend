@@ -203,6 +203,7 @@ function FormAdd(props) {
                         <Picker.Item label='Vidrio' value='vidrio' />
                         <Picker.Item label='Metal y Aluminio' value='metalAluminio' />
                         <Picker.Item label='Orgánico' value='organico' />
+                        <Picker.Item label='Botella de Amor' value='botellaDeAmor' />
                         <Picker.Item label='No se recicla' value='noSeRecicla' />
                         <Picker.Item label='Otro' value='otro' />
                     </Picker>

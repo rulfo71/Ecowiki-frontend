@@ -22,6 +22,7 @@ const materials = {
 	vidrio: 'Vidrio',
 	metalAluminio: 'Metal y Aluminio',
 	organico: 'Orgánico',
+	botellaDeAmor: 'Botella de amor',
 	noSeRecicla: 'No se recicla',
 }
 const defaultPicturesMap = {
@@ -30,6 +31,7 @@ const defaultPicturesMap = {
 	vidrio: require('../../../assets/img/materials/vidrio.png'),
 	metalAluminio: require('../../../assets/img/materials/metalAluminio.png'),
 	organico: require('../../../assets/img/materials/organico.png'),
+	botellaDeAmor: require('../../../assets/img/materials/botellaDeAmor.jpg'),
 	noSeRecicla: require('../../../assets/img/materials/noSeRecicla.png'),
 }
 
