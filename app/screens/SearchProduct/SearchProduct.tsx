@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState, useRef } from 'react'
 import {
   View,
+  Text,
   StyleSheet,
 } from 'react-native'
 import Toast from 'react-native-easy-toast'
@@ -135,9 +136,28 @@ export default function SearchProduct() {
       })
   }
 
+  const cameraPermission = () => {
+    if (hasCameraPermission === null) {
+        return (
+            <Text style={styles.cameraPermission}>
+                Usamos tu camara para escanear productos
+            </Text>
+        );
+    }
+
+    if (hasCameraPermission === false) {
+        return (
+            <Text style={styles.cameraPermission}>
+                Necesitamos permisos para acceder a tu camara y así poder escanear los codigos de barra ;)
+            </Text>
+        );
+    }
+  }
+
   return (
     <View style={styles.view}>
       <CodeScanner setBarcodeScanned={setBarcodeScanned} setBarcode={setBarcode} scanned={scanned} setScanned={setScanned} setAlreadySearched={setAlreadySearched}></CodeScanner>
+      {cameraPermission}
       <SearchBar
         ref={searchBarRef}
         round
@@ -188,6 +208,15 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     backgroundColor: 'transparent'
+  },
+  cameraPermission: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+
+    color: "#606060",
+    margin: 20,
+    fontSize: 15
   },
   SearchBar: {
     opacity: 1,

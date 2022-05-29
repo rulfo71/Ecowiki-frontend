@@ -57,7 +57,7 @@ export default function Ecotip(props) {
 			onPress={onPressCard}
 		>
 			<Card
-				title='¿Sabías qué...?'
+				title='¿Sabías que...?'
 				titleStyle={styles.title}
 				containerStyle={styles.container}
 			>
