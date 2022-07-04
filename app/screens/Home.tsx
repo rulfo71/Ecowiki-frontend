@@ -9,6 +9,7 @@ import { Constants } from "../Common/Constants/Constants";
 import { Button, Icon } from "react-native-elements";
 import ConfirmModal from "../components/ConfirmModal";
 import EcotipsList from "../components/Ecotips/EcotipsList";
+import MaterialsList from "../components/Materials/MaterialsList";
 
 export default function Home() {
 
@@ -133,7 +134,8 @@ const onPressItem = (name) => {
             </View>
           </TouchableHighlight>
         </View>
-        <TresR/>
+        {/* <TresR/> */}
+        <MaterialsList navigation={navigation}/>
         <EcotipsList/>
         <ConfirmModal
           showModal={showLoggedModal}
