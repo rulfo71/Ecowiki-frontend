@@ -152,7 +152,6 @@ export default function Product(props) {
 	}
 
 	return (
-		// <Text> product: {product.displayName}</Text>
 		<View style={styles.AllContainer}>
 			<View style={styles.Container}>
 				<Picture />
@@ -162,41 +161,6 @@ export default function Product(props) {
 				<Observations />
 				<AddedBy />
 			</View>
-			{/* <View style={styles.IconsAgreeContainer}>
-                <TouchableHighlight onPress={() => { setShowAddProductModal(true) }} style={styles.touchableIcon} >
-                    <View style={styles.iconAgreeContainer}>
-                        <Icon name="thumbs-down" color={Constants.Colors.cancelColor} size={50} type="font-awesome" />
-                        <Text style={styles.textThumbs}> No me gusta </Text>
-                    </View>
-                </TouchableHighlight>
-                <TouchableHighlight onPress={agree} style={styles.touchableIcon}>
-                    <View style={styles.iconAgreeContainer} >
-                        <Icon name="thumbs-up" color={Constants.Colors.brandGreenColor} size={50} type="font-awesome" />
-                        <Text style={styles.textThumbs} > Gracias! </Text>
-                    </View>
-                </TouchableHighlight>
-                <ImageView
-                    images={[{
-                        source: {
-                            uri: product.photoUrl,
-                        },
-                        title: '',
-                        width: 806,
-                        height: 720,
-                    }]}
-                    // imageIndex={0}
-                    isVisible={imageViewVisible}
-                    onClose={() => setImageViewVisible(false)}
-                />
-            </View> */}
-			{/* <ConfirmModal
-            showModal={showAddProductModal}
-            setShowModal={setShowAddProductModal}
-            questionText={' ¿ Querés modificarlo ?'}
-            confirmText={'Si'}
-            cancelText={'No'}
-            setResponse={setAddProductModalResponse}
-          /> */}
 		</View>
 	)
 }

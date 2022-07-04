@@ -2,13 +2,6 @@ import React from 'react'
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from '../screens/Home';
-import SearchProduct from '../screens/SearchProduct/SearchProduct';
-import { Constants } from '../Common/Constants/Constants';
-import ProductInfo from '../screens/SearchProduct/ProductInfo';
-import Register from '../screens/Account/Register';
-import Account from '../screens/Account/Account';
-import RecoverPassword from '../screens/Account/RecoverPassword';
 import ModalBottom from '../components/ModalBottom';
 import MainStack from './MainStack';
 

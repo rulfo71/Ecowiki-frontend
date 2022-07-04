@@ -21,7 +21,8 @@ export const Constants = {
             addUnregisteredProduct: 'addUnRegisteredProduct',
             clasify: 'clasify',
             addNewProduct: 'addNewProduct',
-            voteProducts: 'voteProducts'
+            voteProducts: 'voteProducts',
+            productsByMaterial: 'productsByMaterial',
         },
         home: 'home',
         titles: {
@@ -37,6 +38,7 @@ export const Constants = {
                 addProduct: 'Agregar producto',
                 addUnregisteredProduct: 'Agregar producto',
                 clasify: 'Clasificar',
+                productsByMaterial: ' ',
                 addNewProduct: ' ',
                 voteProducts: 'Votar Productos'
             },
@@ -57,7 +59,7 @@ export const Constants = {
     }
     },
     Backend: {
-        url: 'https://reciclarte-63ba5.appspot.com'
-        // url: 'http://192.168.1.33:3000'
+        // url: 'https://reciclarte-63ba5.appspot.com'
+        url: 'http://192.168.1.39:3000'
     }
 } 

@@ -46,9 +46,9 @@ export default function EcotipsList() {
         }
     }
 
-
     return (
         <View style={styles.container}>
+
             {ecotips.length == 0 && isLoading == false ? (
                 <View>
                     {/* <Text>No tengo ecotips</Text> */}

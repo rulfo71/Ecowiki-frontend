@@ -67,3 +67,5 @@ node_modules/
 yarn.lock
 yarn.lock
 .expo/packager-info.json
+yarn.lock
+.expo/packager-info.json

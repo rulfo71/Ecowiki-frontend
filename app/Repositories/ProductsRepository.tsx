@@ -6,6 +6,7 @@ import AddProductDto from '../Dtos/Products/AddProductDto';
 import AddVoteDto from '../Dtos/Products/AddVoteDto';
 import GetProductsToVoteDto from '../Dtos/Products/GetProductsToVoteDto';
 import { Constants } from '../Common/Constants/Constants';
+import GetProductsByMaterialDto from '../Dtos/Products/GetProductsByMaterialDto';
 
 const server = `${Constants.Backend.url}/products/`
 
@@ -155,6 +156,34 @@ export const getProductByName = async name => {
     .then(json)
     .then(function (data) {
       console.log('Respuesta getProductByName: ', data);
+      return data;
+    }).catch(function (error) {
+      console.log('Request failed', error);
+      throw new Error(error);
+    });
+}
+
+export const getProductsByMaterial = async (getProductsByMaterialDto: GetProductsByMaterialDto): Promise<Product[]> => {
+  const { startProductName, material } = getProductsByMaterialDto
+  
+  var uriGetProductsByMaterial : string
+
+  if (startProductName)
+  uriGetProductsByMaterial = `${server}getProductsByMaterial/${material}/${startProductName}`
+  else 
+  uriGetProductsByMaterial = `${server}getProductsByMaterial/${material}`
+  console.log(uriGetProductsByMaterial)
+
+  return await fetch(uriGetProductsByMaterial, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function (data) {
       return data;
     }).catch(function (error) {
       console.log('Request failed', error);
