@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from 'react-native-loading-spinner-overlay'
 import { StyleSheet, View, Text, ScrollView, Alert, Dimensions, FlatList, ActivityIndicator, TouchableHighlight } from 'react-native';
-import Toast from 'react-native-easy-toast'
 
 import Material from './Material';
 import { getMaterials as getMaterialsRepository} from '../../Repositories/MaterialsRepository';

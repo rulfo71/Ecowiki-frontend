@@ -21,13 +21,13 @@ export default function ProductsByMaterial({ route, navigation }) {
     const [startProductName, setStartProductName] = useState('')
     const [products, setProducts] = useState([])
     const [noMoreProducts, setNoMoreProducts] = useState(false)
-
-    const { materialParam } = route.params
-	const material: MaterialModel = materialParam
+    
+    const { name, displayName } = route.params
+	const materialName = name
 
     useEffect(() => {
         navigation.setOptions({
-            title: material.displayName,
+            title: displayName,
             headerStyle: {
                 backgroundColor: Constants.Colors.brandGreenColor,
                 borderBottomStartRadius: 0,
@@ -38,7 +38,7 @@ export default function ProductsByMaterial({ route, navigation }) {
 
     useEffect(() => {
         (async () => {
-            await getProducts(material.name)
+            await getProducts(materialName)
         })()
     }, [])
 

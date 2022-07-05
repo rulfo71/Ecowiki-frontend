@@ -168,11 +168,13 @@ export default function Product(props) {
 const styles = StyleSheet.create({
 	AllContainer: {
 		flex: 1,
-		width: '100%',
-		height: '100%',
+		// width: '100%',
+		// height: '100%',
 		// justifyContent: 'space-around',
 		backgroundColor: Constants.Colors.backgroundGrey,
+		margin: 20,
 		padding: 20,
+		borderRadius: 20,
 		// borderWidth: 2,
 		// borderRadius: 20,
 	},

@@ -22,7 +22,7 @@ export default function ProductsList(props) {
                         keyExtractor={(item, index) => index.toString()}
                         onEndReachedThreshold={0.2}
                         onEndReached={handleLoadMore}
-                        ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} />}
+                        ListFooterComponent={<FooterList isLoadingMore={isLoadingMore} isLoading={isLoading} />}
                     />
                     </ScrollView>
                 )}
@@ -31,8 +31,8 @@ export default function ProductsList(props) {
 }
 
 function FooterList(props) {
-    const { isLoadingMore } = props
-    if (isLoadingMore) {
+    const { isLoadingMore, isLoading } = props
+    if (isLoadingMore || isLoading) {
         return (
             <View style={styles.loaderProducts} >
                 <ActivityIndicator size='large' />

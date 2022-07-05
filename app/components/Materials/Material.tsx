@@ -16,13 +16,14 @@ const defaultPicturesMap = {
 	noSeRecicla: require('../../../assets/img/materials/noSeRecicla.png'),
 }
 
-export default function Ecotip(props) {
+export default function Material(props) {
 	const { materialParam, navigation } = props
 
 	const material: MaterialModel = materialParam
 
 	const onPressCard = () => {
-		navigation.navigate(Constants.Navigations.ProductStack.productsByMaterial, material.name)
+		// navigation.navigate(Constants.Navigations.ProductStack.clasify, material.name)
+        navigation.navigate(Constants.Navigations.ProductStack.productsByMaterial,  material);
 	}
 
 	return (

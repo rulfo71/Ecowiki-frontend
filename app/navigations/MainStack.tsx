@@ -18,6 +18,7 @@ import AddNewProduct from '../screens/SearchProduct/AddNewProduct'
 import VoteProducts from '../screens/SearchProduct/VoteProducts'
 import { Button, Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
+import ProductsByMaterial from '../screens/SearchProduct/ProductsByMaterial';
 
 const Stack = createStackNavigator()
 
@@ -118,6 +119,14 @@ export default function MainStack() {
 				options={{
 					headerTransparent: true,
 					title: '',
+					headerTintColor: Constants.Colors.brandGreenColor,
+				}}
+			/>
+			<Stack.Screen
+				name={Constants.Navigations.ProductStack.productsByMaterial}
+				component={ProductsByMaterial}
+				options={{
+					title: ' ',
 					headerTintColor: Constants.Colors.brandGreenColor,
 				}}
 			/>
